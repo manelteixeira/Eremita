@@ -1,0 +1,227 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+main {
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login {
+  background-color: white;
+
+  width: 350px;
+  padding: 30px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+.login h1 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+.login p {
+  text-align: center;
+  margin-bottom: 25px;
+}
+.login form {
+  display: flex;
+  flex-direction: column;
+}
+.login input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.login form > button {
+  padding: 10px;
+
+  border: none;
+  border-radius: 5px;
+
+  background-color: #222;
+  color: white;
+
+  cursor: pointer;
+}
+.login form > button {
+  transition: 0.3s;
+}
+
+.login form > button:hover {
+  background-color: #444;
+}
+
+.login label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.login input:focus {
+  outline: none;
+  border-color: #222;
+}
+.painel {
+  width: 90%;
+  max-width: 1100px;
+}
+.cabeçalho {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 30px;
+}
+.resumo {
+  display: flex;
+  gap: 20px;
+}
+.card-resumo {
+  background-color: white;
+
+  flex: 1;
+  padding: 20px;
+
+  border-radius: 10px;
+
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+.dividas {
+  margin-top: 30px;
+}
+.titulo-dividas {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 15px;
+}
+.titulo-dividas button {
+  padding: 10px 15px;
+
+  border: none;
+  border-radius: 5px;
+
+  background-color: #222;
+  color: white;
+
+  cursor: pointer;
+}
+.lista-dividas {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.divida {
+  background-color: white;
+
+  padding: 20px;
+
+  border-radius: 10px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+.divida h3{
+    margin-bottom: 5px;
+}
+.divida p{
+    color: #666;
+}
+.divida strong{
+    font-size: 18px;
+}
+.formulario-divida{
+    display: none;
+
+    background-color: white;
+
+    padding: 25px;
+    margin-bottom: 20px;
+
+    border-radius: 10px;
+
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+}
+.formulario-divida h2{
+    margin-bottom: 20px;
+}
+.formulario-divida label{
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.formulario-divida input{
+    width: 100%;
+    padding: 10px;
+
+    margin-bottom: 15px;
+
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.botoes-formulario {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.botoes-formulario button {
+    padding: 10px 15px;
+
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+.botoes-formulario button:last-child {
+    background-color: #222;
+    color: white;
+}
+.btnPagar{
+    display: block;
+
+    margin-top: 10px;
+    margin-left: auto;
+
+    padding: 6px 12px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #222;
+    color: white;
+
+    cursor: pointer;
+}
+.acoes-dividas{
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+.btnExcluir{
+    padding: 6px 12px;
+
+    border: none;
+    border-radius: 5px;
+
+    background-color: #777;
+    color: white;
+
+    cursor: pointer;
+}
