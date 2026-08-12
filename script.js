@@ -3,151 +3,157 @@ const formularioDivida = document.getElementById("formularioDivida");
 const botaoCancelar = document.getElementById("btnCancelar");
 const botaoCadastrar = document.getElementById("btnCadastrar");
 const listaDividas = document.getElementById("listaDividas");
+
 const elementoTotalDividas = document.getElementById("totalDividas");
 const elementoTotalEmAberto = document.getElementById("totalEmAberto");
 const elementoTotalPagas = document.getElementById("totalPagas");
+
 let totalDividas = 0;
 let totalEmAberto = 0;
 let totalPagas = 0;
 
-const dividasIniciais = [   
-    {
-        nome: "Internet",
-        valor: 100,
-        vencimento: "10/08/2026"
-    },
-
-    {
-        nome: "Faculdade",
-        valor: 500,
-        vencimento: "15/08/2026"
-    }
+// Dívidas iniciais
+const dividasIniciais = [
+  {
+    nome: "Internet",
+    valor: 100,
+    vencimento: "10/08/2026",
+    paga: false,
+  },
+  {
+    nome: "Faculdade",
+    valor: 500,
+    vencimento: "15/08/2026",
+    paga: false,
+  },
 ];
 
+// dívidas que realmente estão sendo utilizadas pelo sistema
+const dividas = [];
+
+dividasIniciais.forEach(function (divida) {
+  dividas.push(divida);
+});
+
+// Abrir formulário
 botaoNovaDivida.addEventListener("click", function () {
   formularioDivida.style.display = "block";
 });
 
+// Fechar formulário
 botaoCancelar.addEventListener("click", function () {
   formularioDivida.style.display = "none";
 });
 
-function criarDivida(nomeDivida, valorDivida, vencimentoDivida) {
+// Criar dívida
+function criarDivida(divida) {
+  // Criar elemento HTML
+  const elementoDivida = document.createElement("div");
 
-    let paga = false;
+  elementoDivida.classList.add("divida");
 
-    const novaDivida = document.createElement("div");
-
-    novaDivida.classList.add("divida");
-
-    novaDivida.innerHTML = `
+  elementoDivida.innerHTML = `
         <div>
-            <h3>${nomeDivida}</h3>
-            <p>Vencimento: ${vencimentoDivida}</p>
+            <h3>${divida.nome}</h3>
+            <p>Vencimento: ${divida.vencimento}</p>
         </div>
 
         <div>
-            <strong>R$ ${valorDivida}</strong>
+            <strong>R$ ${divida.valor.toFixed(2)}</strong>
 
-            <div class="acoes-divida">
-                <button type="button" class="btnPagar">Pagar</button>
+            <div class="acoes-dividas">
+                <button 
+                    type="button" 
+                    class="btnPagar"
+                    ${divida.paga ? "disabled" : ""}>
+                    ${divida.paga ? "✓ Paga" : "Pagar"}
+                </button>
                 <button type="button" class="btnExcluir">Excluir</button>
             </div>
         </div>
     `;
 
-    listaDividas.appendChild(novaDivida);
+  // Colocar a dívida na tela
+  listaDividas.appendChild(elementoDivida);
 
-    const botaoPagar = novaDivida.querySelector(".btnPagar");
-    const botaoExcluir = novaDivida.querySelector(".btnExcluir");
+  // Encontrar os botões
+  const botaoPagar = elementoDivida.querySelector(".btnPagar");
+  const botaoExcluir = elementoDivida.querySelector(".btnExcluir");
 
+  // Botão pagar
+  botaoPagar.addEventListener("click", function () {
+    console.log("Dívida paga!");
 
-    botaoPagar.addEventListener("click", function () {
+    divida.paga = true;
 
-        console.log("Dívida paga!");
+    totalEmAberto -= divida.valor;
 
-        paga = true;
+    elementoTotalEmAberto.textContent = `R$ ${totalEmAberto.toFixed(2)}`;
 
-        totalEmAberto -= valorDivida;
+    totalPagas += divida.valor;
 
-        elementoTotalEmAberto.textContent =
-            `R$ ${totalEmAberto.toFixed(2)}`;
+    elementoTotalPagas.textContent = `R$ ${totalPagas.toFixed(2)}`;
 
-        totalPagas += valorDivida;
+    botaoPagar.textContent = "✓ Paga";
 
-        elementoTotalPagas.textContent =
-            `R$ ${totalPagas.toFixed(2)}`;
+    botaoPagar.disabled = true;
+  });
 
-        botaoPagar.textContent = "✓ Paga";
+  // Botão excluir
+  botaoExcluir.addEventListener("click", function () {
+    totalDividas -= divida.valor;
 
-        botaoPagar.disabled = true;
-    });
+    elementoTotalDividas.textContent = `R$ ${totalDividas.toFixed(2)}`;
 
+    if (divida.paga === false) {
+      totalEmAberto -= divida.valor;
 
-    botaoExcluir.addEventListener("click", function () {
+      elementoTotalEmAberto.textContent = `R$ ${totalEmAberto.toFixed(2)}`;
+    } else {
+      totalPagas -= divida.valor;
 
-        totalDividas -= valorDivida;
+      elementoTotalPagas.textContent = `R$ ${totalPagas.toFixed(2)}`;
+    }
 
-        elementoTotalDividas.textContent =
-            `R$ ${totalDividas.toFixed(2)}`;
+    const indice = dividas.indexOf(divida);
 
+    dividas.splice(indice, 1);
 
-        if (paga === false) {
+    elementoDivida.remove();
+  });
 
-            totalEmAberto -= valorDivida;
+  // Atualizar total de dívidas
+  totalDividas += divida.valor;
 
-            elementoTotalEmAberto.textContent =
-                `R$ ${totalEmAberto.toFixed(2)}`;
+  elementoTotalDividas.textContent = `R$ ${totalDividas.toFixed(2)}`;
 
-        } else {
+  // Atualizar total em aberto
+  totalEmAberto += divida.valor;
 
-            totalPagas -= valorDivida;
-
-            elementoTotalPagas.textContent =
-                `R$ ${totalPagas.toFixed(2)}`;
-        }
-
-
-        novaDivida.remove();
-    });
-
-
-    totalDividas += valorDivida;
-
-    elementoTotalDividas.textContent =
-        `R$ ${totalDividas.toFixed(2)}`;
-
-    totalEmAberto += valorDivida;
-
-    elementoTotalEmAberto.textContent =
-        `R$ ${totalEmAberto.toFixed(2)}`;
+  elementoTotalEmAberto.textContent = `R$ ${totalEmAberto.toFixed(2)}`;
 }
-dividasIniciais.forEach(function(divida) {
 
-    criarDivida(
-        divida.nome,
-        divida.valor,
-        divida.vencimento
-    );
-
+// Criar as dívidas iniciais
+dividasIniciais.forEach(function (divida) {
+  criarDivida(divida);
 });
 
+// Cadastrar nova dívida
 botaoCadastrar.addEventListener("click", function () {
+  const nomeDivida = document.getElementById("nome-divida").value;
 
-    const nomeDivida =
-        document.getElementById("nome-divida").value;
+  const valorDivida = Number(document.getElementById("valor-divida").value);
 
-    const valorDivida =
-        Number(document.getElementById("valor-divida").value);
+  const vencimentoDivida = document.getElementById("vencimento-divida").value;
 
-    const vencimentoDivida =
-        document.getElementById("vencimento-divida").value;
+  const novaDivida = {
+    nome: nomeDivida,
+    valor: valorDivida,
+    vencimento: vencimentoDivida,
+    paga: false,
+  };
 
-    criarDivida(nomeDivida, valorDivida, vencimentoDivida);
+  dividas.push(novaDivida);
 
-    document.getElementById("nome-divida").value = "";
-
-    document.getElementById("valor-divida").value = "";
-
-    document.getElementById("vencimento-divida").value = "";
+  criarDivida(novaDivida);
 });
