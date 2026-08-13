@@ -35,6 +35,28 @@ dividasIniciais.forEach(function (divida) {
   dividas.push(divida);
 });
 
+function atualizarResumo() {
+  let total = 0;
+  let emAberto = 0;
+  let pagas = 0;
+
+  dividas.forEach(function (divida) {
+    total += divida.valor;
+
+    if (divida.paga === false) {
+      emAberto += divida.valor;
+    } else {
+      pagas += divida.valor;
+    }
+  });
+
+  elementoTotalDividas.textContent = `R$ ${total.toFixed(2)}`;
+
+  elementoTotalEmAberto.textContent = `R$ ${emAberto.toFixed(2)}`;
+
+  elementoTotalPagas.textContent = `R$ ${pagas.toFixed(2)}`;
+}
+
 // Abrir formulário
 botaoNovaDivida.addEventListener("click", function () {
   formularioDivida.style.display = "block";
@@ -86,13 +108,7 @@ function criarDivida(divida) {
 
     divida.paga = true;
 
-    totalEmAberto -= divida.valor;
-
-    elementoTotalEmAberto.textContent = `R$ ${totalEmAberto.toFixed(2)}`;
-
-    totalPagas += divida.valor;
-
-    elementoTotalPagas.textContent = `R$ ${totalPagas.toFixed(2)}`;
+    atualizarResumo();
 
     botaoPagar.textContent = "✓ Paga";
 
@@ -101,23 +117,12 @@ function criarDivida(divida) {
 
   // Botão excluir
   botaoExcluir.addEventListener("click", function () {
-    totalDividas -= divida.valor;
-
-    elementoTotalDividas.textContent = `R$ ${totalDividas.toFixed(2)}`;
-
-    if (divida.paga === false) {
-      totalEmAberto -= divida.valor;
-
-      elementoTotalEmAberto.textContent = `R$ ${totalEmAberto.toFixed(2)}`;
-    } else {
-      totalPagas -= divida.valor;
-
-      elementoTotalPagas.textContent = `R$ ${totalPagas.toFixed(2)}`;
-    }
 
     const indice = dividas.indexOf(divida);
 
     dividas.splice(indice, 1);
+
+    atualizarResumo();
 
     elementoDivida.remove();
   });
@@ -138,6 +143,8 @@ dividasIniciais.forEach(function (divida) {
   criarDivida(divida);
 });
 
+atualizarResumo();
+
 // Cadastrar nova dívida
 botaoCadastrar.addEventListener("click", function () {
   const nomeDivida = document.getElementById("nome-divida").value;
@@ -156,4 +163,6 @@ botaoCadastrar.addEventListener("click", function () {
   dividas.push(novaDivida);
 
   criarDivida(novaDivida);
+
+  atualizarResumo();
 });
