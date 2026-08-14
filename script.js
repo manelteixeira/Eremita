@@ -1,5 +1,18 @@
 const botaoNovaDivida = document.getElementById("btnNovaDivida");
 const formularioDivida = document.getElementById("formularioDivida");
+
+const telaLogin = document.querySelector(".login");
+const telaPainel = document.querySelector(".painel");
+
+const campoEmail = document.getElementById("email");
+const campoSenha = document.getElementById("password");
+const emailCorreto = "emanuel@eremita.com";
+const senhaCorreta = "123456";
+const mensagemErro = document.getElementById("mensagemErro");
+
+const botaoEntrar = document.getElementById("btnEntrar");
+const botaoSair = document.getElementById("btnSair");
+
 const botaoCancelar = document.getElementById("btnCancelar");
 const botaoCadastrar = document.getElementById("btnCadastrar");
 const listaDividas = document.getElementById("listaDividas");
@@ -8,9 +21,26 @@ const elementoTotalDividas = document.getElementById("totalDividas");
 const elementoTotalEmAberto = document.getElementById("totalEmAberto");
 const elementoTotalPagas = document.getElementById("totalPagas");
 
-let totalDividas = 0;
-let totalEmAberto = 0;
-let totalPagas = 0;
+telaPainel.style.display = "none";
+
+botaoEntrar.addEventListener("click", function (event) {
+  event.preventDefault();
+
+  if (
+    campoEmail.value === emailCorreto &&
+    campoSenha.value === senhaCorreta
+  ) {
+    telaLogin.style.display = "none";
+    telaPainel.style.display = "block";
+  } else {
+    mensagemErro.textContent = "Email ou senha incorretos.";
+  }
+});
+
+botaoSair.addEventListener("click", function () {
+  telaPainel.style.display = "none";
+  telaLogin.style.display = "block";
+});
 
 // Dívidas iniciais
 const dividasIniciais = [
@@ -30,10 +60,6 @@ const dividasIniciais = [
 
 // dívidas que realmente estão sendo utilizadas pelo sistema
 const dividas = [];
-
-dividasIniciais.forEach(function (divida) {
-  dividas.push(divida);
-});
 
 function atualizarResumo() {
   let total = 0;
@@ -55,6 +81,28 @@ function atualizarResumo() {
   elementoTotalEmAberto.textContent = `R$ ${emAberto.toFixed(2)}`;
 
   elementoTotalPagas.textContent = `R$ ${pagas.toFixed(2)}`;
+}
+
+function salvarDividas() {
+  const dados = JSON.stringify(dividas);
+
+  localStorage.setItem("dividas", dados);
+}
+
+function carregarDividas() {
+  const dados = localStorage.getItem("dividas");
+
+  if (dados) {
+    const dividasSalvas = JSON.parse(dados);
+
+    dividasSalvas.forEach(function (divida) {
+      dividas.push(divida);
+    });
+  } else {
+    dividasIniciais.forEach(function (divida) {
+      dividas.push(divida);
+    });
+  }
 }
 
 // Abrir formulário
@@ -108,6 +156,8 @@ function criarDivida(divida) {
 
     divida.paga = true;
 
+    salvarDividas();
+
     atualizarResumo();
 
     botaoPagar.textContent = "✓ Paga";
@@ -117,10 +167,11 @@ function criarDivida(divida) {
 
   // Botão excluir
   botaoExcluir.addEventListener("click", function () {
-
     const indice = dividas.indexOf(divida);
 
     dividas.splice(indice, 1);
+
+    salvarDividas();
 
     atualizarResumo();
 
@@ -128,18 +179,13 @@ function criarDivida(divida) {
   });
 
   // Atualizar total de dívidas
-  totalDividas += divida.valor;
-
-  elementoTotalDividas.textContent = `R$ ${totalDividas.toFixed(2)}`;
-
-  // Atualizar total em aberto
-  totalEmAberto += divida.valor;
-
-  elementoTotalEmAberto.textContent = `R$ ${totalEmAberto.toFixed(2)}`;
+  atualizarResumo();
 }
 
 // Criar as dívidas iniciais
-dividasIniciais.forEach(function (divida) {
+carregarDividas();
+
+dividas.forEach(function (divida) {
   criarDivida(divida);
 });
 
@@ -161,6 +207,8 @@ botaoCadastrar.addEventListener("click", function () {
   };
 
   dividas.push(novaDivida);
+
+  salvarDividas();
 
   criarDivida(novaDivida);
 
