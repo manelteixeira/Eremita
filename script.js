@@ -6,7 +6,7 @@ const telaPainel = document.querySelector(".painel");
 
 const campoEmail = document.getElementById("email");
 const campoSenha = document.getElementById("password");
-const emailCorreto = "emanuel@eremita.com";
+const emailCorreto = "claudioemanuel0208@gmail.com";
 const senhaCorreta = "123456";
 const mensagemErro = document.getElementById("mensagemErro");
 
@@ -21,15 +21,14 @@ const elementoTotalDividas = document.getElementById("totalDividas");
 const elementoTotalEmAberto = document.getElementById("totalEmAberto");
 const elementoTotalPagas = document.getElementById("totalPagas");
 
+let dividaEditando = null;
+
 telaPainel.style.display = "none";
 
 botaoEntrar.addEventListener("click", function (event) {
   event.preventDefault();
 
-  if (
-    campoEmail.value === emailCorreto &&
-    campoSenha.value === senhaCorreta
-  ) {
+  if (campoEmail.value === emailCorreto && campoSenha.value === senhaCorreta) {
     telaLogin.style.display = "none";
     telaPainel.style.display = "block";
   } else {
@@ -122,6 +121,10 @@ function criarDivida(divida) {
 
   elementoDivida.classList.add("divida");
 
+  if (divida.paga) {
+    elementoDivida.classList.add("paga");
+  }
+
   elementoDivida.innerHTML = `
         <div>
             <h3>${divida.nome}</h3>
@@ -131,15 +134,18 @@ function criarDivida(divida) {
         <div>
             <strong>R$ ${divida.valor.toFixed(2)}</strong>
 
-            <div class="acoes-dividas">
-                <button 
-                    type="button" 
-                    class="btnPagar"
-                    ${divida.paga ? "disabled" : ""}>
-                    ${divida.paga ? "✓ Paga" : "Pagar"}
-                </button>
-                <button type="button" class="btnExcluir">Excluir</button>
-            </div>
+           <div class="acoes-dividas">
+    <button 
+        type="button" 
+        class="btnPagar"
+        ${divida.paga ? "disabled" : ""}>
+        ${divida.paga ? "✓ Paga" : "Pagar"}
+    </button>
+
+    <button type="button" class="btnEditar">Editar</button>
+
+    <button type="button" class="btnExcluir">Excluir</button>
+</div>
         </div>
     `;
 
@@ -148,6 +154,7 @@ function criarDivida(divida) {
 
   // Encontrar os botões
   const botaoPagar = elementoDivida.querySelector(".btnPagar");
+  const botaoEditar = elementoDivida.querySelector(".btnEditar");
   const botaoExcluir = elementoDivida.querySelector(".btnExcluir");
 
   // Botão pagar
@@ -163,7 +170,21 @@ function criarDivida(divida) {
     botaoPagar.textContent = "✓ Paga";
 
     botaoPagar.disabled = true;
+
+    elementoDivida.classList.add("paga");
   });
+ botaoEditar.addEventListener("click", function () {
+  dividaEditando = divida;
+
+  console.log("Editando:", divida);
+  console.log("dividaEditando:", dividaEditando);
+
+  document.getElementById("nome-divida").value = divida.nome;
+  document.getElementById("valor-divida").value = divida.valor;
+  document.getElementById("vencimento-divida").value = divida.vencimento;
+
+  formularioDivida.style.display = "block";
+});
 
   // Botão excluir
   botaoExcluir.addEventListener("click", function () {
@@ -192,12 +213,61 @@ dividas.forEach(function (divida) {
 atualizarResumo();
 
 // Cadastrar nova dívida
-botaoCadastrar.addEventListener("click", function () {
+botaoCadastrar.addEventListener("click", function (event) {
+  event.preventDefault();
+
+console.log("BOTÃO CADASTRAR CLICADO");
+console.log("dividaEditando no cadastro:", dividaEditando);
+
   const nomeDivida = document.getElementById("nome-divida").value;
 
   const valorDivida = Number(document.getElementById("valor-divida").value);
 
   const vencimentoDivida = document.getElementById("vencimento-divida").value;
+
+  // Validar nome
+  if (nomeDivida === "") {
+    alert("Digite o nome da dívida.");
+    return;
+  }
+
+  // Validar valor
+  if (valorDivida <= 0) {
+    alert("Digite um valor maior que zero.");
+    return;
+  }
+
+  // Validar vencimento
+  if (vencimentoDivida === "") {
+    alert("Informe o vencimento da dívida.");
+    return;
+  }
+
+  if (dividaEditando !== null) {
+  dividaEditando.nome = nomeDivida;
+  dividaEditando.valor = valorDivida;
+  dividaEditando.vencimento = vencimentoDivida;
+
+  salvarDividas();
+
+  listaDividas.innerHTML = "";
+
+  dividas.forEach(function (divida) {
+    criarDivida(divida);
+  });
+
+  atualizarResumo();
+
+  dividaEditando = null;
+
+  formularioDivida.style.display = "none";
+
+  document.getElementById("nome-divida").value = "";
+  document.getElementById("valor-divida").value = "";
+  document.getElementById("vencimento-divida").value = "";
+
+  return;
+}
 
   const novaDivida = {
     nome: nomeDivida,
@@ -213,4 +283,10 @@ botaoCadastrar.addEventListener("click", function () {
   criarDivida(novaDivida);
 
   atualizarResumo();
+
+  formularioDivida.style.display = "none";
+
+  document.getElementById("nome-divida").value = "";
+  document.getElementById("valor-divida").value = "";
+  document.getElementById("vencimento-divida").value = "";
 });
