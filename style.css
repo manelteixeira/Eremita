@@ -137,97 +137,121 @@ main {
 
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
-.divida h3{
-    margin-bottom: 5px;
+.divida h3 {
+  margin-bottom: 5px;
 }
-.divida p{
-    color: #666;
+.divida p {
+  color: #666;
 }
-.divida strong{
-    font-size: 18px;
+.divida strong {
+  font-size: 18px;
 }
-.formulario-divida{
-    display: none;
+.formulario-divida {
+  display: none;
 
-    background-color: white;
+  background-color: white;
 
-    padding: 25px;
-    margin-bottom: 20px;
+  padding: 25px;
+  margin-bottom: 20px;
 
-    border-radius: 10px;
+  border-radius: 10px;
 
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
-.formulario-divida h2{
-    margin-bottom: 20px;
+.formulario-divida h2 {
+  margin-bottom: 20px;
 }
-.formulario-divida label{
-    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
+.formulario-divida label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
 }
-.formulario-divida input{
-    width: 100%;
-    padding: 10px;
+.formulario-divida input {
+  width: 100%;
+  padding: 10px;
 
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 
-    border: 1px solid #ccc;
-    border-radius: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 .botoes-formulario {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .botoes-formulario button {
-    padding: 10px 15px;
+  padding: 10px 15px;
 
-    border: none;
-    border-radius: 5px;
+  border: none;
+  border-radius: 5px;
 
-    cursor: pointer;
+  cursor: pointer;
 }
 .botoes-formulario button:last-child {
-    background-color: #222;
-    color: white;
+  background-color: #222;
+  color: white;
 }
-.btnPagar{
-    display: block;
+.btnPagar {
+  display: block;
 
-    margin-top: 10px;
-    margin-left: auto;
+  margin-top: 10px;
+  margin-left: auto;
 
-    padding: 6px 12px;
+  padding: 6px 12px;
 
-    border: none;
-    border-radius: 5px;
+  border: none;
+  border-radius: 5px;
 
-    background-color: #222;
-    color: white;
+  background-color: #222;
+  color: white;
 
-    cursor: pointer;
+  cursor: pointer;
 }
-.acoes-dividas{
-    display: flex;
-    gap: 8px;
-    margin-top: 10px;
+.acoes-dividas {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
 }
-.btnExcluir{
-    padding: 6px 12px;
+.btnExcluir {
+  padding: 6px 12px;
 
-    border: none;
-    border-radius: 5px;
+  border: none;
+  border-radius: 5px;
 
-    background-color: #777;
-    color: white;
+  background-color: #777;
+  color: white;
 
-    cursor: pointer;
+  cursor: pointer;
 }
-.divida.paga{
+.divida.paga {
   opacity: 0.6;
 }
-.divida.paga h3{
+.divida.paga h3 {
   text-decoration: line-through;
+}
+
+.status-paga {
+  color: #166534;
+  background-color: #dcfce7;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.status-atrasada {
+  color: #991b1b;
+  background-color: #fee2e2;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.status-aberta {
+  color: orange;
+  background-color: #ffedd5;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-weight: bold;
 }

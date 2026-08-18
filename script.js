@@ -20,6 +20,10 @@ const listaDividas = document.getElementById("listaDividas");
 const elementoTotalDividas = document.getElementById("totalDividas");
 const elementoTotalEmAberto = document.getElementById("totalEmAberto");
 const elementoTotalPagas = document.getElementById("totalPagas");
+const elementoTotalAtrasadas = document.getElementById("totalAtrasadas");
+const elementoQuantidadeAtrasadas = document.getElementById(
+  "quantidadeAtrasadas",
+);
 
 let dividaEditando = null;
 
@@ -64,12 +68,19 @@ function atualizarResumo() {
   let total = 0;
   let emAberto = 0;
   let pagas = 0;
+  let atrasadas = 0;
+  let quantidadeAtrasadas = 0;
 
   dividas.forEach(function (divida) {
     total += divida.valor;
 
     if (divida.paga === false) {
-      emAberto += divida.valor;
+      if (estaAtrasada(divida)) {
+        atrasadas += divida.valor;
+        quantidadeAtrasadas++;
+      } else {
+        emAberto += divida.valor;
+      }
     } else {
       pagas += divida.valor;
     }
@@ -80,6 +91,12 @@ function atualizarResumo() {
   elementoTotalEmAberto.textContent = `R$ ${emAberto.toFixed(2)}`;
 
   elementoTotalPagas.textContent = `R$ ${pagas.toFixed(2)}`;
+
+  elementoTotalAtrasadas.textContent = `R$ ${atrasadas.toFixed(2)}`;
+
+  elementoQuantidadeAtrasadas.textContent = `${quantidadeAtrasadas} ${
+    quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
+  }`;
 }
 
 function salvarDividas() {
@@ -114,6 +131,38 @@ botaoCancelar.addEventListener("click", function () {
   formularioDivida.style.display = "none";
 });
 
+function estaAtrasada(divida) {
+  if (divida.paga) {
+    return false;
+  }
+
+  const partes = divida.vencimento.split("-");
+
+  const ano = Number(partes[0]);
+  const mes = Number(partes[1]) - 1;
+  const dia = Number(partes[2]);
+
+  const vencimento = new Date(ano, mes, dia);
+  const hoje = new Date();
+
+  hoje.setHours(0, 0, 0, 0);
+  vencimento.setHours(0, 0, 0, 0);
+
+  return vencimento < hoje;
+}
+
+function obterStatus(divida) {
+  if (divida.paga) {
+    return "Paga";
+  }
+
+  if (estaAtrasada(divida)) {
+    return "Atrasada";
+  }
+
+  return "Em aberto";
+}
+
 // Criar dívida
 function criarDivida(divida) {
   // Criar elemento HTML
@@ -125,10 +174,25 @@ function criarDivida(divida) {
     elementoDivida.classList.add("paga");
   }
 
+  const status = obterStatus(divida);
+
+  let classeStatus = "";
+
+  if (status === "Paga") {
+    classeStatus = "status-paga";
+  } else if (status === "Atrasada") {
+    classeStatus = "status-atrasada";
+  } else {
+    classeStatus = "status-aberta";
+  }
+
   elementoDivida.innerHTML = `
         <div>
             <h3>${divida.nome}</h3>
             <p>Vencimento: ${divida.vencimento}</p>
+           <p class="status-divida">
+              Status: <span class="${classeStatus}">${status}</span>
+            </p>
         </div>
 
         <div>
@@ -156,12 +220,18 @@ function criarDivida(divida) {
   const botaoPagar = elementoDivida.querySelector(".btnPagar");
   const botaoEditar = elementoDivida.querySelector(".btnEditar");
   const botaoExcluir = elementoDivida.querySelector(".btnExcluir");
+  const elementoStatus = elementoDivida.querySelector(".status-divida");
 
   // Botão pagar
   botaoPagar.addEventListener("click", function () {
     console.log("Dívida paga!");
 
     divida.paga = true;
+
+    elementoStatus.textContent = "Status: Paga";
+
+    elementoStatus.classList.remove("status-atrasada", "status-aberta");
+    elementoStatus.classList.add("status-paga");
 
     salvarDividas();
 
@@ -173,18 +243,18 @@ function criarDivida(divida) {
 
     elementoDivida.classList.add("paga");
   });
- botaoEditar.addEventListener("click", function () {
-  dividaEditando = divida;
+  botaoEditar.addEventListener("click", function () {
+    dividaEditando = divida;
 
-  console.log("Editando:", divida);
-  console.log("dividaEditando:", dividaEditando);
+    console.log("Editando:", divida);
+    console.log("dividaEditando:", dividaEditando);
 
-  document.getElementById("nome-divida").value = divida.nome;
-  document.getElementById("valor-divida").value = divida.valor;
-  document.getElementById("vencimento-divida").value = divida.vencimento;
+    document.getElementById("nome-divida").value = divida.nome;
+    document.getElementById("valor-divida").value = divida.valor;
+    document.getElementById("vencimento-divida").value = divida.vencimento;
 
-  formularioDivida.style.display = "block";
-});
+    formularioDivida.style.display = "block";
+  });
 
   // Botão excluir
   botaoExcluir.addEventListener("click", function () {
@@ -206,6 +276,9 @@ function criarDivida(divida) {
 // Criar as dívidas iniciais
 carregarDividas();
 
+console.log("Internet atrasada?", estaAtrasada(dividas[0]));
+console.log("Faculdade atrasada?", estaAtrasada(dividas[1]));
+
 dividas.forEach(function (divida) {
   criarDivida(divida);
 });
@@ -216,8 +289,8 @@ atualizarResumo();
 botaoCadastrar.addEventListener("click", function (event) {
   event.preventDefault();
 
-console.log("BOTÃO CADASTRAR CLICADO");
-console.log("dividaEditando no cadastro:", dividaEditando);
+  console.log("BOTÃO CADASTRAR CLICADO");
+  console.log("dividaEditando no cadastro:", dividaEditando);
 
   const nomeDivida = document.getElementById("nome-divida").value;
 
@@ -244,30 +317,30 @@ console.log("dividaEditando no cadastro:", dividaEditando);
   }
 
   if (dividaEditando !== null) {
-  dividaEditando.nome = nomeDivida;
-  dividaEditando.valor = valorDivida;
-  dividaEditando.vencimento = vencimentoDivida;
+    dividaEditando.nome = nomeDivida;
+    dividaEditando.valor = valorDivida;
+    dividaEditando.vencimento = vencimentoDivida;
 
-  salvarDividas();
+    salvarDividas();
 
-  listaDividas.innerHTML = "";
+    listaDividas.innerHTML = "";
 
-  dividas.forEach(function (divida) {
-    criarDivida(divida);
-  });
+    dividas.forEach(function (divida) {
+      criarDivida(divida);
+    });
 
-  atualizarResumo();
+    atualizarResumo();
 
-  dividaEditando = null;
+    dividaEditando = null;
 
-  formularioDivida.style.display = "none";
+    formularioDivida.style.display = "none";
 
-  document.getElementById("nome-divida").value = "";
-  document.getElementById("valor-divida").value = "";
-  document.getElementById("vencimento-divida").value = "";
+    document.getElementById("nome-divida").value = "";
+    document.getElementById("valor-divida").value = "";
+    document.getElementById("vencimento-divida").value = "";
 
-  return;
-}
+    return;
+  }
 
   const novaDivida = {
     nome: nomeDivida,
