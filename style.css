@@ -3,10 +3,10 @@
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: Arial, Helvetica, sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
 }
 main {
   min-height: 100vh;
@@ -15,15 +15,20 @@ main {
   justify-content: center;
   align-items: center;
 }
+/* =========================
+   LOGIN
+========================= */
 .login {
   background-color: white;
 
   width: 350px;
   padding: 30px;
 
-  border-radius: 10px;
+  border-radius: 12px;
 
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 .login h1 {
   text-align: center;
@@ -32,19 +37,29 @@ main {
 .login p {
   text-align: center;
   margin-bottom: 25px;
+  color: #666;
 }
 .login form {
   display: flex;
   flex-direction: column;
 }
+.login label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
 .login input {
   width: 100%;
   padding: 10px;
+
   margin-top: 5px;
   margin-bottom: 15px;
 
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: 6px;
+}
+.login input:focus {
+  outline: none;
+  border-color: #222;
 }
 .login form > button {
   padding: 10px;
@@ -52,27 +67,20 @@ main {
   border: none;
   border-radius: 5px;
 
-  background-color: #222;
+  background-color: #2563eb;
   color: white;
 
   cursor: pointer;
-}
-.login form > button {
-  transition: 0.3s;
-}
 
+  transition: 0.2s;
+}
 .login form > button:hover {
-  background-color: #444;
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
 }
-
-.login label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-.login input:focus {
-  outline: none;
-  border-color: #222;
-}
+/* =========================
+   PAINEL
+========================= */
 .painel {
   width: 90%;
   max-width: 1100px;
@@ -84,6 +92,16 @@ main {
 
   margin-bottom: 30px;
 }
+.cabeçalho h1 {
+  font-size: 28px;
+  margin-bottom: 5px;
+}
+.cabeçalho p {
+  color: #666;
+}
+/* =========================
+   RESUMO
+========================= */
 .resumo {
   display: flex;
   gap: 20px;
@@ -96,8 +114,25 @@ main {
 
   border-radius: 10px;
 
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
+.card-resumo h2 {
+  font-size: 14px;
+  color: #666;
+
+  margin-bottom: 10px;
+
+  font-weight: normal;
+}
+.card-resumo p {
+  font-size: 24px;
+  font-weight: bold;
+}
+/* =========================
+   DÍVIDAS
+========================= */
 .dividas {
   margin-top: 30px;
 }
@@ -112,13 +147,56 @@ main {
   padding: 10px 15px;
 
   border: none;
-  border-radius: 5px;
+  border-radius: 6px;
 
-  background-color: #222;
+  background-color: #2563eb;
   color: white;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
+.titulo-dividas button:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+/* =========================
+   FILTROS
+========================= */
+.filtros-dividas {
+  display: flex;
+  gap: 10px;
+
+  margin-bottom: 20px;
+
+  flex-wrap: wrap;
+}
+.filtro {
+  padding: 8px 14px;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  background-color: white;
+  color: #222;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+.filtro:hover {
+  background-color: #f0f0f0;
+  transform: translateY(-1px);
+}
+.filtro.ativo {
+  background-color: #222;
+  color: white;
+
+  border-color: #222;
+}
+/* =========================
+   LISTA DE DÍVIDAS
+========================= */
 .lista-dividas {
   display: flex;
   flex-direction: column;
@@ -131,11 +209,22 @@ main {
 
   border-radius: 10px;
 
+  border: 1px solid #e5e7eb;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.divida:hover {
+  transform: translateY(-2px);
+
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 .divida h3 {
   margin-bottom: 5px;
@@ -146,6 +235,9 @@ main {
 .divida strong {
   font-size: 18px;
 }
+/* =========================
+   FORMULÁRIO
+========================= */
 .formulario-divida {
   display: none;
 
@@ -156,102 +248,155 @@ main {
 
   border-radius: 10px;
 
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
 }
 .formulario-divida h2 {
   margin-bottom: 20px;
 }
 .formulario-divida label {
   display: block;
+
   font-weight: bold;
+
   margin-bottom: 5px;
 }
 .formulario-divida input {
   width: 100%;
+
   padding: 10px;
 
   margin-bottom: 15px;
 
   border: 1px solid #ccc;
-  border-radius: 5px;
+
+  border-radius: 6px;
 }
 .botoes-formulario {
   display: flex;
+
   justify-content: flex-end;
+
   gap: 10px;
 }
-
 .botoes-formulario button {
   padding: 10px 15px;
 
   border: none;
-  border-radius: 5px;
+
+  border-radius: 6px;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
+.botoes-formulario button:hover {
+  transform: translateY(-1px);
+}
+
 .botoes-formulario button:last-child {
   background-color: #222;
   color: white;
 }
-.btnPagar {
-  display: block;
-
-  margin-top: 10px;
-  margin-left: auto;
-
-  padding: 6px 12px;
-
-  border: none;
-  border-radius: 5px;
-
-  background-color: #222;
-  color: white;
-
-  cursor: pointer;
-}
+/* =========================
+   AÇÕES DAS DÍVIDAS
+========================= */
 .acoes-dividas {
   display: flex;
+
   gap: 8px;
+
   margin-top: 10px;
 }
+
+.btnPagar,
+.btnEditar,
 .btnExcluir {
   padding: 6px 12px;
 
   border: none;
-  border-radius: 5px;
 
-  background-color: #777;
-  color: white;
+  border-radius: 6px;
 
   cursor: pointer;
+
+  transition: 0.2s;
 }
+
+.btnPagar {
+  background-color: #222;
+  color: white;
+}
+
+.btnEditar {
+  background-color: #555;
+  color: white;
+}
+
+.btnExcluir {
+  background-color: #777;
+  color: white;
+}
+
+.btnPagar:hover,
+.btnEditar:hover,
+.btnExcluir:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================
+   DÍVIDA PAGA
+========================= */
+
 .divida.paga {
   opacity: 0.6;
 }
+
 .divida.paga h3 {
   text-decoration: line-through;
 }
 
+/* =========================
+   STATUS
+========================= */
+
+.status-divida {
+  margin-top: 8px;
+}
+
 .status-paga {
   color: #166534;
+
   background-color: #dcfce7;
+
   padding: 4px 8px;
+
   border-radius: 5px;
+
   font-weight: bold;
 }
 
 .status-atrasada {
   color: #991b1b;
+
   background-color: #fee2e2;
+
   padding: 4px 8px;
+
   border-radius: 5px;
+
   font-weight: bold;
 }
 
 .status-aberta {
-  color: orange;
+  color: #c2410c;
+
   background-color: #ffedd5;
+
   padding: 4px 8px;
+
   border-radius: 5px;
+
   font-weight: bold;
 }

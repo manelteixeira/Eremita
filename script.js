@@ -24,6 +24,9 @@ const elementoTotalAtrasadas = document.getElementById("totalAtrasadas");
 const elementoQuantidadeAtrasadas = document.getElementById(
   "quantidadeAtrasadas",
 );
+const botoesFiltro = document.querySelectorAll(".filtro");
+
+let filtroAtual = "todas";
 
 let dividaEditando = null;
 
@@ -50,13 +53,13 @@ const dividasIniciais = [
   {
     nome: "Internet",
     valor: 100,
-    vencimento: "10/08/2026",
+    vencimento: "2026-08-10",
     paga: false,
   },
   {
     nome: "Faculdade",
     valor: 500,
-    vencimento: "15/08/2026",
+    vencimento: "2026-08-15",
     paga: false,
   },
 ];
@@ -163,8 +166,43 @@ function obterStatus(divida) {
   return "Em aberto";
 }
 
+function deveMostrarDivida(divida) {
+  if (filtroAtual === "todas") {
+    return true;
+  }
+
+  if (filtroAtual === "abertas") {
+    return !divida.paga && !estaAtrasada(divida);
+  }
+
+  if (filtroAtual === "atrasadas") {
+    return !divida.paga && estaAtrasada(divida);
+  }
+
+  if (filtroAtual === "pagas") {
+    return divida.paga;
+  }
+
+  return true;
+}
+function ordenarPorVencimento(lista) {
+  return [...lista].sort(function (a, b) {
+    return a.vencimento.localeCompare(b.vencimento);
+  });
+}
+function atualizarListaDividas() {
+  listaDividas.innerHTML = "";
+
+  ordenarPorVencimento(dividas).forEach(function (divida) {
+    criarDivida(divida);
+  });
+}
+
 // Criar dívida
 function criarDivida(divida) {
+  if (!deveMostrarDivida(divida)) {
+    return;
+  }
   // Criar elemento HTML
   const elementoDivida = document.createElement("div");
 
@@ -279,7 +317,7 @@ carregarDividas();
 console.log("Internet atrasada?", estaAtrasada(dividas[0]));
 console.log("Faculdade atrasada?", estaAtrasada(dividas[1]));
 
-dividas.forEach(function (divida) {
+ordenarPorVencimento(dividas).forEach(function (divida) {
   criarDivida(divida);
 });
 
@@ -317,17 +355,19 @@ botaoCadastrar.addEventListener("click", function (event) {
   }
 
   if (dividaEditando !== null) {
-    dividaEditando.nome = nomeDivida;
-    dividaEditando.valor = valorDivida;
-    dividaEditando.vencimento = vencimentoDivida;
+  dividaEditando.nome = nomeDivida;
+  dividaEditando.valor = valorDivida;
+  dividaEditando.vencimento = vencimentoDivida;
 
-    salvarDividas();
+  salvarDividas();
 
-    listaDividas.innerHTML = "";
+  atualizarListaDividas();
 
-    dividas.forEach(function (divida) {
-      criarDivida(divida);
-    });
+  atualizarResumo();
+
+  dividaEditando = null;
+
+  formularioDivida.style.display = "none";
 
     atualizarResumo();
 
@@ -351,15 +391,28 @@ botaoCadastrar.addEventListener("click", function (event) {
 
   dividas.push(novaDivida);
 
-  salvarDividas();
+salvarDividas();
 
-  criarDivida(novaDivida);
+atualizarListaDividas();
 
-  atualizarResumo();
+atualizarResumo();
 
   formularioDivida.style.display = "none";
 
   document.getElementById("nome-divida").value = "";
   document.getElementById("valor-divida").value = "";
   document.getElementById("vencimento-divida").value = "";
+});
+botoesFiltro.forEach(function (botao) {
+  botao.addEventListener("click", function () {
+    filtroAtual = botao.dataset.filtro;
+
+    botoesFiltro.forEach(function (botaoFiltro) {
+      botaoFiltro.classList.remove("ativo");
+    });
+
+    botao.classList.add("ativo");
+
+    atualizarListaDividas();
+  });
 });
