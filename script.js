@@ -110,7 +110,6 @@ function salvarDividas() {
   localStorage.setItem("dividas", dados);
 }
 
-
 function carregarDividas() {
   const dados = localStorage.getItem("dividas");
 
@@ -347,7 +346,6 @@ carregarDividasSupabase();
 
 // atualizarResumo();
 
-
 // Cadastrar nova dívida
 botaoCadastrar.addEventListener("click", async function (event) {
   event.preventDefault();
@@ -380,58 +378,68 @@ botaoCadastrar.addEventListener("click", async function (event) {
   }
 
   if (dividaEditando !== null) {
-  dividaEditando.nome = nomeDivida;
-  dividaEditando.valor = valorDivida;
-  dividaEditando.vencimento = vencimentoDivida;
+  const { data, error } = await supabase
+    .from("dividas")
+    .update({
+      nome: nomeDivida,
+      valor: valorDivida,
+      vencimento: vencimentoDivida,
+    })
+    .eq("id", dividaEditando.id)
+    .select()
+    .single();
 
-  salvarDividas();
+  if (error) {
+    console.error("Erro ao editar dívida:", error);
+    alert("Erro ao editar a dívida.");
+    return;
+  }
+
+  console.log("Dívida editada no Supabase:", data);
+
+  dividaEditando.nome = data.nome;
+  dividaEditando.valor = data.valor;
+  dividaEditando.vencimento = data.vencimento;
 
   atualizarListaDividas();
-
   atualizarResumo();
 
   dividaEditando = null;
 
   formularioDivida.style.display = "none";
 
-    atualizarResumo();
+  document.getElementById("nome-divida").value = "";
+  document.getElementById("valor-divida").value = "";
+  document.getElementById("vencimento-divida").value = "";
 
-    dividaEditando = null;
-
-    formularioDivida.style.display = "none";
-
-    document.getElementById("nome-divida").value = "";
-    document.getElementById("valor-divida").value = "";
-    document.getElementById("vencimento-divida").value = "";
-
-    return;
-  }
-
-  const novaDivida = {
-  nome: nomeDivida,
-  valor: valorDivida,
-  vencimento: vencimentoDivida,
-  paga: false,
-};
-
-const { data, error } = await supabase
-  .from("dividas")
-  .insert([novaDivida])
-  .select()
-  .single();
-
-if (error) {
-  console.error("Erro ao cadastrar dívida:", error);
-  alert("Erro ao cadastrar a dívida.");
   return;
 }
 
-console.log("Dívida cadastrada no Supabase:", data);
+  const novaDivida = {
+    nome: nomeDivida,
+    valor: valorDivida,
+    vencimento: vencimentoDivida,
+    paga: false,
+  };
 
-dividas.push(data);
+  const { data, error } = await supabase
+    .from("dividas")
+    .insert([novaDivida])
+    .select()
+    .single();
 
-atualizarListaDividas();
-atualizarResumo();
+  if (error) {
+    console.error("Erro ao cadastrar dívida:", error);
+    alert("Erro ao cadastrar a dívida.");
+    return;
+  }
+
+  console.log("Dívida cadastrada no Supabase:", data);
+
+  dividas.push(data);
+
+  atualizarListaDividas();
+  atualizarResumo();
 
   formularioDivida.style.display = "none";
 
@@ -453,10 +461,7 @@ botoesFiltro.forEach(function (botao) {
   });
 });
 async function testarSupabase() {
-  const { data, error } = await supabase
-    .from("dividas")
-    .select("*")
-    .limit(1);
+  const { data, error } = await supabase.from("dividas").select("*").limit(1);
 
   if (error) {
     console.error("ERRO AO CONECTAR COM SUPABASE:", error);
