@@ -50,24 +50,76 @@
         </header>
 
         <section class="resumo">
-          <div class="card-resumo">
-            <h2>Total de dividas</h2>
+          <div class="card-resumo card-total">
+            <div class="icone-resumo">💰</div>
 
-            <p id="totalDividas">R$ 0,00</p>
-          </div>
-          <div class="card-resumo">
-            <h2>Em aberto</h2>
-            <p id="totalEmAberto">R$ 0,00</p>
-          </div>
-          <div class="card-resumo">
-            <h2>Pagas</h2>
-            <p id="totalPagas">R$ 0,00</p>
+            <div>
+              <h2>Total devido</h2>
+              <p id="totalDividas">R$ 0,00</p>
+            </div>
           </div>
 
-          <div class="card-resumo">
-            <h2>Atrasadas</h2>
-            <p id="totalAtrasadas">R$ 0,00</p>
-            <small id="quantidadeAtrasadas">0 dívidas</small>
+          <div class="card-resumo card-aberto">
+            <div class="icone-resumo">📋</div>
+
+            <div>
+              <h2>Em aberto</h2>
+              <p id="totalEmAberto">R$ 0,00</p>
+            </div>
+          </div>
+
+          <div class="card-resumo card-pago">
+            <div class="icone-resumo">✓</div>
+
+            <div>
+              <h2>Pagas</h2>
+              <p id="totalPagas">R$ 0,00</p>
+            </div>
+          </div>
+
+          <div class="card-resumo card-atrasado">
+            <div class="icone-resumo">⚠</div>
+
+            <div>
+              <h2>Atrasadas</h2>
+              <p id="totalAtrasadas">R$ 0,00</p>
+              <small id="quantidadeAtrasadas">0 dívidas</small>
+            </div>
+          </div>
+        </section>
+
+        <section class="visao-financeira">
+          <div class="card-visao">
+            <div class="cabecalho-card">
+              <div>
+                <span class="titulo-card">Situação financeira</span>
+                <h2>Visão geral</h2>
+              </div>
+            </div>
+
+            <div class="indicador-financeiro">
+              <div class="indicador-circulo">
+                <span>✓</span>
+              </div>
+
+              <div>
+                <strong>Sua situação</strong>
+                <p>Você está acompanhando suas dívidas.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-visao">
+            <div class="cabecalho-card">
+              <div>
+                <span class="titulo-card">Próximos vencimentos</span>
+                <h2>Fique atento</h2>
+              </div>
+            </div>
+
+            <div class="proximos-vencimentos" id="proximosVencimentos">
+              <p>Nenhum vencimento próximo.</p>
+            </div>
           </div>
         </section>
         <section class="dividas">
@@ -92,7 +144,6 @@
             <button type="button" class="filtro" data-filtro="pagas">
               Pagas
             </button>
-
           </div>
 
           <div class="formulario-divida" id="formularioDivida">
