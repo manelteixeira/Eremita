@@ -1,4 +1,4 @@
-/*import { supabase } from "./supabase.js";*/
+import { supabase } from "./supabase.js";
 
 const botaoNovaDivida = document.getElementById("btnNovaDivida");
 const formularioDivida = document.getElementById("formularioDivida");
