@@ -27,7 +27,18 @@
 }
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: var(--cor-fundo);
+
+  background:
+    linear-gradient(
+      rgba(2, 44, 34, 0.55),
+      rgba(2, 44, 34, 0.55)
+    ),
+    url("fundo-financeiro.jpg");
+
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+
   color: var(--cor-texto);
 }
 main {
@@ -108,49 +119,107 @@ main {
 .painel {
   width: 90%;
   max-width: 1100px;
+
+  padding: 25px;
+
+  background: rgba(248, 250, 252, 0.94);
+
+  border-radius: 20px;
+
+  box-shadow: 
+  0 25px 60px rgba(0, 0, 0, 0.25);
+
+  backdrop-filter: blur(6px);
 }
 .cabeçalho {
   display: flex;
+
   justify-content: space-between;
   align-items: center;
 
-  margin-bottom: 30px;
+  margin-bottom: 25px;
+
+  padding: 20px 22px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(240, 253, 244, 0.98),
+      rgba(255, 255, 255, 0.96)
+    );
+
+  border: 1px solid #bbf7d0;
+
+  border-radius: var(--raio-card);
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15);
 }
 .cabeçalho h1 {
-  font-size: 30px;
+  font-size: 28px;
   margin-bottom: 6px;
-  color: var(--cor-texto);
+
+  color: var(--cor-principal);
+
+  letter-spacing: -0.5px;
 }
 
 .cabeçalho p {
   color: var(--cor-texto-secundario);
-  font-size: 15px;
+  font-size: 14px;
+  margin: 0;
 }
 
 #btnSair {
-  padding: 9px 16px;
+  padding: 10px 18px;
 
-  border: 1px solid var(--cor-borda);
+  border: 1px solid #bbf7d0;
 
-  border-radius: 8px;
+  border-radius: 9px;
 
-  background-color: var(--cor-card);
+  background-color: white;
 
-  color: var(--cor-texto-secundario);
+  color: var(--cor-principal);
 
   cursor: pointer;
 
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 13px;
 
   transition: 0.2s;
 }
 
 #btnSair:hover {
-  background-color: #fee2e2;
+  background-color: var(--cor-principal);
 
-  color: var(--cor-perigo);
+  color: white;
 
-  border-color: #fecaca;
+  border-color: var(--cor-principal);
+
+  transform: translateY(-1px);
+}.marca {
+  gap: 10px;
+}
+
+.logo-eremita {
+  width: 48px;
+  height: 48px;
+}
+
+.logo-eremita > span {
+  font-size: 34px;
+}
+
+.marca-texto h1 {
+  font-size: 22px;
+}
+
+.marca-texto p {
+  font-size: 13px;
+}
+
+.cabeçalho {
+  padding: 16px;
 }
 /* =========================
    RESUMO
@@ -163,7 +232,8 @@ main {
   background-color: var(--cor-card);
 
   flex: 1;
-  padding: 22px;
+
+  padding: 20px;
 
   border-radius: var(--raio-card);
 
@@ -173,50 +243,60 @@ main {
 
   transition:
     transform 0.2s,
-    box-shadow 0.2s;
+    box-shadow 0.2s,
+    border-color 0.2s;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .card-resumo:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
 
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+  border-color: #cbd5e1;
+
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
 }
 .card-resumo h2 {
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
 
-  margin-bottom: 10px;
+  color: var(--cor-texto-secundario);
 
-  font-weight: normal;
+  margin-bottom: 6px;
+
+  font-weight: 600;
 }
 .card-resumo p {
-  font-size: 24px;
-  font-weight: bold;
+  font-size: 22px;
+
+  font-weight: 700;
+
+  color: var(--cor-texto);
 }
 /* =========================
    IDENTIDADE DOS RESUMOS
 ========================= */
-.card-resumo{
+.card-resumo {
   display: flex;
 
   align-items: center;
 
   gap: 15px;
 }
-.icone-resumo{
-  width: 48px;
-  height: 48px;
+.icone-resumo {
+  width: 46px;
+  height: 46px;
 
   flex-shrink: 0;
 
-  border-radius: 10px;
+  border-radius: 12px;
 
   display: flex;
-
   justify-content: center;
   align-items: center;
 
-  font-size: 21px;
+  font-size: 20px;
 
   font-weight: bold;
 }
@@ -251,12 +331,11 @@ main {
   color: var(--cor-sucesso);
 }
 /* ATRASADAS */
-.card-atrasado .icone-resumo{
-  background-color: #fee2fe;
-
+.card-atrasado .icone-resumo {
+  background-color: #fee2e2;
   color: var(--cor-perigo);
 }
-.card-resumo small{
+.card-resumo small {
   display: block;
 
   margin-top: 4px;
@@ -303,34 +382,40 @@ main {
 ========================= */
 .filtros-dividas {
   display: flex;
-  gap: 10px;
-
+  gap: 8px;
   margin-bottom: 20px;
-
   flex-wrap: wrap;
 }
 .filtro {
   padding: 8px 14px;
 
-  border: 1px solid #ccc;
-  border-radius: 6px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
 
-  background-color: white;
-  color: #222;
+  background-color: var(--cor-card);
+  color: var(--cor-texto-secundario);
 
   cursor: pointer;
+
+  font-weight: 600;
+  font-size: 13px;
 
   transition: 0.2s;
 }
 .filtro:hover {
-  background-color: #f0f0f0;
+  border-color: var(--cor-principal);
+  color: var(--cor-principal);
+  background-color: #f0fdf4;
+
   transform: translateY(-1px);
 }
+
 .filtro.ativo {
   background-color: var(--cor-principal);
   color: white;
-
   border-color: var(--cor-principal);
+
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
 }
 /* =========================
    LISTA DE DÍVIDAS
@@ -341,37 +426,48 @@ main {
   gap: 10px;
 }
 .divida {
-  background-color: white;
+  background-color: var(--cor-card);
 
-  padding: 20px;
+  padding: 18px 20px;
 
-  border-radius: 10px;
+  border-radius: var(--raio-card);
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--cor-card);
 
   display: flex;
   justify-content: space-between;
   align-items: center;
 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--sombra-card);
 
   transition:
     transform 0.2s,
-    box-shadow 0.2s;
+    box-shadow 0.2s,
+    border-color 0.2s;
 }
 .divida:hover {
   transform: translateY(-2px);
 
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
 }
 .divida h3 {
-  margin-bottom: 5px;
+  margin-bottom: 6px;
+
+  font-size: 16px;
+  color: var(--cor-texto);
 }
+
 .divida p {
-  color: #666;
+  color: var(--cor-texto-secundario);
+
+  font-size: 13px;
 }
+
 .divida strong {
   font-size: 18px;
+  color: var(--cor-texto);
 }
 /* =========================
    FORMULÁRIO
@@ -379,37 +475,56 @@ main {
 .formulario-divida {
   display: none;
 
-  background-color: white;
+  background-color: var(--cor-card);
 
   padding: 25px;
   margin-bottom: 20px;
 
-  border-radius: 10px;
+  border-radius: var(--raio-card);
 
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--cor-borda);
 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--sombra-card);
 }
+
 .formulario-divida h2 {
   margin-bottom: 20px;
+  font-size: 20px;
 }
+
 .formulario-divida label {
   display: block;
 
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 14px;
 
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
+
 .formulario-divida input {
   width: 100%;
 
-  padding: 10px;
+  padding: 11px 12px;
+  margin-bottom: 16px;
 
-  margin-bottom: 15px;
+  border: 1px solid var(--cor-borda);
+  border-radius: 8px;
 
-  border: 1px solid #ccc;
+  background-color: #f8fafc;
+  color: var(--cor-texto);
 
-  border-radius: 6px;
+  font-size: 14px;
+
+  transition: 0.2s;
+}
+.formulario-divida input:focus {
+  outline: none;
+
+  border-color: var(--cor-principal);
+
+  background-color: white;
+
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 .botoes-formulario {
   display: flex;
@@ -418,24 +533,42 @@ main {
 
   gap: 10px;
 }
+
 .botoes-formulario button {
-  padding: 10px 15px;
+  padding: 10px 16px;
 
   border: none;
-
-  border-radius: 6px;
+  border-radius: 8px;
 
   cursor: pointer;
 
+  font-weight: 600;
+
   transition: 0.2s;
 }
+
 .botoes-formulario button:hover {
   transform: translateY(-1px);
 }
 
+.botoes-formulario button:first-child {
+  background-color: #f1f5f9;
+  color: var(--cor-texto-secundario);
+
+  border: 1px solid var(--cor-borda);
+}
+
+.botoes-formulario button:first-child:hover {
+  background-color: #e2e8f0;
+}
+
 .botoes-formulario button:last-child {
-  background-color: #222;
+  background-color: var(--cor-principal);
   color: white;
+}
+
+.botoes-formulario button:last-child:hover {
+  background-color: var(--cor-principal-hover);
 }
 /* =========================
    AÇÕES DAS DÍVIDAS
@@ -463,24 +596,38 @@ main {
 }
 
 .btnPagar {
-  background-color: #222;
+  background-color: var(--cor-sucesso);
   color: white;
 }
 
 .btnEditar {
-  background-color: #555;
+  background-color: var(--cor-secundaria);
   color: white;
 }
 
 .btnExcluir {
-  background-color: #777;
+  background-color: var(--cor-perigo);
   color: white;
 }
 
-.btnPagar:hover,
-.btnEditar:hover,
-.btnExcluir:hover {
+.btnPagar:hover {
+  background-color: var(--cor-principal-hover);
   transform: translateY(-1px);
+}
+.btnEditar:hover {
+  background-color: #1d4ed8;
+  transform: translateY(-1px);
+}
+.btnExcluir:hover {
+  background-color: #991b1b;
+  transform: translateY(-1px);
+}
+.btnPagar:disabled {
+  background-color: #dcfce7;
+  color: #166534;
+  cursor: not-allowed;
+  opacity: 1;
+  transform: none;
 }
 
 /* =========================
@@ -488,7 +635,9 @@ main {
 ========================= */
 
 .divida.paga {
-  opacity: 0.6;
+  opacity: 0.75;
+  border-color: #bbf7d0;
+  background-color: #f8fff9;
 }
 
 .divida.paga h3 {
@@ -550,7 +699,7 @@ main {
 
   margin-top: 30px;
 }
-.card-visao{
+.card-visao {
   background-color: var(--cor-card);
 
   padding: 22px;
@@ -582,18 +731,16 @@ main {
    INDICADOR FINANCEIRO
 ========================= */
 
-
-.indicador-financeiro {
-  display: flex;
-
-  align-items: center;
-
-  gap: 15px;
+.card-atrasado .icone-resumo {
+  background-color: #fee2e2;
+  color: var(--cor-perigo);
 }
 
 .indicador-circulo {
-  width: 50px;
-  height: 50px;
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
 
   border-radius: 50%;
 
@@ -602,63 +749,197 @@ main {
   color: var(--cor-sucesso);
 
   display: flex;
-
   justify-content: center;
-
   align-items: center;
 
   font-size: 22px;
-
   font-weight: bold;
+
+  border: 5px solid #f0fdf4;
 }
 
 .indicador-financeiro strong {
   display: block;
 
   margin-bottom: 5px;
+
+  font-size: 15px;
 }
 
 .indicador-financeiro p {
   color: var(--cor-texto-secundario);
 
-  font-size: 14px;
+  font-size: 13px;
+
+  line-height: 1.4;
 }
 /* =========================
    PRÓXIMOS VENCIMENTOS
 ========================= */
-.proximos-vencimentos{
+.proximos-vencimentos {
   display: flex;
 
   flex-direction: column;
 
   gap: 10px;
 }
-.proximos-vencimentos > p{
+.proximos-vencimentos > p {
   color: var(--cor-texto-secundario);
 
   font-size: 14px;
 }
+.item-vencimento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
+  padding: 12px 0;
+
+  border-bottom: 1px solid var(--cor-borda);
+}
+.item-vencimento:last-child {
+  border-bottom: none;
+}
+.info-vencimento {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.info-vencimento strong {
+  font-size: 14px;
+}
+.info-vencimento span {
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+}
+.valor-vencimento {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+}
+.valor-vencimento strong {
+  font-size: 14px;
+}
+.valor-vencimento span {
+  font-size: 11px;
+  font-weight: bold;
+
+  padding: 3px 7px;
+  border-radius: 5px;
+}
+.vencimento-aberto {
+  color: #c2410c;
+  background-color: #ffedd5;
+}
+.vencimento-atrasado {
+  color: #991b1b;
+  background-color: #fee2e2;
+}
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.marca-texto h1 {
+  font-size: 28px;
+
+  margin-bottom: 5px;
+
+  color: var(--cor-principal);
+
+  letter-spacing: -0.5px;
+}
+
+.marca-texto p {
+  color: var(--cor-texto-secundario);
+
+  font-size: 14px;
+
+  margin: 0;
+}
+
+.logo-eremita {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 16px;
+
+  background-color: #dcfce7;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  color: var(--cor-principal);
+}
+
+.logo-eremita > span {
+  font-size: 42px;
+  font-weight: 900;
+
+  line-height: 1;
+
+  transform: translateX(-4px);
+}
+
+.logo-grafico {
+  position: absolute;
+
+  right: 9px;
+  bottom: 11px;
+
+  display: flex;
+  align-items: flex-end;
+
+  gap: 2px;
+}
+
+.logo-grafico i {
+  display: block;
+
+  width: 4px;
+
+  border-radius: 2px;
+
+  background-color: var(--cor-principal);
+}
+
+.logo-grafico i:nth-child(1) {
+  height: 7px;
+}
+
+.logo-grafico i:nth-child(2) {
+  height: 11px;
+}
+
+.logo-grafico i:nth-child(3) {
+  height: 15px;
+}
 /* =========================
    RESPONSIVIDADE
 ========================= */
 
 @media (max-width: 600px) {
-
   main {
     align-items: flex-start;
     padding: 20px 0;
   }
 
   .painel {
-    width: 92%;
-  }
+  width: 94%;
+  padding: 15px;
+  border-radius: 16px;
+}
 
   .cabeçalho {
     flex-direction: column;
     align-items: flex-start;
     gap: 5px;
     margin-bottom: 20px;
+    padding: 16px;
   }
 
   .cabeçalho h1 {
@@ -671,15 +952,15 @@ main {
   }
 
   .card-resumo {
-  padding: 15px;
-}
+    padding: 15px;
+  }
 
-.icone-resumo {
-  width: 42px;
-  height: 42px;
+  .icone-resumo {
+    width: 42px;
+    height: 42px;
 
-  font-size: 18px;
-}
+    font-size: 18px;
+  }
 
   .titulo-dividas {
     flex-direction: column;
@@ -712,12 +993,12 @@ main {
   }
 
   .acoes-dividas button {
-    flex: 1;
+    font-size: 12px;
+    font-weight: 600;
   }
   .visao-financeira {
-  grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
 
-  gap: 10px;
-}
-
+    gap: 10px;
+  }
 }

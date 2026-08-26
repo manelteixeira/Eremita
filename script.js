@@ -1,4 +1,4 @@
-import { supabase } from "./supabase.js";
+/*import { supabase } from "./supabase.js";*/
 
 const botaoNovaDivida = document.getElementById("btnNovaDivida");
 const formularioDivida = document.getElementById("formularioDivida");
@@ -145,6 +145,7 @@ async function carregarDividasSupabase() {
 
   atualizarListaDividas();
   atualizarResumo();
+  atualizarProximosVencimentos();
 }
 
 // Abrir formulário
@@ -211,6 +212,55 @@ function deveMostrarDivida(divida) {
 function ordenarPorVencimento(lista) {
   return [...lista].sort(function (a, b) {
     return a.vencimento.localeCompare(b.vencimento);
+  });
+}
+function atualizarProximosVencimentos() {
+  const elemento = document.getElementById("proximosVencimentos");
+
+  const dividasPendentes = dividas
+    .filter(function (divida) {
+      return !divida.paga;
+    })
+    .sort(function (a, b) {
+      return a.vencimento.localeCompare(b.vencimento);
+    });
+
+  if (dividasPendentes.length === 0) {
+    elemento.innerHTML = `
+      <p>Nenhum vencimento próximo.</p>
+    `;
+
+    return;
+  }
+
+  const proximas = dividasPendentes.slice(0, 3);
+
+  elemento.innerHTML = "";
+
+  proximas.forEach(function (divida) {
+    const item = document.createElement("div");
+
+    item.classList.add("item-vencimento");
+
+    const status = estaAtrasada(divida) ? "Atrasada" : "Em aberto";
+
+    const classeStatus = estaAtrasada(divida)
+      ? "vencimento-atrasado"
+      : "vencimento-aberto";
+
+    item.innerHTML = `
+      <div class="info-vencimento">
+        <strong>${divida.nome}</strong>
+        <span>Vencimento: ${divida.vencimento}</span>
+      </div>
+
+      <div class="valor-vencimento">
+        <strong>R$ ${divida.valor.toFixed(2)}</strong>
+        <span class="${classeStatus}">${status}</span>
+      </div>
+    `;
+
+    elemento.appendChild(item);
   });
 }
 function atualizarListaDividas() {
@@ -297,6 +347,7 @@ function criarDivida(divida) {
     salvarDividas();
 
     atualizarResumo();
+    atualizarProximosVencimentos();   
 
     botaoPagar.textContent = "✓ Paga";
 
@@ -378,42 +429,42 @@ botaoCadastrar.addEventListener("click", async function (event) {
   }
 
   if (dividaEditando !== null) {
-  const { data, error } = await supabase
-    .from("dividas")
-    .update({
-      nome: nomeDivida,
-      valor: valorDivida,
-      vencimento: vencimentoDivida,
-    })
-    .eq("id", dividaEditando.id)
-    .select()
-    .single();
+    const { data, error } = await supabase
+      .from("dividas")
+      .update({
+        nome: nomeDivida,
+        valor: valorDivida,
+        vencimento: vencimentoDivida,
+      })
+      .eq("id", dividaEditando.id)
+      .select()
+      .single();
 
-  if (error) {
-    console.error("Erro ao editar dívida:", error);
-    alert("Erro ao editar a dívida.");
+    if (error) {
+      console.error("Erro ao editar dívida:", error);
+      alert("Erro ao editar a dívida.");
+      return;
+    }
+
+    console.log("Dívida editada no Supabase:", data);
+
+    dividaEditando.nome = data.nome;
+    dividaEditando.valor = data.valor;
+    dividaEditando.vencimento = data.vencimento;
+
+    atualizarListaDividas();
+    atualizarResumo();
+
+    dividaEditando = null;
+
+    formularioDivida.style.display = "none";
+
+    document.getElementById("nome-divida").value = "";
+    document.getElementById("valor-divida").value = "";
+    document.getElementById("vencimento-divida").value = "";
+
     return;
   }
-
-  console.log("Dívida editada no Supabase:", data);
-
-  dividaEditando.nome = data.nome;
-  dividaEditando.valor = data.valor;
-  dividaEditando.vencimento = data.vencimento;
-
-  atualizarListaDividas();
-  atualizarResumo();
-
-  dividaEditando = null;
-
-  formularioDivida.style.display = "none";
-
-  document.getElementById("nome-divida").value = "";
-  document.getElementById("valor-divida").value = "";
-  document.getElementById("vencimento-divida").value = "";
-
-  return;
-}
 
   const novaDivida = {
     nome: nomeDivida,
