@@ -30,12 +30,54 @@
               placeholder="Digite sua senha"
               required
             />
-            <button type="button" id="mostrarSenha">👁</button>
+            <button type="button" id="mostrarSenha" aria-label="Mostrar senha">
+              👁
+            </button>
           </div>
 
           <p id="mensagemErro"></p>
 
           <button type="submit" id="btnEntrar">Entrar</button>
+
+          <button type="button" id="btnCriarConta">Criar conta</button>
+
+          <div id="formularioCadastro" style="display: none">
+            <h2>Criar conta</h2>
+
+            <label for="nomeCadastro">Nome:</label>
+            <input
+              type="text"
+              id="nomeCadastro"
+              placeholder="Digite seu nome"
+            />
+
+            <label for="emailCadastro">Email:</label>
+            <input
+              type="email"
+              id="emailCadastro"
+              placeholder="Digite seu email"
+            />
+
+            <label for="senhaCadastro">Senha:</label>
+            <input
+              type="password"
+              id="senhaCadastro"
+              placeholder="Digite sua senha"
+            />
+
+            <label for="confirmarSenhaCadastro">Confirmar senha:</label>
+            <input
+              type="password"
+              id="confirmarSenhaCadastro"
+              placeholder="Digite a senha novamente"
+            />
+
+            <p id="mensagemCadastro"></p>
+
+            <button type="button" id="btnCadastrarUsuario">Criar conta</button>
+
+            <button type="button" id="btnVoltarLogin">Voltar para login</button>
+          </div>
         </form>
       </section>
 
@@ -53,7 +95,7 @@
             </div>
 
             <div class="marca-texto">
-              <h1>Olá, Emanuel!</h1>
+              <h1 id="nomeUsuario">Olá!</h1>
               <p>Bem-vindo à Eremita</p>
             </div>
           </div>

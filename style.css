@@ -110,6 +110,9 @@ main {
   background-color: #1d4ed8;
   transform: translateY(-1px);
 }
+#btnCriarConta {
+  margin-top: 10px;
+}
 /* =========================
    PAINEL
 ========================= */
@@ -756,7 +759,7 @@ main {
     transform 0.2s ease,
     box-shadow 0.2s ease;
 }
-.card-visao:hover{
+.card-visao:hover {
   transform: translateY(-2px);
 
   box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
@@ -995,6 +998,38 @@ main {
 .logo-grafico i:nth-child(3) {
   height: 15px;
 }
+.campo-senha {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.campo-senha input {
+  padding-right: 45px;
+}
+
+#mostrarSenha {
+  position: absolute;
+  right: 10px;
+
+  border: none;
+  background: transparent;
+
+  padding: 5px;
+
+  cursor: pointer;
+
+  font-size: 18px;
+
+  color: #64748b;
+
+  transition: 0.2s;
+}
+
+#mostrarSenha:hover {
+  color: var(--cor-principal);
+  transform: scale(1.05);
+}
 /* =========================
    RESPONSIVIDADE
 ========================= */
@@ -1054,12 +1089,12 @@ main {
   }
 
   .filtro {
-  flex: 1;
+    flex: 1;
 
-  text-align: center;
+    text-align: center;
 
-  padding: 8px 10px;
-}
+    padding: 8px 10px;
+  }
 
   .divida {
     flex-direction: column;
