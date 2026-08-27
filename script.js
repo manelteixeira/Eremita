@@ -5,6 +5,7 @@ const formularioDivida = document.getElementById("formularioDivida");
 
 const botaoMenuMobile = document.getElementById("btnMenuMobile");
 const estruturaPainel = document.querySelector(".estrutura-painel");
+const overlayMenu = document.getElementById("overlayMenu");
 
 const telaLogin = document.querySelector(".login");
 const telaPainel = document.querySelector(".painel");
@@ -248,10 +249,16 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
   senhaCadastro.value = "";
   confirmarSenhaCadastro.value = "";
 });
-botaoMenuMobile.addEventListener("click", function () {
-  estruturaPainel.classList.toggle("menu-aberto");
+function fecharMenu() {
+  estruturaPainel.classList.remove("menu-aberto");
 
-  const menuAberto = estruturaPainel.classList.contains("menu-aberto");
+  botaoMenuMobile.textContent = "☰";
+
+  botaoMenuMobile.setAttribute("aria-label", "Abrir menu");
+}
+
+botaoMenuMobile.addEventListener("click", function () {
+  const menuAberto = estruturaPainel.classList.toggle("menu-aberto");
 
   botaoMenuMobile.textContent = menuAberto ? "✕" : "☰";
 
@@ -259,6 +266,10 @@ botaoMenuMobile.addEventListener("click", function () {
     "aria-label",
     menuAberto ? "Fechar menu" : "Abrir menu",
   );
+});
+
+overlayMenu.addEventListener("click", function () {
+  fecharMenu();
 });
 
 // dívidas que realmente estão sendo utilizadas pelo sistema
