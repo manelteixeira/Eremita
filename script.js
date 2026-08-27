@@ -189,6 +189,7 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
     email: email,
     password: senha,
     options: {
+      emailRedirectTo: window.location.origin,
       data: {
         nome: nome,
       },
