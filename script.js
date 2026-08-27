@@ -3,6 +3,9 @@ import { supabase } from "./supabase.js";
 const botaoNovaDivida = document.getElementById("btnNovaDivida");
 const formularioDivida = document.getElementById("formularioDivida");
 
+const botaoMenuMobile = document.getElementById("btnMenuMobile");
+const estruturaPainel = document.querySelector(".estrutura-painel");
+
 const telaLogin = document.querySelector(".login");
 const telaPainel = document.querySelector(".painel");
 
@@ -51,6 +54,38 @@ let filtroAtual = "todas";
 let dividaEditando = null;
 
 telaPainel.style.display = "none";
+
+const botaoTema = document.getElementById("btnTema");
+
+// =========================
+// TEMA
+// =========================
+
+const temaSalvo = localStorage.getItem("tema");
+
+if (temaSalvo === "escuro") {
+  document.body.classList.add("dark-mode");
+  botaoTema.textContent = "☀️";
+  botaoTema.setAttribute("aria-label", "Ativar modo claro");
+}
+
+botaoTema.addEventListener("click", function () {
+  document.body.classList.toggle("dark-mode");
+
+  const modoEscuro = document.body.classList.contains("dark-mode");
+
+  if (modoEscuro) {
+    botaoTema.textContent = "☀️";
+    botaoTema.setAttribute("aria-label", "Ativar modo claro");
+
+    localStorage.setItem("tema", "escuro");
+  } else {
+    botaoTema.textContent = "🌙";
+    botaoTema.setAttribute("aria-label", "Ativar modo escuro");
+
+    localStorage.setItem("tema", "claro");
+  }
+});
 
 botaoMostrarSenha.addEventListener("click", function () {
   if (campoSenha.type === "password") {
@@ -212,6 +247,18 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
   emailCadastro.value = "";
   senhaCadastro.value = "";
   confirmarSenhaCadastro.value = "";
+});
+botaoMenuMobile.addEventListener("click", function () {
+  estruturaPainel.classList.toggle("menu-aberto");
+
+  const menuAberto = estruturaPainel.classList.contains("menu-aberto");
+
+  botaoMenuMobile.textContent = menuAberto ? "✕" : "☰";
+
+  botaoMenuMobile.setAttribute(
+    "aria-label",
+    menuAberto ? "Fechar menu" : "Abrir menu",
+  );
 });
 
 // dívidas que realmente estão sendo utilizadas pelo sistema

@@ -10,11 +10,16 @@
 
   <body>
     <main>
+      <!-- =========================
+           LOGIN
+      ========================== -->
       <section class="login">
         <h1>Eremita</h1>
         <p>Boas-vindas!</p>
+
         <form>
           <label for="email">Email:</label>
+
           <input
             type="email"
             id="email"
@@ -23,6 +28,7 @@
           />
 
           <label for="password">Senha:</label>
+
           <div class="campo-senha">
             <input
               type="password"
@@ -30,6 +36,7 @@
               placeholder="Digite sua senha"
               required
             />
+
             <button type="button" id="mostrarSenha" aria-label="Mostrar senha">
               👁
             </button>
@@ -41,10 +48,15 @@
 
           <button type="button" id="btnCriarConta">Criar conta</button>
 
+          <!-- =========================
+               CADASTRO
+          ========================== -->
+
           <div id="formularioCadastro" style="display: none">
             <h2>Criar conta</h2>
 
             <label for="nomeCadastro">Nome:</label>
+
             <input
               type="text"
               id="nomeCadastro"
@@ -52,6 +64,7 @@
             />
 
             <label for="emailCadastro">Email:</label>
+
             <input
               type="email"
               id="emailCadastro"
@@ -59,13 +72,15 @@
             />
 
             <label for="senhaCadastro">Senha:</label>
+
             <input
               type="password"
               id="senhaCadastro"
               placeholder="Digite sua senha"
             />
 
-            <label for="confirmarSenhaCadastro">Confirmar senha:</label>
+            <label for="confirmarSenhaCadastro"> Confirmar senha: </label>
+
             <input
               type="password"
               id="confirmarSenhaCadastro"
@@ -81,144 +96,328 @@
         </form>
       </section>
 
+      <!-- =========================
+           PAINEL
+      ========================== -->
+
       <section class="painel">
-        <header class="cabeçalho">
-          <div class="marca">
-            <div class="logo-eremita">
-              <span>E</span>
+        <div class="estrutura-painel">
+          <!-- =========================
+               MENU LATERAL
+          ========================== -->
 
-              <div class="logo-grafico">
-                <i></i>
-                <i></i>
-                <i></i>
-              </div>
-            </div>
+          <aside class="menu-lateral">
+            <!-- LOGO -->
+            <div class="menu-logo">
+              <div class="menu-logo-icone">
+                <svg
+                  class="logo-ninja"
+                  viewBox="0 0 64 64"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-label="Logo Eremita"
+                >
+                  <path
+                    d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
+                    fill="currentColor"
+                  />
 
-            <div class="marca-texto">
-              <h1 id="nomeUsuario">Olá!</h1>
-              <p>Bem-vindo à Eremita</p>
-            </div>
-          </div>
+                  <path d="M14 27h36v9H14z" fill="currentColor" />
 
-          <button type="button" id="btnSair">Sair</button>
-        </header>
+                  <path
+                    d="M21 30c2.5-3 6-3 9 0"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
 
-        <section class="resumo">
-          <div class="card-resumo card-total">
-            <div class="icone-resumo">💰</div>
+                  <path
+                    d="M34 30c3-3 6.5-3 9 0"
+                    fill="none"
+                    stroke="white"
+                    stroke-width="3"
+                    stroke-linecap="round"
+                  />
 
-            <div>
-              <h2>Total devido</h2>
-              <p id="totalDividas">R$ 0,00</p>
-            </div>
-          </div>
+                  <circle cx="27" cy="30" r="2" fill="white" />
 
-          <div class="card-resumo card-aberto">
-            <div class="icone-resumo">📋</div>
-
-            <div>
-              <h2>Em aberto</h2>
-              <p id="totalEmAberto">R$ 0,00</p>
-            </div>
-          </div>
-
-          <div class="card-resumo card-pago">
-            <div class="icone-resumo">✓</div>
-
-            <div>
-              <h2>Pagas</h2>
-              <p id="totalPagas">R$ 0,00</p>
-            </div>
-          </div>
-
-          <div class="card-resumo card-atrasado">
-            <div class="icone-resumo">⚠</div>
-
-            <div>
-              <h2>Atrasadas</h2>
-              <p id="totalAtrasadas">R$ 0,00</p>
-              <small id="quantidadeAtrasadas">0 dívidas</small>
-            </div>
-          </div>
-        </section>
-
-        <section class="visao-financeira">
-          <div class="card-visao">
-            <div class="cabecalho-card">
-              <div>
-                <span class="titulo-card">Situação financeira</span>
-                <h2>Visão geral</h2>
-              </div>
-            </div>
-
-            <div class="indicador-financeiro">
-              <div class="indicador-circulo">
-                <span>✓</span>
+                  <circle cx="37" cy="30" r="2" fill="white" />
+                </svg>
               </div>
 
               <div>
-                <strong>Sua situação</strong>
-                <p>Você está acompanhando suas dívidas.</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="card-visao">
-            <div class="cabecalho-card">
-              <div>
-                <span class="titulo-card">Próximos vencimentos</span>
-                <h2>Fique atento</h2>
+                <strong>EREMITA</strong>
+                <small>Controle financeiro</small>
               </div>
             </div>
 
-            <div class="proximos-vencimentos" id="proximosVencimentos">
-              <p>Nenhum vencimento próximo.</p>
+            <!-- NAVEGAÇÃO -->
+            <nav class="menu-navegacao">
+              <a href="#dashboard" class="item-menu ativo">
+                <span>🏠</span>
+                <span>Dashboard</span>
+              </a>
+
+              <a href="#dividas" class="item-menu">
+                <span>💸</span>
+                <span>Dívidas</span>
+              </a>
+
+              <a href="#" class="item-menu menu-breve">
+                <span>💰</span>
+                <span>Gastos</span>
+                <small>Em breve</small>
+              </a>
+
+              <a href="#" class="item-menu menu-breve">
+                <span>📊</span>
+                <span>Relatórios</span>
+                <small>Em breve</small>
+              </a>
+            </nav>
+
+            <!-- MENU INFERIOR -->
+            <div class="menu-inferior">
+              <a href="#" class="item-menu menu-breve">
+                <span>⚙️</span>
+                <span>Configurações</span>
+                <small>Em breve</small>
+              </a>
+
+              <button
+                type="button"
+                id="btnSair"
+                class="item-menu btn-menu-sair"
+              >
+                <span>🚪</span>
+                <span>Sair</span>
+              </button>
             </div>
+          </aside>
+
+          <div class="overlay-menu" id="overlayMenu"></div>
+          <!-- =========================
+               CONTEÚDO DO PAINEL
+          ========================== -->
+
+          <div class="conteudo-painel">
+            <!-- CABEÇALHO -->
+            <header class="cabeçalho">
+              <button
+                type="button"
+                id="btnMenuMobile"
+                class="btn-menu-mobile"
+                aria-label="Abrir menu"
+              >
+                ☰
+              </button>
+
+              <div class="marca">
+                <div class="logo-eremita">
+                  <svg
+                    class="logo-ninja"
+                    viewBox="0 0 64 64"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-label="Logo Eremita"
+                  >
+                    <path
+                      d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
+                      fill="currentColor"
+                    />
+
+                    <path d="M14 27h36v9H14z" fill="currentColor" />
+
+                    <path
+                      d="M21 30c2.5-3 6-3 9 0"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                    />
+
+                    <path
+                      d="M34 30c3-3 6.5-3 9 0"
+                      fill="none"
+                      stroke="white"
+                      stroke-width="3"
+                      stroke-linecap="round"
+                    />
+
+                    <circle cx="27" cy="30" r="2" fill="white" />
+
+                    <circle cx="37" cy="30" r="2" fill="white" />
+                  </svg>
+                </div>
+
+                <div class="marca-texto">
+                  <h1 id="nomeUsuario">Olá!</h1>
+
+                  <p>Bem-vindo à Eremita</p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                id="btnTema"
+                class="btn-tema"
+                aria-label="Ativar modo escuro"
+              >
+                🌙
+              </button>
+            </header>
+
+            <!-- =========================
+                 RESUMO
+            ========================== -->
+
+            <section class="resumo" id="dashboard">
+              <div class="card-resumo card-total">
+                <div class="icone-resumo">💰</div>
+
+                <div>
+                  <h2>Total devido</h2>
+                  <p id="totalDividas">R$ 0,00</p>
+                </div>
+              </div>
+
+              <div class="card-resumo card-aberto">
+                <div class="icone-resumo">📋</div>
+
+                <div>
+                  <h2>Em aberto</h2>
+                  <p id="totalEmAberto">R$ 0,00</p>
+                </div>
+              </div>
+
+              <div class="card-resumo card-pago">
+                <div class="icone-resumo">✓</div>
+
+                <div>
+                  <h2>Pagas</h2>
+                  <p id="totalPagas">R$ 0,00</p>
+                </div>
+              </div>
+
+              <div class="card-resumo card-atrasado">
+                <div class="icone-resumo">⚠</div>
+
+                <div>
+                  <h2>Atrasadas</h2>
+
+                  <p id="totalAtrasadas">R$ 0,00</p>
+
+                  <small id="quantidadeAtrasadas"> 0 dívidas </small>
+                </div>
+              </div>
+            </section>
+
+            <!-- =========================
+                 VISÃO FINANCEIRA
+            ========================== -->
+
+            <section class="visao-financeira">
+              <div class="card-visao">
+                <div class="cabecalho-card">
+                  <div>
+                    <span class="titulo-card"> Situação financeira </span>
+
+                    <h2>Visão geral</h2>
+                  </div>
+                </div>
+
+                <div class="indicador-financeiro">
+                  <div class="indicador-circulo">
+                    <span>✓</span>
+                  </div>
+
+                  <div>
+                    <strong> Sua situação </strong>
+
+                    <p>Você está acompanhando suas dívidas.</p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card-visao">
+                <div class="cabecalho-card">
+                  <div>
+                    <span class="titulo-card"> Próximos vencimentos </span>
+
+                    <h2>Fique atento</h2>
+                  </div>
+                </div>
+
+                <div class="proximos-vencimentos" id="proximosVencimentos">
+                  <p>Nenhum vencimento próximo.</p>
+                </div>
+              </div>
+            </section>
+
+            <!-- =========================
+                 DÍVIDAS
+            ========================== -->
+
+            <section class="dividas" id="dividas">
+              <div class="titulo-dividas">
+                <h2>Minhas dívidas</h2>
+
+                <button type="button" id="btnNovaDivida">+ Nova dívida</button>
+              </div>
+
+              <!-- FILTROS -->
+
+              <div class="filtros-dividas">
+                <button type="button" class="filtro ativo" data-filtro="todas">
+                  Todas
+                </button>
+
+                <button type="button" class="filtro" data-filtro="abertas">
+                  Em aberto
+                </button>
+
+                <button type="button" class="filtro" data-filtro="atrasadas">
+                  Atrasadas
+                </button>
+
+                <button type="button" class="filtro" data-filtro="pagas">
+                  Pagas
+                </button>
+              </div>
+
+              <!-- FORMULÁRIO DE DÍVIDA -->
+
+              <div class="formulario-divida" id="formularioDivida">
+                <h2>Nova dívida</h2>
+
+                <label for="nome-divida"> Nome da dívida </label>
+
+                <input
+                  type="text"
+                  id="nome-divida"
+                  placeholder="Ex: Internet"
+                />
+
+                <label for="valor-divida"> Valor </label>
+
+                <input type="number" id="valor-divida" placeholder="Ex: 100" />
+
+                <label for="vencimento-divida"> Vencimento </label>
+
+                <input type="date" id="vencimento-divida" />
+
+                <div class="botoes-formulario">
+                  <button type="button" id="btnCancelar">Cancelar</button>
+
+                  <button type="button" id="btnCadastrar">Cadastrar</button>
+                </div>
+              </div>
+
+              <!-- LISTA DE DÍVIDAS -->
+
+              <div class="lista-dividas" id="listaDividas"></div>
+            </section>
           </div>
-        </section>
-        <section class="dividas">
-          <div class="titulo-dividas">
-            <h2>Minhas dívidas</h2>
-
-            <button type="button" id="btnNovaDivida">+ Nova dívida</button>
-          </div>
-          <div class="filtros-dividas">
-            <button type="button" class="filtro ativo" data-filtro="todas">
-              Todas
-            </button>
-
-            <button type="button" class="filtro" data-filtro="abertas">
-              Em aberto
-            </button>
-
-            <button type="button" class="filtro" data-filtro="atrasadas">
-              Atrasadas
-            </button>
-
-            <button type="button" class="filtro" data-filtro="pagas">
-              Pagas
-            </button>
-          </div>
-
-          <div class="formulario-divida" id="formularioDivida">
-            <h2>Nova dívida</h2>
-
-            <label for="nome-divida">Nome da dívida</label>
-            <input type="text" id="nome-divida" placeholder="Ex: Internet" />
-
-            <label for="valor-divida">Valor</label>
-            <input type="number" id="valor-divida" placeholder="Ex: 100" />
-
-            <label for="vencimento-divida">Vencimento</label>
-            <input type="date" id="vencimento-divida" />
-
-            <div class="botoes-formulario">
-              <button type="button" id="btnCancelar">Cancelar</button>
-              <button type="button" id="btnCadastrar">Cadastrar</button>
-            </div>
-          </div>
-          <div class="lista-dividas" id="listaDividas"></div>
-        </section>
+        </div>
       </section>
     </main>
 
