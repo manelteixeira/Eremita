@@ -1827,200 +1827,11 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
   color: #86efac;
 }
 /* =========================
-   MENU LATERAL RETRÁTIL
+   MENU RETRÁTIL
 ========================= */
 
 .btn-menu-mobile {
-  width: 42px;
-  height: 42px;
-
   display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border: 1px solid var(--cor-borda);
-  border-radius: 10px;
-
-  background-color: var(--cor-card);
-  color: var(--cor-texto);
-
-  font-size: 20px;
-
-  cursor: pointer;
-
-  transition: 0.2s;
-}
-
-.btn-menu-mobile:hover {
-  background-color: #f0fdf4;
-  color: var(--cor-principal);
-  border-color: #bbf7d0;
-}
-
-/* Menu fechado */
-
-.estrutura-painel {
-  position: relative;
-}
-
-.menu-lateral {
-  position: absolute;
-
-  left: 0;
-  top: 0;
-
-  transform: translateX(-120%);
-
-  z-index: 100;
-
-  transition:
-    transform 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-/* Menu aberto */
-
-.estrutura-painel.menu-aberto .menu-lateral {
-  transform: translateX(0);
-
-  box-shadow:
-    0 20px 40px rgba(15, 23, 42, 0.18);
-}
-
-/* Conteúdo ocupa todo o espaço quando o menu está fechado */
-
-.conteudo-painel {
-  width: 100%;
-}
-
-/* =========================
-   OVERLAY
-========================= */
-
-.estrutura-painel::after {
-  content: "";
-
-  position: fixed;
-
-  inset: 0;
-
-  background-color: rgba(15, 23, 42, 0.25);
-
-  opacity: 0;
-
-  visibility: hidden;
-
-  z-index: 90;
-
-  transition:
-    opacity 0.25s ease,
-    visibility 0.25s ease;
-}
-
-.estrutura-painel.menu-aberto::after {
-  opacity: 1;
-
-  visibility: visible;
-}
-
-/* O conteúdo fica acima do overlay */
-
-.conteudo-painel {
-  position: relative;
-  z-index: 1;
-}
-
-/* Menu acima de tudo */
-
-.menu-lateral {
-  z-index: 101;
-}
-
-/* =========================
-   DARK MODE
-========================= */
-
-body.dark-mode .btn-menu-mobile {
-  background-color: var(--cor-card);
-
-  border-color: #475569;
-
-  color: var(--cor-texto);
-}
-
-body.dark-mode .btn-menu-mobile:hover {
-  background-color: #14532d;
-
-  border-color: #166534;
-
-  color: #86efac;
-}
-
-/* =========================
-   CELULAR
-========================= */
-
-@media (max-width: 600px) {
-
-  .estrutura-painel {
-    position: relative;
-
-    display: block;
-  }
-
-  .menu-lateral {
-    position: fixed;
-
-    top: 20px;
-    left: 3%;
-
-    width: 260px;
-
-    min-width: 0;
-
-    min-height: calc(100vh - 40px);
-
-    transform: translateX(-120%);
-
-    z-index: 101;
-  }
-
-  .estrutura-painel.menu-aberto .menu-lateral {
-    transform: translateX(0);
-  }
-
-  .conteudo-painel {
-    width: 100%;
-  }
-
-  .menu-navegacao {
-    flex-direction: column;
-
-    overflow-x: visible;
-  }
-
-  .menu-navegacao .item-menu {
-    width: 100%;
-
-    min-width: 0;
-
-    justify-content: flex-start;
-  }
-
-  .menu-navegacao .item-menu span:last-of-type {
-    display: inline;
-  }
-
-  .menu-inferior {
-    display: flex;
-  }
-}
-/* =========================
-   MENU MOBILE
-========================= */
-
-.btn-menu-mobile {
-  display: none;
 
   width: 42px;
   height: 42px;
@@ -2047,66 +1858,86 @@ body.dark-mode .btn-menu-mobile:hover {
   border-color: #bbf7d0;
 }
 
+/* =========================
+   MENU FECHADO
+========================= */
+
+.menu-lateral {
+  position: fixed;
+
+  top: 0;
+  left: 0;
+
+  width: 270px;
+  height: 100vh;
+
+  z-index: 1000;
+
+  border-radius: 0 16px 16px 0;
+
+  transform: translateX(-100%);
+
+  transition: transform 0.25s ease;
+
+  overflow-y: auto;
+}
 
 /* =========================
-   MENU MOBILE — CELULAR
+   MENU ABERTO
+========================= */
+
+.estrutura-painel.menu-aberto .menu-lateral {
+  transform: translateX(0);
+}
+
+/* Fundo atrás do menu */
+
+.estrutura-painel.menu-aberto::before {
+  content: "";
+
+  position: fixed;
+
+  inset: 0;
+
+  background: rgba(15, 23, 42, 0.45);
+
+  z-index: 999;
+}
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.conteudo-painel {
+  position: relative;
+
+  z-index: 1;
+}
+
+/* =========================
+   CELULAR
 ========================= */
 
 @media (max-width: 600px) {
-
-  .estrutura-painel {
-    position: relative;
-  }
-
-  /* Botão ☰ */
 
   .btn-menu-mobile {
     display: flex;
   }
 
-  /* Menu escondido */
-
   .menu-lateral {
-    position: fixed;
-
-    top: 0;
-    left: 0;
-
     width: 270px;
     min-width: 270px;
-    height: 100vh;
     min-height: 100vh;
-
-    z-index: 1000;
-
-    border-radius: 0 16px 16px 0;
-
-    transform: translateX(-110%);
-
-    transition: transform 0.25s ease;
-
-    overflow-y: auto;
   }
-
-  /* Menu aberto */
-
-  .estrutura-painel.menu-aberto .menu-lateral {
-    transform: translateX(0);
-  }
-
-  /* Navegação volta para vertical */
 
   .menu-navegacao {
     flex-direction: column;
-
-    overflow-x: visible;
+    overflow: visible;
   }
 
   .menu-navegacao .item-menu {
     width: 100%;
-
     min-width: 0;
-
     justify-content: flex-start;
   }
 
@@ -2114,48 +1945,23 @@ body.dark-mode .btn-menu-mobile:hover {
     display: inline;
   }
 
-  /* Menu inferior aparece novamente */
-
   .menu-inferior {
     display: flex;
   }
+}
 
-  /* Fundo escuro atrás do menu */
+/* =========================
+   DARK MODE
+========================= */
 
-  .estrutura-painel.menu-aberto::before {
-    content: "";
+body.dark-mode .btn-menu-mobile {
+  background-color: var(--cor-card);
+  border-color: #475569;
+  color: var(--cor-texto);
+}
 
-    position: fixed;
-
-    inset: 0;
-
-    background: rgba(15, 23, 42, 0.45);
-
-    z-index: 999;
-  }
-
-  /* Conteúdo fica acima do fundo */
-
-  .conteudo-painel {
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Dark mode */
-
-  body.dark-mode .btn-menu-mobile {
-    background-color: #1e293b;
-
-    border-color: #475569;
-
-    color: #f8fafc;
-  }
-
-  body.dark-mode .btn-menu-mobile:hover {
-    background-color: #14532d;
-
-    border-color: #166534;
-
-    color: #86efac;
-  }
+body.dark-mode .btn-menu-mobile:hover {
+  background-color: #14532d;
+  border-color: #166534;
+  color: #86efac;
 }
