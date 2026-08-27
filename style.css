@@ -1837,9 +1837,11 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
   height: 42px;
 
   border: 1px solid var(--cor-borda);
+
   border-radius: 10px;
 
   background-color: var(--cor-card);
+
   color: var(--cor-texto);
 
   font-size: 22px;
@@ -1850,6 +1852,10 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
   justify-content: center;
 
   transition: 0.2s;
+
+  position: relative;
+
+  z-index: 30;
 }
 
 .btn-menu-mobile:hover {
@@ -1862,49 +1868,102 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
 
 
 /* =========================
-   MENU FECHADO
+   ESTRUTURA DO MENU
+========================= */
+
+.estrutura-painel {
+  position: relative;
+}
+
+
+/* =========================
+   OVERLAY
+========================= */
+
+.overlay-menu {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: rgba(15, 23, 42, 0.45);
+
+  opacity: 0;
+
+  visibility: hidden;
+
+  z-index: 15;
+
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
+}
+
+.estrutura-painel.menu-aberto .overlay-menu {
+  opacity: 1;
+
+  visibility: visible;
+}
+
+
+/* =========================
+   MENU LATERAL
+========================= */
+
+.menu-lateral {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 210px;
+
+  min-width: 210px;
+
+  height: 100%;
+
+  z-index: 20;
+
+  transform: translateX(-110%);
+
+  transition: transform 0.25s ease;
+}
+
+.estrutura-painel.menu-aberto .menu-lateral {
+  transform: translateX(0);
+}
+
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+.conteudo-painel {
+  position: relative;
+
+  width: 100%;
+
+  margin-left: 0 !important;
+}
+
+
+/* =========================
+   DESKTOP
 ========================= */
 
 @media (min-width: 601px) {
 
-  .estrutura-painel {
-    position: relative;
+  .btn-menu-mobile {
+    display: flex;
   }
 
   .menu-lateral {
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
     width: 210px;
+
     min-width: 210px;
-
-    height: 100%;
-
-    z-index: 10;
-
-    transform: translateX(-235px);
-
-    transition: transform 0.25s ease;
-  }
-
-  .estrutura-painel.menu-aberto .menu-lateral {
-    transform: translateX(0);
-  }
-
-  .conteudo-painel {
-    width: 100%;
-
-    transition: margin-left 0.25s ease;
-  }
-
-  .estrutura-painel.menu-aberto .conteudo-painel {
-    margin-left: 235px;
-  }
-
-  .btn-menu-mobile {
-    display: flex;
   }
 }
 
@@ -1919,64 +1978,18 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
     display: flex;
   }
 
-  .estrutura-painel {
-    position: relative;
-
-    flex-direction: column;
-
-    gap: 15px;
-  }
-
   .menu-lateral {
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
     width: 270px;
+
     min-width: 270px;
 
     height: 100%;
 
-    min-height: 650px;
+    min-height: 0;
 
-    z-index: 10;
-
-    transform: translateX(-285px);
-
-    transition: transform 0.25s ease;
+    max-height: 100%;
 
     overflow-y: auto;
-  }
-
-  .estrutura-painel.menu-aberto .menu-lateral {
-    transform: translateX(0);
-  }
-
-  .conteudo-painel {
-    position: relative;
-
-    z-index: 1;
-
-    width: 100%;
-  }
-
-  .estrutura-painel.menu-aberto::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-
-    width: 100%;
-    height: 100%;
-
-    background: rgba(15, 23, 42, 0.45);
-
-    z-index: 5;
-
-    pointer-events: none;
   }
 
   .menu-navegacao {
