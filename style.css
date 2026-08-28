@@ -39,10 +39,7 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 
   background:
-    linear-gradient(
-      rgba(2, 44, 34, 0.55),
-      rgba(2, 44, 34, 0.55)
-    ),
+    linear-gradient(rgba(2, 44, 34, 0.55), rgba(2, 44, 34, 0.55)),
     url("fundo-financeiro.jpg");
 
   background-size: cover;
@@ -473,12 +470,11 @@ main {
 
   padding: 16px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(240, 253, 244, 0.98),
-      rgba(255, 255, 255, 0.96)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(240, 253, 244, 0.98),
+    rgba(255, 255, 255, 0.96)
+  );
 
   border: 1px solid #bbf7d0;
 
@@ -652,8 +648,7 @@ main {
 
   border-color: #cbd5e1;
 
-  box-shadow:
-    0 10px 25px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
 }
 
 .card-resumo h2 {
@@ -777,8 +772,7 @@ main {
 .card-visao:hover {
   transform: translateY(-2px);
 
-  box-shadow:
-    0 10px 25px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
 }
 
 .cabecalho-card {
@@ -1066,8 +1060,7 @@ main {
 
   border-color: var(--cor-borda);
 
-  box-shadow:
-    0 2px 6px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
 
   transform: none;
 }
@@ -1112,8 +1105,7 @@ main {
 
   border-color: #bbf7d0;
 
-  box-shadow:
-    0 10px 25px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.08);
 }
 
 .divida h3 {
@@ -1211,8 +1203,7 @@ main {
 
   background-color: white;
 
-  box-shadow:
-    0 0 0 3px rgba(22, 163, 74, 0.1);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 .botoes-formulario {
@@ -1422,7 +1413,6 @@ main {
 ========================= */
 
 @media (max-width: 600px) {
-
   main {
     align-items: flex-start;
 
@@ -1587,10 +1577,7 @@ body.dark-mode {
   --sombra-card: 0 4px 15px rgba(0, 0, 0, 0.25);
 
   background:
-    linear-gradient(
-      rgba(2, 44, 34, 0.75),
-      rgba(2, 44, 34, 0.75)
-    ),
+    linear-gradient(rgba(2, 44, 34, 0.75), rgba(2, 44, 34, 0.75)),
     url("fundo-financeiro.jpg");
 
   color: var(--cor-texto);
@@ -1604,12 +1591,11 @@ body.dark-mode .menu-lateral {
 }
 
 body.dark-mode .cabeçalho {
-  background:
-    linear-gradient(
-      135deg,
-      rgba(20, 83, 45, 0.85),
-      rgba(30, 41, 59, 0.95)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(20, 83, 45, 0.85),
+    rgba(30, 41, 59, 0.95)
+  );
 
   border-color: #166534;
 }
@@ -1735,8 +1721,7 @@ body.dark-mode .card-visao:hover,
 body.dark-mode .divida:hover {
   border-color: #166534;
 
-  box-shadow:
-    0 10px 25px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
 }
 
 body.dark-mode .indicador-circulo {
@@ -1831,7 +1816,7 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
 ========================= */
 
 .btn-menu-mobile {
-  display: none;
+  display: flex;
 
   width: 42px;
   height: 42px;
@@ -1866,15 +1851,14 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
   border-color: #bbf7d0;
 }
 
-
 /* =========================
-   ESTRUTURA DO MENU
+   ESTRUTURA
 ========================= */
 
 .estrutura-painel {
   position: relative;
+  overflow: hidden;
 }
-
 
 /* =========================
    OVERLAY
@@ -1892,7 +1876,6 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
   background: rgba(15, 23, 42, 0.45);
 
   opacity: 0;
-
   visibility: hidden;
 
   z-index: 15;
@@ -1904,13 +1887,11 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
 
 .estrutura-painel.menu-aberto .overlay-menu {
   opacity: 1;
-
   visibility: visible;
 }
 
-
 /* =========================
-   MENU LATERAL
+   MENU RETRÁTIL
 ========================= */
 
 .menu-lateral {
@@ -1920,14 +1901,13 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
   left: 0;
 
   width: 210px;
-
   min-width: 210px;
 
   height: 100%;
 
   z-index: 20;
 
-  transform: translateX(-110%);
+  transform: translateX(-105%);
 
   transition: transform 0.25s ease;
 }
@@ -1935,7 +1915,6 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
 .estrutura-painel.menu-aberto .menu-lateral {
   transform: translateX(0);
 }
-
 
 /* =========================
    CONTEÚDO
@@ -1946,47 +1925,42 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
 
   width: 100%;
 
-  margin-left: 0 !important;
-}
+  min-width: 0;
 
+  margin-left: 0;
+}
 
 /* =========================
    DESKTOP
 ========================= */
 
 @media (min-width: 601px) {
-
   .btn-menu-mobile {
     display: flex;
   }
 
   .menu-lateral {
     width: 210px;
-
     min-width: 210px;
   }
 }
-
 
 /* =========================
    CELULAR
 ========================= */
 
 @media (max-width: 600px) {
-
   .btn-menu-mobile {
     display: flex;
   }
 
   .menu-lateral {
     width: 270px;
-
     min-width: 270px;
 
     height: 100%;
 
     min-height: 0;
-
     max-height: 100%;
 
     overflow-y: auto;
@@ -2014,7 +1988,6 @@ body.dark-mode .acoes-dividas .btnPagar:disabled {
     display: flex;
   }
 }
-
 
 /* =========================
    DARK MODE
