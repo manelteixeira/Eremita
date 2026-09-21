@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eremita-app1.vercel.app/sitemap.xml
