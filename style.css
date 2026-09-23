@@ -52,6 +52,9 @@ body {
 ========================= */
 
 main {
+  position: relative;
+  isolation: isolate;
+
   min-height: 100vh;
 
   display: flex;
@@ -67,17 +70,64 @@ main {
 
 .login {
   display: none;
+  width: 420px;
+  min-height: 560px;
 
-  width: 350px;
+  perspective: 1500px;
+}
 
-  padding: 30px;
+.auth-livro {
+  position: relative;
+  width: 100%;
+  min-height: 560px;
 
-  background-color: white;
+  transform-style: preserve-3d;
+}
 
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+.pagina-auth {
+  position: absolute;
+  inset: 0;
 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+  padding: 40px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 20px;
+
+  box-shadow:
+    0 25px 60px rgba(0, 0, 0, 0.25),
+    inset 0 0 30px rgba(255, 255, 255, 0.15);
+
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  transition:
+    transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1),
+    opacity 0.4s ease;
+}
+
+.pagina-login {
+  transform: rotateY(0deg);
+  z-index: 2;
+}
+
+.pagina-cadastro {
+  transform: rotateY(180deg);
+  z-index: 1;
+}
+.auth-livro.cadastro-aberto .pagina-login {
+  transform: rotateY(-180deg);
+}
+
+.auth-livro.cadastro-aberto .pagina-cadastro {
+  transform: rotateY(0deg);
 }
 
 .login h1 {
@@ -137,8 +187,9 @@ main {
   transform: translateY(-1px);
 }
 
-#btnCriarConta {
-  margin-top: 10px;
+#btnCriarConta,
+#btnVoltarLogin {
+  margin-top: 12px;
 }
 
 /* =========================
@@ -2172,7 +2223,7 @@ body.dark-mode .btnPagar:disabled {
 ========================= */
 .landing {
   position: relative;
-  z-index: 0;
+  z-index: 1;
   overflow: hidden;
 
   width: 100%;
@@ -2197,13 +2248,13 @@ body.dark-mode .btnPagar:disabled {
   max-width: 650px;
 }
 #animated-gradient {
-  position: absolute;
+  position: fixed;
   inset: 0;
 
   width: 100%;
   height: 100%;
 
-  z-index: 1;
+  z-index: 0;
 
   pointer-events: none;
 }
@@ -2345,6 +2396,32 @@ body.dark-mode .btnPagar:disabled {
 /* =========================
    ANIMAÇÕES
 ========================= */
+@keyframes resumoEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.card-resumo:nth-child(1) {
+  animation: resumoEntrada 0.7s ease-out 0.1s both;
+}
+
+.card-resumo:nth-child(2) {
+  animation: resumoEntrada 0.7s ease-out 0.2s both;
+}
+
+.card-resumo:nth-child(3) {
+  animation: resumoEntrada 0.7s ease-out 0.3s both;
+}
+
+.card-resumo:nth-child(4) {
+  animation: resumoEntrada 0.7s ease-out 0.4s both;
+}
 
 @keyframes landingEntrada {
   from {

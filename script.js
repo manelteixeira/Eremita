@@ -14,6 +14,7 @@ const telaPainel = document.querySelector(".painel");
 const telaLanding = document.querySelector(".landing");
 const botaoComecar = document.getElementById("btnComecar");
 const botaoLoginLanding = document.getElementById("btnLoginLanding");
+const authLivro = document.querySelector(".auth-livro");
 
 const campoEmail = document.getElementById("email");
 const campoSenha = document.getElementById("password");
@@ -37,7 +38,6 @@ const elementoQuantidadeAtrasadas = document.getElementById(
 );
 
 const botaoCriarConta = document.getElementById("btnCriarConta");
-const formularioCadastro = document.getElementById("formularioCadastro");
 
 const botaoCadastrarUsuario = document.getElementById("btnCadastrarUsuario");
 
@@ -108,6 +108,8 @@ botaoMostrarSenha.addEventListener("click", function () {
 botaoComecar.addEventListener("click", function () {
   telaLanding.style.display = "none";
   telaLogin.style.display = "block";
+
+  authLivro.classList.add("cadastro-aberto");
 });
 
 botaoLoginLanding.addEventListener("click", function () {
@@ -173,39 +175,15 @@ botaoSair.addEventListener("click", async function () {
   console.log("Usuário desconectado.");
 });
 botaoCriarConta.addEventListener("click", function () {
-  formularioCadastro.style.display = "block";
-
-  campoEmail.style.display = "none";
-  campoEmail.previousElementSibling.style.display = "none";
-
-  campoSenha.style.display = "none";
-  campoSenha.parentElement.style.display = "none";
-  campoSenha.parentElement.previousElementSibling.style.display = "none";
-
-  botaoEntrar.style.display = "none";
-  botaoCriarConta.style.display = "none";
+  authLivro.classList.add("cadastro-aberto");
 
   mensagemErro.textContent = "";
 });
 
 botaoVoltarLogin.addEventListener("click", function () {
-  formularioCadastro.style.display = "none";
-
-  campoEmail.style.display = "block";
-  campoEmail.previousElementSibling.style.display = "block";
-
-  campoSenha.style.display = "block";
-  campoSenha.parentElement.style.display = "flex";
-  campoSenha.parentElement.previousElementSibling.style.display = "block";
-  botaoEntrar.style.display = "block";
-  botaoCriarConta.style.display = "block";
+  authLivro.classList.remove("cadastro-aberto");
 
   mensagemCadastro.textContent = "";
-
-  nomeCadastro.value = "";
-  emailCadastro.value = "";
-  senhaCadastro.value = "";
-  confirmarSenhaCadastro.value = "";
 });
 
 botaoCadastrarUsuario.addEventListener("click", async function () {
