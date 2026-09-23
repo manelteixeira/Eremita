@@ -1,26 +1,82 @@
 <!doctype html>
 <html lang="pt-br">
   <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eremita - Controle Financeiro</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Eremita - Controle Financeiro</title>
 
-  <meta
-    name="description"
-    content="Eremita é uma aplicação de controle financeiro para organizar dívidas, vencimentos e pagamentos."
-  />
+    <meta
+      name="description"
+      content="Eremita é uma aplicação de controle financeiro para organizar dívidas, vencimentos e pagamentos."
+    />
 
-  <meta name="robots" content="index, follow" />
-  <meta
-  name="google-site-verification"
-  content="byZaaMbnoTYLMJ60Ris971b3h6PZ9YMrtFbJDg67s6E"
-  />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="google-site-verification"
+      content="byZaaMbnoTYLMJ60Ris971b3h6PZ9YMrtFbJDg67s6E"
+    />
 
-  <link rel="stylesheet" href="style.css" />
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
   <body>
     <main>
+      <section class="landing" id="landing">
+        <canvas id="animated-gradient"></canvas>
+        <div class="landing-conteudo">
+          <div class="landing-logo">
+            <svg
+              class="logo-ninja landing-ninja"
+              viewBox="0 0 64 64"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-label="Logo Eremita"
+            >
+              <path
+                d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
+                fill="currentColor"
+              />
+
+              <path d="M14 27h36v9H14z" fill="currentColor" />
+
+              <path
+                d="M21 30c2.5-3 6-3 9 0"
+                fill="none"
+                stroke="white"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+
+              <path
+                d="M34 30c3-3 6.5-3 9 0"
+                fill="none"
+                stroke="white"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+
+              <circle cx="27" cy="30" r="2" fill="white" />
+              <circle cx="37" cy="30" r="2" fill="white" />
+            </svg>
+          </div>
+
+          <span class="landing-subtitulo">CONTROLE FINANCEIRO</span>
+
+          <h1>Eremita</h1>
+
+          <p>
+            Organize suas dívidas, acompanhe seus vencimentos e tenha mais
+            controle sobre sua vida financeira.
+          </p>
+
+          <div class="landing-botoes">
+            <button type="button" id="btnComecar">Começar agora</button>
+
+            <button type="button" id="btnLoginLanding">
+              Já tenho uma conta
+            </button>
+          </div>
+        </div>
+      </section>
       <!-- =========================
            LOGIN
       ========================== -->

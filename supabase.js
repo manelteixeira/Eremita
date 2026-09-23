@@ -1,6 +1,6 @@
-import { createClient } from "@supabase/supabase-js";
+import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
 
 const supabaseUrl = "https://lqqcohecbxhveuykvgnm.supabase.co";
-const supabaseKey = "sb_publishable_cMsrSiM1JUv_W446t6Y4hA_yy4q2PBi";
+const supabaseKey = "SUA_CHAVE_ATUAL";
 
 export const supabase = createClient(supabaseUrl, supabaseKey);

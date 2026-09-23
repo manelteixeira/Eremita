@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import "./animacoes/animated-gradient.js";
 
 const botaoNovaDivida = document.getElementById("btnNovaDivida");
 const formularioDivida = document.getElementById("formularioDivida");
@@ -9,6 +10,10 @@ const overlayMenu = document.getElementById("overlayMenu");
 
 const telaLogin = document.querySelector(".login");
 const telaPainel = document.querySelector(".painel");
+
+const telaLanding = document.querySelector(".landing");
+const botaoComecar = document.getElementById("btnComecar");
+const botaoLoginLanding = document.getElementById("btnLoginLanding");
 
 const campoEmail = document.getElementById("email");
 const campoSenha = document.getElementById("password");
@@ -98,6 +103,16 @@ botaoMostrarSenha.addEventListener("click", function () {
     botaoMostrarSenha.textContent = "👁";
     botaoMostrarSenha.setAttribute("aria-label", "Mostrar senha");
   }
+});
+
+botaoComecar.addEventListener("click", function () {
+  telaLanding.style.display = "none";
+  telaLogin.style.display = "block";
+});
+
+botaoLoginLanding.addEventListener("click", function () {
+  telaLanding.style.display = "none";
+  telaLogin.style.display = "block";
 });
 
 botaoEntrar.addEventListener("click", async function (event) {

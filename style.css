@@ -66,6 +66,8 @@ main {
 ========================= */
 
 .login {
+  display: none;
+
   width: 350px;
 
   padding: 30px;
@@ -2101,7 +2103,6 @@ body.dark-mode .btnPagar:disabled {
   }
 }
 
-
 /* =========================
    CELULARES MUITO PEQUENOS
 ========================= */
@@ -2164,5 +2165,252 @@ body.dark-mode .btnPagar:disabled {
   .filtro {
     flex: none;
     width: calc(50% - 2px);
+  }
+}
+/* =========================
+   LANDING PAGE
+========================= */
+.landing {
+  position: relative;
+  z-index: 0;
+  overflow: hidden;
+
+  width: 100%;
+  min-height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 40px 20px;
+
+  text-align: center;
+}
+.landing-conteudo {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  max-width: 650px;
+}
+#animated-gradient {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  z-index: 1;
+
+  pointer-events: none;
+}
+/* =========================
+   LOGO DA LANDING
+========================= */
+.landing-logo {
+  width: 100px;
+  height: 100px;
+
+  margin-bottom: 25px;
+
+  border-radius: 28px;
+
+  background: rgba(220, 252, 231, 0.95);
+  color: var(--cor-principal);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+
+  animation:
+    landingEntrada 0.8s ease-out,
+    ninjaFlutuando 4s ease-in-out 1s infinite;
+}
+.landing-ninja {
+  width: 72px;
+  height: 72px;
+}
+
+/* =========================
+   TEXTOS
+========================= */
+
+.landing-subtitulo {
+  margin-bottom: 8px;
+
+  color: #bbf7d0;
+
+  font-size: 12px;
+  font-weight: 800;
+
+  letter-spacing: 3px;
+
+  animation: landingEntrada 0.8s ease-out 0.15s both;
+}
+
+.landing h1 {
+  margin-bottom: 15px;
+
+  color: white;
+
+  font-size: clamp(48px, 8vw, 76px);
+
+  line-height: 1;
+
+  letter-spacing: -2px;
+
+  animation: landingEntrada 0.8s ease-out 0.3s both;
+}
+
+.landing p {
+  max-width: 560px;
+
+  margin-bottom: 30px;
+
+  color: #e2e8f0;
+
+  font-size: 17px;
+  line-height: 1.6;
+
+  animation: landingEntrada 0.8s ease-out 0.45s both;
+}
+
+/* =========================
+   BOTÕES
+========================= */
+
+.landing-botoes {
+  display: flex;
+
+  justify-content: center;
+
+  gap: 12px;
+
+  animation: landingEntrada 0.8s ease-out 0.6s both;
+}
+
+.landing-botoes button {
+  padding: 13px 22px;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
+}
+
+#btnComecar {
+  border: none;
+
+  background-color: var(--cor-principal);
+  color: white;
+
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.35);
+}
+
+#btnComecar:hover {
+  background-color: var(--cor-principal-hover);
+
+  transform: translateY(-2px);
+
+  box-shadow: 0 12px 25px rgba(22, 163, 74, 0.45);
+}
+
+#btnLoginLanding {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+
+  backdrop-filter: blur(5px);
+}
+
+#btnLoginLanding:hover {
+  background: rgba(255, 255, 255, 0.15);
+
+  transform: translateY(-2px);
+}
+
+/* =========================
+   ANIMAÇÕES
+========================= */
+
+@keyframes landingEntrada {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ninjaFlutuando {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* =========================
+   LANDING — DARK MODE
+========================= */
+
+body.dark-mode .landing-logo {
+  background: rgba(20, 83, 45, 0.95);
+}
+
+/* =========================
+   LANDING — CELULAR
+========================= */
+
+@media (max-width: 600px) {
+  .landing {
+    min-height: 100vh;
+
+    padding: 30px 20px;
+  }
+
+  .landing-logo {
+    width: 85px;
+    height: 85px;
+
+    border-radius: 24px;
+  }
+
+  .landing-ninja {
+    width: 62px;
+    height: 62px;
+  }
+
+  .landing p {
+    font-size: 15px;
+  }
+
+  .landing-botoes {
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+  .landing-botoes button {
+    width: 100%;
   }
 }
