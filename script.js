@@ -15,6 +15,24 @@ const telaLanding = document.querySelector(".landing");
 const botaoComecar = document.getElementById("btnComecar");
 const botaoLoginLanding = document.getElementById("btnLoginLanding");
 const authLivro = document.querySelector(".auth-livro");
+function mostrarLanding() {
+  telaLanding.style.display = "flex";
+  telaLogin.style.display = "none";
+  telaPainel.style.display = "none";
+}
+
+function mostrarLogin() {
+  telaLanding.style.display = "none";
+  telaLogin.style.display = "block";
+  telaPainel.style.display = "none";
+}
+
+function mostrarCadastro() {
+  telaLanding.style.display = "none";
+  telaLogin.style.display = "block";
+  telaPainel.style.display = "none";
+  authLivro.classList.add("cadastro-aberto");
+}
 
 const campoEmail = document.getElementById("email");
 const campoSenha = document.getElementById("password");
@@ -106,16 +124,28 @@ botaoMostrarSenha.addEventListener("click", function () {
 });
 
 botaoComecar.addEventListener("click", function () {
-  telaLanding.style.display = "none";
-  telaLogin.style.display = "block";
-
-  authLivro.classList.add("cadastro-aberto");
+  history.pushState({ tela: "cadastro" }, "", "#cadastro");
+  mostrarCadastro();
 });
 
 botaoLoginLanding.addEventListener("click", function () {
-  telaLanding.style.display = "none";
-  telaLogin.style.display = "block";
+  history.pushState({ tela: "login" }, "", "#login");
+  mostrarLogin();
 });
+window.addEventListener("popstate", function (event) {
+  if (event.state?.tela === "cadastro") {
+    mostrarCadastro();
+    return;
+  }
+
+  if (event.state?.tela === "login") {
+    mostrarLogin();
+    return;
+  }
+
+  mostrarLanding();
+});
+history.replaceState({ tela: "landing" }, "", "#inicio");
 
 botaoEntrar.addEventListener("click", async function (event) {
   event.preventDefault();
@@ -181,7 +211,9 @@ botaoCriarConta.addEventListener("click", function () {
 });
 
 botaoVoltarLogin.addEventListener("click", function () {
-  authLivro.classList.remove("cadastro-aberto");
+  history.pushState({ tela: "login" }, "", "#login");
+
+  mostrarLogin();
 
   mensagemCadastro.textContent = "";
 });
