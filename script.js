@@ -1,30 +1,90 @@
 import { supabase } from "./supabase.js";
 import "./animacoes/animated-gradient.js";
 
-const botaoNovaDivida = document.getElementById("btnNovaDivida");
-const formularioDivida = document.getElementById("formularioDivida");
+// =========================
+// ELEMENTOS DA INTERFACE
+// =========================
+
+const telaLanding = document.querySelector(".landing");
+const telaLogin = document.querySelector(".login");
+const telaPainel = document.querySelector(".painel");
+const authLivro = document.querySelector(".auth-livro");
+
+const botaoComecar = document.getElementById("btnComecar");
+const botaoLoginLanding = document.getElementById("btnLoginLanding");
+const botaoCriarConta = document.getElementById("btnCriarConta");
+const botaoVoltarLogin = document.getElementById("btnVoltarLogin");
+
+const campoEmail = document.getElementById("email");
+const campoSenha = document.getElementById("password");
+const botaoMostrarSenha = document.getElementById("mostrarSenha");
+const botaoEntrar = document.getElementById("btnEntrar");
+const mensagemErro = document.getElementById("mensagemErro");
+
+const nomeCadastro = document.getElementById("nomeCadastro");
+const emailCadastro = document.getElementById("emailCadastro");
+const senhaCadastro = document.getElementById("senhaCadastro");
+const confirmarSenhaCadastro = document.getElementById(
+  "confirmarSenhaCadastro",
+);
+const botaoCadastrarUsuario = document.getElementById("btnCadastrarUsuario");
+const mensagemCadastro = document.getElementById("mensagemCadastro");
+
+const botaoSair = document.getElementById("btnSair");
+const botaoTema = document.getElementById("btnTema");
 
 const botaoMenuMobile = document.getElementById("btnMenuMobile");
 const estruturaPainel = document.querySelector(".estrutura-painel");
 const overlayMenu = document.getElementById("overlayMenu");
 
-const telaLogin = document.querySelector(".login");
-const telaPainel = document.querySelector(".painel");
+const botaoNovaDivida = document.getElementById("btnNovaDivida");
+const formularioDivida = document.getElementById("formularioDivida");
+const botaoCancelar = document.getElementById("btnCancelar");
+const botaoCadastrar = document.getElementById("btnCadastrar");
 
-const telaLanding = document.querySelector(".landing");
-const botaoComecar = document.getElementById("btnComecar");
-const botaoLoginLanding = document.getElementById("btnLoginLanding");
-const authLivro = document.querySelector(".auth-livro");
+const nomeDivida = document.getElementById("nome-divida");
+const valorDivida = document.getElementById("valor-divida");
+const vencimentoDivida = document.getElementById("vencimento-divida");
+
+const listaDividas = document.getElementById("listaDividas");
+const botoesFiltro = document.querySelectorAll(".filtro");
+
+const elementoTotalDividas = document.getElementById("totalDividas");
+const elementoTotalEmAberto = document.getElementById("totalEmAberto");
+const elementoTotalPagas = document.getElementById("totalPagas");
+const elementoTotalAtrasadas = document.getElementById("totalAtrasadas");
+const elementoQuantidadeAtrasadas = document.getElementById(
+  "quantidadeAtrasadas",
+);
+const elementoProximosVencimentos = document.getElementById(
+  "proximosVencimentos",
+);
+const nomeUsuario = document.getElementById("nomeUsuario");
+
+// =========================
+// ESTADO
+// =========================
+
+const dividas = [];
+let filtroAtual = "todas";
+let dividaEditando = null;
+
+// =========================
+// NAVEGAÇÃO
+// =========================
+
 function mostrarLanding() {
   telaLanding.style.display = "flex";
   telaLogin.style.display = "none";
   telaPainel.style.display = "none";
+  authLivro.classList.remove("cadastro-aberto");
 }
 
 function mostrarLogin() {
   telaLanding.style.display = "none";
   telaLogin.style.display = "block";
   telaPainel.style.display = "none";
+  authLivro.classList.remove("cadastro-aberto");
 }
 
 function mostrarCadastro() {
@@ -34,52 +94,45 @@ function mostrarCadastro() {
   authLivro.classList.add("cadastro-aberto");
 }
 
-const campoEmail = document.getElementById("email");
-const campoSenha = document.getElementById("password");
-const mensagemErro = document.getElementById("mensagemErro");
+function navegarPara(tela) {
+  history.pushState({ tela }, "", `#${tela}`);
 
-const botaoMostrarSenha = document.getElementById("mostrarSenha");
+  if (tela === "cadastro") {
+    mostrarCadastro();
+    return;
+  }
 
-const botaoEntrar = document.getElementById("btnEntrar");
-const botaoSair = document.getElementById("btnSair");
+  if (tela === "login") {
+    mostrarLogin();
+    return;
+  }
 
-const botaoCancelar = document.getElementById("btnCancelar");
-const botaoCadastrar = document.getElementById("btnCadastrar");
-const listaDividas = document.getElementById("listaDividas");
+  mostrarLanding();
+}
 
-const elementoTotalDividas = document.getElementById("totalDividas");
-const elementoTotalEmAberto = document.getElementById("totalEmAberto");
-const elementoTotalPagas = document.getElementById("totalPagas");
-const elementoTotalAtrasadas = document.getElementById("totalAtrasadas");
-const elementoQuantidadeAtrasadas = document.getElementById(
-  "quantidadeAtrasadas",
-);
+botaoComecar.addEventListener("click", function () {
+  navegarPara("cadastro");
+});
 
-const botaoCriarConta = document.getElementById("btnCriarConta");
+botaoLoginLanding.addEventListener("click", function () {
+  navegarPara("login");
+});
 
-const botaoCadastrarUsuario = document.getElementById("btnCadastrarUsuario");
+window.addEventListener("popstate", function (event) {
+  if (event.state?.tela === "cadastro") {
+    mostrarCadastro();
+    return;
+  }
 
-const botaoVoltarLogin = document.getElementById("btnVoltarLogin");
+  if (event.state?.tela === "login") {
+    mostrarLogin();
+    return;
+  }
 
-const nomeCadastro = document.getElementById("nomeCadastro");
-const emailCadastro = document.getElementById("emailCadastro");
-const senhaCadastro = document.getElementById("senhaCadastro");
-const confirmarSenhaCadastro = document.getElementById(
-  "confirmarSenhaCadastro",
-);
+  mostrarLanding();
+});
 
-const mensagemCadastro = document.getElementById("mensagemCadastro");
-const botoesFiltro = document.querySelectorAll(".filtro");
-
-const nomeUsuario = document.getElementById("nomeUsuario");
-
-let filtroAtual = "todas";
-
-let dividaEditando = null;
-
-telaPainel.style.display = "none";
-
-const botaoTema = document.getElementById("btnTema");
+history.replaceState({ tela: "landing" }, "", "#inicio");
 
 // =========================
 // TEMA
@@ -94,69 +147,41 @@ if (temaSalvo === "escuro") {
 }
 
 botaoTema.addEventListener("click", function () {
-  document.body.classList.toggle("dark-mode");
+  const modoEscuro = document.body.classList.toggle("dark-mode");
 
-  const modoEscuro = document.body.classList.contains("dark-mode");
+  botaoTema.textContent = modoEscuro ? "☀️" : "🌙";
+  botaoTema.setAttribute(
+    "aria-label",
+    modoEscuro ? "Ativar modo claro" : "Ativar modo escuro",
+  );
 
-  if (modoEscuro) {
-    botaoTema.textContent = "☀️";
-    botaoTema.setAttribute("aria-label", "Ativar modo claro");
-
-    localStorage.setItem("tema", "escuro");
-  } else {
-    botaoTema.textContent = "🌙";
-    botaoTema.setAttribute("aria-label", "Ativar modo escuro");
-
-    localStorage.setItem("tema", "claro");
-  }
+  localStorage.setItem("tema", modoEscuro ? "escuro" : "claro");
 });
+
+// =========================
+// AUTENTICAÇÃO
+// =========================
 
 botaoMostrarSenha.addEventListener("click", function () {
-  if (campoSenha.type === "password") {
-    campoSenha.type = "text";
-    botaoMostrarSenha.textContent = "🙈";
-    botaoMostrarSenha.setAttribute("aria-label", "Ocultar senha");
-  } else {
-    campoSenha.type = "password";
-    botaoMostrarSenha.textContent = "👁";
-    botaoMostrarSenha.setAttribute("aria-label", "Mostrar senha");
-  }
-});
+  const mostrandoSenha = campoSenha.type === "text";
 
-botaoComecar.addEventListener("click", function () {
-  history.pushState({ tela: "cadastro" }, "", "#cadastro");
-  mostrarCadastro();
+  campoSenha.type = mostrandoSenha ? "password" : "text";
+  botaoMostrarSenha.textContent = mostrandoSenha ? "👁" : "🙈";
+  botaoMostrarSenha.setAttribute(
+    "aria-label",
+    mostrandoSenha ? "Mostrar senha" : "Ocultar senha",
+  );
 });
-
-botaoLoginLanding.addEventListener("click", function () {
-  history.pushState({ tela: "login" }, "", "#login");
-  mostrarLogin();
-});
-window.addEventListener("popstate", function (event) {
-  if (event.state?.tela === "cadastro") {
-    mostrarCadastro();
-    return;
-  }
-
-  if (event.state?.tela === "login") {
-    mostrarLogin();
-    return;
-  }
-
-  mostrarLanding();
-});
-history.replaceState({ tela: "landing" }, "", "#inicio");
 
 botaoEntrar.addEventListener("click", async function (event) {
   event.preventDefault();
-
   mensagemErro.textContent = "";
 
   const email = campoEmail.value.trim();
   const senha = campoSenha.value;
 
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: email,
+    email,
     password: senha,
   });
 
@@ -166,55 +191,23 @@ botaoEntrar.addEventListener("click", async function (event) {
     return;
   }
 
-  console.log("Usuário conectado:", data.user);
-
   const nome = data.user.user_metadata?.nome || data.user.email;
-
   nomeUsuario.textContent = `Olá, ${nome}!`;
 
-  // Limpa qualquer dívida que tenha ficado da sessão anterior
   dividas.length = 0;
-
-  // Carrega somente as dívidas do usuário que acabou de entrar
   await carregarDividasSupabase();
 
   telaLogin.style.display = "none";
   telaPainel.style.display = "block";
 });
 
-botaoSair.addEventListener("click", async function () {
-  const { error } = await supabase.auth.signOut();
-
-  if (error) {
-    console.error("Erro ao sair:", error);
-    return;
-  }
-
-  // Limpa as dívidas da sessão anterior
-  dividas.length = 0;
-
-  listaDividas.innerHTML = "";
-
-  atualizarResumo();
-
-  atualizarProximosVencimentos();
-
-  telaPainel.style.display = "none";
-  telaLogin.style.display = "block";
-
-  console.log("Usuário desconectado.");
-});
 botaoCriarConta.addEventListener("click", function () {
-  authLivro.classList.add("cadastro-aberto");
-
+  navegarPara("cadastro");
   mensagemErro.textContent = "";
 });
 
 botaoVoltarLogin.addEventListener("click", function () {
-  history.pushState({ tela: "login" }, "", "#login");
-
-  mostrarLogin();
-
+  navegarPara("login");
   mensagemCadastro.textContent = "";
 });
 
@@ -226,18 +219,19 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
 
   mensagemCadastro.textContent = "";
 
-  if (nome === "") {
+  if (!nome) {
     mensagemCadastro.textContent = "Digite seu nome.";
     return;
   }
 
-  if (email === "") {
+  if (!email) {
     mensagemCadastro.textContent = "Digite seu email.";
     return;
   }
 
   if (senha.length < 6) {
-    mensagemCadastro.textContent = "A senha deve ter pelo menos 6 caracteres.";
+    mensagemCadastro.textContent =
+      "A senha deve ter pelo menos 6 caracteres.";
     return;
   }
 
@@ -246,25 +240,22 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
     return;
   }
 
-  const { data, error } = await supabase.auth.signUp({
-    email: email,
+  const { error } = await supabase.auth.signUp({
+    email,
     password: senha,
     options: {
       emailRedirectTo: window.location.origin,
       data: {
-        nome: nome,
+        nome,
       },
     },
   });
 
   if (error) {
     console.error("Erro ao criar usuário:", error);
-
     mensagemCadastro.textContent = error.message;
     return;
   }
-
-  console.log("Usuário criado:", data.user);
 
   mensagemCadastro.textContent =
     "Conta criada com sucesso! Você já pode entrar.";
@@ -273,12 +264,33 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
   emailCadastro.value = "";
   senhaCadastro.value = "";
   confirmarSenhaCadastro.value = "";
+
 });
+
+botaoSair.addEventListener("click", async function () {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    console.error("Erro ao sair:", error);
+    return;
+  }
+
+  dividas.length = 0;
+  listaDividas.innerHTML = "";
+  atualizarResumo();
+  atualizarProximosVencimentos();
+
+  telaPainel.style.display = "none";
+  telaLogin.style.display = "block";
+});
+
+// =========================
+// MENU MOBILE
+// =========================
+
 function fecharMenu() {
   estruturaPainel.classList.remove("menu-aberto");
-
   botaoMenuMobile.textContent = "☰";
-
   botaoMenuMobile.setAttribute("aria-label", "Abrir menu");
 }
 
@@ -286,19 +298,17 @@ botaoMenuMobile.addEventListener("click", function () {
   const menuAberto = estruturaPainel.classList.toggle("menu-aberto");
 
   botaoMenuMobile.textContent = menuAberto ? "✕" : "☰";
-
   botaoMenuMobile.setAttribute(
     "aria-label",
     menuAberto ? "Fechar menu" : "Abrir menu",
   );
 });
 
-overlayMenu.addEventListener("click", function () {
-  fecharMenu();
-});
+overlayMenu.addEventListener("click", fecharMenu);
 
-// dívidas que realmente estão sendo utilizadas pelo sistema
-const dividas = [];
+// =========================
+// RESUMO FINANCEIRO
+// =========================
 
 function atualizarResumo() {
   let total = 0;
@@ -310,30 +320,40 @@ function atualizarResumo() {
   dividas.forEach(function (divida) {
     total += divida.valor;
 
-    if (divida.paga === false) {
-      if (estaAtrasada(divida)) {
-        atrasadas += divida.valor;
-        quantidadeAtrasadas++;
-      } else {
-        emAberto += divida.valor;
-      }
-    } else {
+    if (divida.paga) {
       pagas += divida.valor;
+      return;
+    }
+
+    if (estaAtrasada(divida)) {
+      atrasadas += divida.valor;
+      quantidadeAtrasadas++;
+    } else {
+      emAberto += divida.valor;
     }
   });
 
-  elementoTotalDividas.textContent = `R$ ${total.toFixed(2)}`;
+  elementoTotalDividas.textContent = formatarMoeda(total);
+  elementoTotalEmAberto.textContent = formatarMoeda(emAberto);
+  elementoTotalPagas.textContent = formatarMoeda(pagas);
+  elementoTotalAtrasadas.textContent = formatarMoeda(atrasadas);
 
-  elementoTotalEmAberto.textContent = `R$ ${emAberto.toFixed(2)}`;
-
-  elementoTotalPagas.textContent = `R$ ${pagas.toFixed(2)}`;
-
-  elementoTotalAtrasadas.textContent = `R$ ${atrasadas.toFixed(2)}`;
-
-  elementoQuantidadeAtrasadas.textContent = `${quantidadeAtrasadas} ${
-    quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
-  }`;
+  elementoQuantidadeAtrasadas.textContent =
+    `${quantidadeAtrasadas} ${
+      quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
+    }`;
 }
+
+function formatarMoeda(valor) {
+  return valor.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+}
+
+// =========================
+// SUPABASE — DÍVIDAS
+// =========================
 
 async function carregarDividasSupabase() {
   const {
@@ -344,7 +364,6 @@ async function carregarDividasSupabase() {
     console.error("Nenhum usuário está logado.");
     return;
   }
-  console.log("USUÁRIO ATUAL:", user.id, user.email);
 
   const { data, error } = await supabase
     .from("dividas")
@@ -357,41 +376,25 @@ async function carregarDividasSupabase() {
     return;
   }
 
-  console.log("Dívidas carregadas do Supabase:", data);
-
   dividas.length = 0;
-
-  data.forEach(function (divida) {
-    dividas.push(divida);
-  });
+  dividas.push(...data);
 
   atualizarListaDividas();
   atualizarResumo();
   atualizarProximosVencimentos();
 }
 
-// Abrir formulário
-botaoNovaDivida.addEventListener("click", function () {
-  formularioDivida.style.display = "block";
-});
-
-// Fechar formulário
-botaoCancelar.addEventListener("click", function () {
-  formularioDivida.style.display = "none";
-});
+// =========================
+// STATUS DAS DÍVIDAS
+// =========================
 
 function estaAtrasada(divida) {
   if (divida.paga) {
     return false;
   }
 
-  const partes = divida.vencimento.split("-");
-
-  const ano = Number(partes[0]);
-  const mes = Number(partes[1]) - 1;
-  const dia = Number(partes[2]);
-
-  const vencimento = new Date(ano, mes, dia);
+  const [ano, mes, dia] = divida.vencimento.split("-").map(Number);
+  const vencimento = new Date(ano, mes - 1, dia);
   const hoje = new Date();
 
   hoje.setHours(0, 0, 0, 0);
@@ -402,73 +405,63 @@ function estaAtrasada(divida) {
 
 function obterStatus(divida) {
   if (divida.paga) {
-    return "Paga";
+    return {
+      texto: "Paga",
+      classe: "status-paga",
+    };
   }
 
   if (estaAtrasada(divida)) {
-    return "Atrasada";
+    return {
+      texto: "Atrasada",
+      classe: "status-atrasada",
+    };
   }
 
-  return "Em aberto";
+  return {
+    texto: "Em aberto",
+    classe: "status-aberta",
+  };
 }
 
 function deveMostrarDivida(divida) {
-  if (filtroAtual === "todas") {
-    return true;
-  }
+  switch (filtroAtual) {
+    case "abertas":
+      return !divida.paga && !estaAtrasada(divida);
 
-  if (filtroAtual === "abertas") {
-    return !divida.paga && !estaAtrasada(divida);
-  }
+    case "atrasadas":
+      return !divida.paga && estaAtrasada(divida);
 
-  if (filtroAtual === "atrasadas") {
-    return !divida.paga && estaAtrasada(divida);
-  }
+    case "pagas":
+      return divida.paga;
 
-  if (filtroAtual === "pagas") {
-    return divida.paga;
+    default:
+      return true;
   }
-
-  return true;
 }
-function ordenarPorVencimento(lista) {
-  return [...lista].sort(function (a, b) {
-    return a.vencimento.localeCompare(b.vencimento);
-  });
-}
+
+// =========================
+// PRÓXIMOS VENCIMENTOS
+// =========================
+
 function atualizarProximosVencimentos() {
-  const elemento = document.getElementById("proximosVencimentos");
-
-  const dividasPendentes = dividas
-    .filter(function (divida) {
-      return !divida.paga;
-    })
-    .sort(function (a, b) {
-      return a.vencimento.localeCompare(b.vencimento);
-    });
+  const dividasPendentes = [...dividas]
+    .filter((divida) => !divida.paga)
+    .sort((a, b) => a.vencimento.localeCompare(b.vencimento));
 
   if (dividasPendentes.length === 0) {
-    elemento.innerHTML = `
-      <p>Nenhum vencimento próximo.</p>
-    `;
-
+    elementoProximosVencimentos.innerHTML =
+      "<p>Nenhum vencimento próximo.</p>";
     return;
   }
 
-  const proximas = dividasPendentes.slice(0, 3);
+  elementoProximosVencimentos.innerHTML = "";
 
-  elemento.innerHTML = "";
-
-  proximas.forEach(function (divida) {
+  dividasPendentes.slice(0, 3).forEach(function (divida) {
+    const atrasada = estaAtrasada(divida);
     const item = document.createElement("div");
 
     item.classList.add("item-vencimento");
-
-    const status = estaAtrasada(divida) ? "Atrasada" : "Em aberto";
-
-    const classeStatus = estaAtrasada(divida)
-      ? "vencimento-atrasado"
-      : "vencimento-aberto";
 
     item.innerHTML = `
       <div class="info-vencimento">
@@ -477,28 +470,34 @@ function atualizarProximosVencimentos() {
       </div>
 
       <div class="valor-vencimento">
-        <strong>R$ ${divida.valor.toFixed(2)}</strong>
-        <span class="${classeStatus}">${status}</span>
+        <strong>${formatarMoeda(divida.valor)}</strong>
+        <span class="${
+          atrasada ? "vencimento-atrasado" : "vencimento-aberto"
+        }">
+          ${atrasada ? "Atrasada" : "Em aberto"}
+        </span>
       </div>
     `;
 
-    elemento.appendChild(item);
+    elementoProximosVencimentos.appendChild(item);
   });
 }
+
+// =========================
+// LISTA DE DÍVIDAS
+// =========================
+
 function atualizarListaDividas() {
   listaDividas.innerHTML = "";
 
-  ordenarPorVencimento(dividas).forEach(function (divida) {
-    criarDivida(divida);
-  });
+  [...dividas]
+    .sort((a, b) => a.vencimento.localeCompare(b.vencimento))
+    .filter(deveMostrarDivida)
+    .forEach(criarDivida);
 }
 
-// Criar dívida
 function criarDivida(divida) {
-  if (!deveMostrarDivida(divida)) {
-    return;
-  }
-  // Criar elemento HTML
+  const status = obterStatus(divida);
   const elementoDivida = document.createElement("div");
 
   elementoDivida.classList.add("divida");
@@ -507,63 +506,45 @@ function criarDivida(divida) {
     elementoDivida.classList.add("paga");
   }
 
-  const status = obterStatus(divida);
-
-  let classeStatus = "";
-
-  if (status === "Paga") {
-    classeStatus = "status-paga";
-  } else if (status === "Atrasada") {
-    classeStatus = "status-atrasada";
-  } else {
-    classeStatus = "status-aberta";
-  }
-
   elementoDivida.innerHTML = `
-        <div>
-            <h3>${divida.nome}</h3>
-            <p>Vencimento: ${divida.vencimento}</p>
-           <p class="status-divida">
-              Status: <span class="${classeStatus}">${status}</span>
-            </p>
-        </div>
+    <div>
+      <h3>${divida.nome}</h3>
+      <p>Vencimento: ${divida.vencimento}</p>
+      <p class="status-divida">
+        Status:
+        <span class="${status.classe}">${status.texto}</span>
+      </p>
+    </div>
 
-        <div>
-            <strong>R$ ${divida.valor.toFixed(2)}</strong>
+    <div>
+      <strong>${formatarMoeda(divida.valor)}</strong>
 
-           <div class="acoes-dividas">
-    <button 
-        type="button" 
-        class="btnPagar"
-        ${divida.paga ? "disabled" : ""}>
-        ${divida.paga ? "✓ Paga" : "Pagar"}
-    </button>
+      <div class="acoes-dividas">
+        <button
+          type="button"
+          class="btnPagar"
+          ${divida.paga ? "disabled" : ""}
+        >
+          ${divida.paga ? "✓ Paga" : "Pagar"}
+        </button>
 
-    <button type="button" class="btnEditar">Editar</button>
+        <button type="button" class="btnEditar">Editar</button>
+        <button type="button" class="btnExcluir">Excluir</button>
+      </div>
+    </div>
+  `;
 
-    <button type="button" class="btnExcluir">Excluir</button>
-</div>
-        </div>
-    `;
-
-  // Colocar a dívida na tela
   listaDividas.appendChild(elementoDivida);
 
-  // Encontrar os botões
   const botaoPagar = elementoDivida.querySelector(".btnPagar");
   const botaoEditar = elementoDivida.querySelector(".btnEditar");
   const botaoExcluir = elementoDivida.querySelector(".btnExcluir");
-  const elementoStatus = elementoDivida.querySelector(".status-divida");
+  const elementoStatus = elementoDivida.querySelector(".status-divida span");
 
-  // Botão pagar
   botaoPagar.addEventListener("click", async function () {
-    console.log("Dívida paga!");
-
     const { data, error } = await supabase
       .from("dividas")
-      .update({
-        paga: true,
-      })
+      .update({ paga: true })
       .eq("id", divida.id)
       .select()
       .single();
@@ -576,34 +557,28 @@ function criarDivida(divida) {
 
     divida.paga = data.paga;
 
-    elementoStatus.textContent = "Status: Paga";
-
+    elementoStatus.textContent = "Paga";
     elementoStatus.classList.remove("status-atrasada", "status-aberta");
     elementoStatus.classList.add("status-paga");
 
+    botaoPagar.textContent = "✓ Paga";
+    botaoPagar.disabled = true;
+    elementoDivida.classList.add("paga");
+
     atualizarResumo();
     atualizarProximosVencimentos();
-
-    botaoPagar.textContent = "✓ Paga";
-
-    botaoPagar.disabled = true;
-
-    elementoDivida.classList.add("paga");
   });
+
   botaoEditar.addEventListener("click", function () {
     dividaEditando = divida;
 
-    console.log("Editando:", divida);
-    console.log("dividaEditando:", dividaEditando);
-
-    document.getElementById("nome-divida").value = divida.nome;
-    document.getElementById("valor-divida").value = divida.valor;
-    document.getElementById("vencimento-divida").value = divida.vencimento;
+    nomeDivida.value = divida.nome;
+    valorDivida.value = divida.valor;
+    vencimentoDivida.value = divida.vencimento;
 
     formularioDivida.style.display = "block";
   });
 
-  // Botão excluir
   botaoExcluir.addEventListener("click", async function () {
     const confirmar = confirm(
       `Tem certeza que deseja excluir a dívida "${divida.nome}"?`,
@@ -624,99 +599,110 @@ function criarDivida(divida) {
       return;
     }
 
-    console.log("Dívida excluída do Supabase:", divida);
-
     const indice = dividas.indexOf(divida);
 
     if (indice !== -1) {
       dividas.splice(indice, 1);
     }
 
+    atualizarListaDividas();
     atualizarResumo();
     atualizarProximosVencimentos();
-
-    elementoDivida.remove();
   });
 }
 
-// Cadastrar nova dívida
+// =========================
+// FORMULÁRIO DE DÍVIDA
+// =========================
+
+function limparFormularioDivida() {
+  nomeDivida.value = "";
+  valorDivida.value = "";
+  vencimentoDivida.value = "";
+  dividaEditando = null;
+}
+
+function fecharFormularioDivida() {
+  formularioDivida.style.display = "none";
+  limparFormularioDivida();
+}
+
+botaoNovaDivida.addEventListener("click", function () {
+  formularioDivida.style.display = "block";
+});
+
+botaoCancelar.addEventListener("click", fecharFormularioDivida);
+
 botaoCadastrar.addEventListener("click", async function (event) {
   event.preventDefault();
 
-  console.log("BOTÃO CADASTRAR CLICADO");
-  console.log("dividaEditando no cadastro:", dividaEditando);
+  const nome = nomeDivida.value.trim();
+  const valor = Number(valorDivida.value);
+  const vencimento = vencimentoDivida.value;
 
-  const nomeDivida = document.getElementById("nome-divida").value;
-
-  const valorDivida = Number(document.getElementById("valor-divida").value);
-
-  const vencimentoDivida = document.getElementById("vencimento-divida").value;
-
-  // Validar nome
-  if (nomeDivida === "") {
+  if (!nome) {
     alert("Digite o nome da dívida.");
     return;
   }
 
-  // Validar valor
-  if (valorDivida <= 0) {
+  if (valor <= 0) {
     alert("Digite um valor maior que zero.");
     return;
   }
 
-  // Validar vencimento
-  if (vencimentoDivida === "") {
+  if (!vencimento) {
     alert("Informe o vencimento da dívida.");
     return;
   }
 
-  if (dividaEditando !== null) {
-    const { data, error } = await supabase
-      .from("dividas")
-      .update({
-        nome: nomeDivida,
-        valor: valorDivida,
-        vencimento: vencimentoDivida,
-      })
-      .eq("id", dividaEditando.id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("Erro ao editar dívida:", error);
-      alert("Erro ao editar a dívida.");
-      return;
-    }
-
-    console.log("Dívida editada no Supabase:", data);
-
-    dividaEditando.nome = data.nome;
-    dividaEditando.valor = data.valor;
-    dividaEditando.vencimento = data.vencimento;
-
-    atualizarListaDividas();
-    atualizarResumo();
-    atualizarProximosVencimentos();
-
-    dividaEditando = null;
-
-    formularioDivida.style.display = "none";
-
-    document.getElementById("nome-divida").value = "";
-    document.getElementById("valor-divida").value = "";
-    document.getElementById("vencimento-divida").value = "";
-
+  if (dividaEditando) {
+    await editarDivida(nome, valor, vencimento);
     return;
   }
 
+  await cadastrarDivida(nome, valor, vencimento);
+});
+
+async function editarDivida(nome, valor, vencimento) {
+  const { data, error } = await supabase
+    .from("dividas")
+    .update({
+      nome,
+      valor,
+      vencimento,
+    })
+    .eq("id", dividaEditando.id)
+    .select()
+    .single();
+
+  if (error) {
+    console.error("Erro ao editar dívida:", error);
+    alert("Erro ao editar a dívida.");
+    return;
+  }
+
+  Object.assign(dividaEditando, data);
+
+  atualizarListaDividas();
+  atualizarResumo();
+  atualizarProximosVencimentos();
+  fecharFormularioDivida();
+}
+
+async function cadastrarDivida(nome, valor, vencimento) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
 
+  if (!user) {
+    alert("Usuário não encontrado.");
+    return;
+  }
+
   const novaDivida = {
-    nome: nomeDivida,
-    valor: valorDivida,
-    vencimento: vencimentoDivida,
+    nome,
+    valor,
+    vencimento,
     paga: false,
     user_id: user.id,
   };
@@ -733,19 +719,18 @@ botaoCadastrar.addEventListener("click", async function (event) {
     return;
   }
 
-  console.log("Dívida cadastrada no Supabase:", data);
-
   dividas.push(data);
 
   atualizarListaDividas();
   atualizarResumo();
+  atualizarProximosVencimentos();
+  fecharFormularioDivida();
+}
 
-  formularioDivida.style.display = "none";
+// =========================
+// FILTROS
+// =========================
 
-  document.getElementById("nome-divida").value = "";
-  document.getElementById("valor-divida").value = "";
-  document.getElementById("vencimento-divida").value = "";
-});
 botoesFiltro.forEach(function (botao) {
   botao.addEventListener("click", function () {
     filtroAtual = botao.dataset.filtro;
@@ -755,7 +740,6 @@ botoesFiltro.forEach(function (botao) {
     });
 
     botao.classList.add("ativo");
-
     atualizarListaDividas();
   });
 });

@@ -3,13 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
     <title>Eremita - Controle Financeiro</title>
 
     <meta
       name="description"
       content="Eremita é uma aplicação de controle financeiro para organizar dívidas, vencimentos e pagamentos."
     />
-
     <meta name="robots" content="index, follow" />
     <meta
       name="google-site-verification"
@@ -23,40 +23,39 @@
     <main>
       <canvas id="animated-gradient"></canvas>
 
+      <!-- Ícone reutilizável da marca -->
+      <svg class="svg-defs" aria-hidden="true">
+        <symbol id="logo-ninja" viewBox="0 0 64 64">
+          <path
+            d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
+            fill="currentColor"
+          />
+          <path d="M14 27h36v9H14z" fill="currentColor" />
+          <path
+            d="M21 30c2.5-3 6-3 9 0"
+            fill="none"
+            stroke="white"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+          <path
+            d="M34 30c3-3 6.5-3 9 0"
+            fill="none"
+            stroke="white"
+            stroke-width="3"
+            stroke-linecap="round"
+          />
+          <circle cx="27" cy="30" r="2" fill="white" />
+          <circle cx="37" cy="30" r="2" fill="white" />
+        </symbol>
+      </svg>
+
+      <!-- LANDING -->
       <section class="landing" id="landing">
         <div class="landing-conteudo">
           <div class="landing-logo">
-            <svg
-              class="logo-ninja landing-ninja"
-              viewBox="0 0 64 64"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-label="Logo Eremita"
-            >
-              <path
-                d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
-                fill="currentColor"
-              />
-
-              <path d="M14 27h36v9H14z" fill="currentColor" />
-
-              <path
-                d="M21 30c2.5-3 6-3 9 0"
-                fill="none"
-                stroke="white"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
-
-              <path
-                d="M34 30c3-3 6.5-3 9 0"
-                fill="none"
-                stroke="white"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
-
-              <circle cx="27" cy="30" r="2" fill="white" />
-              <circle cx="37" cy="30" r="2" fill="white" />
+            <svg class="logo-ninja landing-ninja" aria-hidden="true">
+              <use href="#logo-ninja"></use>
             </svg>
           </div>
 
@@ -71,26 +70,28 @@
 
           <div class="landing-botoes">
             <button type="button" id="btnComecar">Começar agora</button>
-
             <button type="button" id="btnLoginLanding">
               Já tenho uma conta
             </button>
           </div>
         </div>
       </section>
-      <!-- =========================
-           LOGIN
-      ========================== -->
+
+      <!-- LOGIN / CADASTRO -->
       <section class="login">
         <div class="auth-livro">
-          <!-- PÁGINA DE LOGIN -->
           <div class="pagina-auth pagina-login">
             <h1>Eremita</h1>
             <p>Boas-vindas!</p>
 
             <form>
               <label for="email">Email:</label>
-              <input type="email" id="email" placeholder="Digite seu email" />
+              <input
+                type="email"
+                id="email"
+                placeholder="Digite seu email"
+                autocomplete="email"
+              />
 
               <label for="password">Senha:</label>
 
@@ -99,6 +100,7 @@
                   type="password"
                   id="password"
                   placeholder="Digite sua senha"
+                  autocomplete="current-password"
                 />
                 <button
                   type="button"
@@ -112,12 +114,10 @@
               <p id="mensagemErro"></p>
 
               <button type="submit" id="btnEntrar">Entrar</button>
-
               <button type="button" id="btnCriarConta">Criar uma conta</button>
             </form>
           </div>
 
-          <!-- PÁGINA DE CADASTRO -->
           <div class="pagina-auth pagina-cadastro">
             <h1>Criar conta</h1>
             <p>Comece sua organização financeira.</p>
@@ -128,6 +128,7 @@
                 type="text"
                 id="nomeCadastro"
                 placeholder="Digite seu nome"
+                autocomplete="name"
               />
 
               <label for="emailCadastro">Email:</label>
@@ -135,6 +136,7 @@
                 type="email"
                 id="emailCadastro"
                 placeholder="Digite seu email"
+                autocomplete="email"
               />
 
               <label for="senhaCadastro">Senha:</label>
@@ -142,6 +144,7 @@
                 type="password"
                 id="senhaCadastro"
                 placeholder="Digite sua senha"
+                autocomplete="new-password"
               />
 
               <label for="confirmarSenhaCadastro">Confirmar senha:</label>
@@ -149,6 +152,7 @@
                 type="password"
                 id="confirmarSenhaCadastro"
                 placeholder="Digite a senha novamente"
+                autocomplete="new-password"
               />
 
               <p id="mensagemCadastro"></p>
@@ -165,52 +169,14 @@
         </div>
       </section>
 
-      <!-- =========================
-           PAINEL
-      ========================== -->
-
+      <!-- PAINEL -->
       <section class="painel">
         <div class="estrutura-painel">
-          <!-- =========================
-               MENU LATERAL
-          ========================== -->
-
           <aside class="menu-lateral">
-            <!-- LOGO -->
             <div class="menu-logo">
               <div class="menu-logo-icone">
-                <svg
-                  class="logo-ninja"
-                  viewBox="0 0 64 64"
-                  xmlns="http://www.w3.org/2000/svg"
-                  aria-label="Logo Eremita"
-                >
-                  <path
-                    d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
-                    fill="currentColor"
-                  />
-
-                  <path d="M14 27h36v9H14z" fill="currentColor" />
-
-                  <path
-                    d="M21 30c2.5-3 6-3 9 0"
-                    fill="none"
-                    stroke="white"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                  />
-
-                  <path
-                    d="M34 30c3-3 6.5-3 9 0"
-                    fill="none"
-                    stroke="white"
-                    stroke-width="3"
-                    stroke-linecap="round"
-                  />
-
-                  <circle cx="27" cy="30" r="2" fill="white" />
-
-                  <circle cx="37" cy="30" r="2" fill="white" />
+                <svg class="logo-ninja" aria-hidden="true">
+                  <use href="#logo-ninja"></use>
                 </svg>
               </div>
 
@@ -220,7 +186,6 @@
               </div>
             </div>
 
-            <!-- NAVEGAÇÃO -->
             <nav class="menu-navegacao">
               <a href="#dashboard" class="item-menu ativo">
                 <span>🏠</span>
@@ -245,7 +210,6 @@
               </a>
             </nav>
 
-            <!-- MENU INFERIOR -->
             <div class="menu-inferior">
               <a href="#" class="item-menu menu-breve">
                 <span>⚙️</span>
@@ -253,11 +217,7 @@
                 <small>Em breve</small>
               </a>
 
-              <button
-                type="button"
-                id="btnSair"
-                class="item-menu btn-menu-sair"
-              >
+              <button type="button" id="btnSair" class="item-menu btn-menu-sair">
                 <span>🚪</span>
                 <span>Sair</span>
               </button>
@@ -265,12 +225,8 @@
           </aside>
 
           <div class="overlay-menu" id="overlayMenu"></div>
-          <!-- =========================
-               CONTEÚDO DO PAINEL
-          ========================== -->
 
           <div class="conteudo-painel">
-            <!-- CABEÇALHO -->
             <header class="cabeçalho">
               <button
                 type="button"
@@ -283,44 +239,13 @@
 
               <div class="marca">
                 <div class="logo-eremita">
-                  <svg
-                    class="logo-ninja"
-                    viewBox="0 0 64 64"
-                    xmlns="http://www.w3.org/2000/svg"
-                    aria-label="Logo Eremita"
-                  >
-                    <path
-                      d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
-                      fill="currentColor"
-                    />
-
-                    <path d="M14 27h36v9H14z" fill="currentColor" />
-
-                    <path
-                      d="M21 30c2.5-3 6-3 9 0"
-                      fill="none"
-                      stroke="white"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                    />
-
-                    <path
-                      d="M34 30c3-3 6.5-3 9 0"
-                      fill="none"
-                      stroke="white"
-                      stroke-width="3"
-                      stroke-linecap="round"
-                    />
-
-                    <circle cx="27" cy="30" r="2" fill="white" />
-
-                    <circle cx="37" cy="30" r="2" fill="white" />
+                  <svg class="logo-ninja" aria-hidden="true">
+                    <use href="#logo-ninja"></use>
                   </svg>
                 </div>
 
                 <div class="marca-texto">
                   <h1 id="nomeUsuario">Olá!</h1>
-
                   <p>Bem-vindo à Eremita</p>
                 </div>
               </div>
@@ -335,14 +260,9 @@
               </button>
             </header>
 
-            <!-- =========================
-                 RESUMO
-            ========================== -->
-
             <section class="resumo" id="dashboard">
               <div class="card-resumo card-total">
                 <div class="icone-resumo">💰</div>
-
                 <div>
                   <h2>Total devido</h2>
                   <p id="totalDividas">R$ 0,00</p>
@@ -351,7 +271,6 @@
 
               <div class="card-resumo card-aberto">
                 <div class="icone-resumo">📋</div>
-
                 <div>
                   <h2>Em aberto</h2>
                   <p id="totalEmAberto">R$ 0,00</p>
@@ -360,7 +279,6 @@
 
               <div class="card-resumo card-pago">
                 <div class="icone-resumo">✓</div>
-
                 <div>
                   <h2>Pagas</h2>
                   <p id="totalPagas">R$ 0,00</p>
@@ -369,29 +287,19 @@
 
               <div class="card-resumo card-atrasado">
                 <div class="icone-resumo">⚠</div>
-
                 <div>
                   <h2>Atrasadas</h2>
-
                   <p id="totalAtrasadas">R$ 0,00</p>
-
-                  <small id="quantidadeAtrasadas"> 0 dívidas </small>
+                  <small id="quantidadeAtrasadas">0 dívidas</small>
                 </div>
               </div>
             </section>
 
-            <!-- =========================
-                 VISÃO FINANCEIRA
-            ========================== -->
-
             <section class="visao-financeira">
               <div class="card-visao">
                 <div class="cabecalho-card">
-                  <div>
-                    <span class="titulo-card"> Situação financeira </span>
-
-                    <h2>Visão geral</h2>
-                  </div>
+                  <span class="titulo-card">Situação financeira</span>
+                  <h2>Visão geral</h2>
                 </div>
 
                 <div class="indicador-financeiro">
@@ -400,8 +308,7 @@
                   </div>
 
                   <div>
-                    <strong> Sua situação </strong>
-
+                    <strong>Sua situação</strong>
                     <p>Você está acompanhando suas dívidas.</p>
                   </div>
                 </div>
@@ -409,11 +316,8 @@
 
               <div class="card-visao">
                 <div class="cabecalho-card">
-                  <div>
-                    <span class="titulo-card"> Próximos vencimentos </span>
-
-                    <h2>Fique atento</h2>
-                  </div>
+                  <span class="titulo-card">Próximos vencimentos</span>
+                  <h2>Fique atento</h2>
                 </div>
 
                 <div class="proximos-vencimentos" id="proximosVencimentos">
@@ -422,66 +326,52 @@
               </div>
             </section>
 
-            <!-- =========================
-                 DÍVIDAS
-            ========================== -->
-
             <section class="dividas" id="dividas">
               <div class="titulo-dividas">
                 <h2>Minhas dívidas</h2>
-
                 <button type="button" id="btnNovaDivida">+ Nova dívida</button>
               </div>
-
-              <!-- FILTROS -->
 
               <div class="filtros-dividas">
                 <button type="button" class="filtro ativo" data-filtro="todas">
                   Todas
                 </button>
-
                 <button type="button" class="filtro" data-filtro="abertas">
                   Em aberto
                 </button>
-
                 <button type="button" class="filtro" data-filtro="atrasadas">
                   Atrasadas
                 </button>
-
                 <button type="button" class="filtro" data-filtro="pagas">
                   Pagas
                 </button>
               </div>
 
-              <!-- FORMULÁRIO DE DÍVIDA -->
-
               <div class="formulario-divida" id="formularioDivida">
                 <h2>Nova dívida</h2>
 
-                <label for="nome-divida"> Nome da dívida </label>
-
+                <label for="nome-divida">Nome da dívida</label>
                 <input
                   type="text"
                   id="nome-divida"
                   placeholder="Ex: Internet"
                 />
 
-                <label for="valor-divida"> Valor </label>
+                <label for="valor-divida">Valor</label>
+                <input
+                  type="number"
+                  id="valor-divida"
+                  placeholder="Ex: 100"
+                />
 
-                <input type="number" id="valor-divida" placeholder="Ex: 100" />
-
-                <label for="vencimento-divida"> Vencimento </label>
-
+                <label for="vencimento-divida">Vencimento</label>
                 <input type="date" id="vencimento-divida" />
 
                 <div class="botoes-formulario">
                   <button type="button" id="btnCancelar">Cancelar</button>
-
                   <button type="button" id="btnCadastrar">Cadastrar</button>
                 </div>
               </div>
-
-              <!-- LISTA DE DÍVIDAS -->
 
               <div class="lista-dividas" id="listaDividas"></div>
             </section>
