@@ -230,8 +230,7 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
   }
 
   if (senha.length < 6) {
-    mensagemCadastro.textContent =
-      "A senha deve ter pelo menos 6 caracteres.";
+    mensagemCadastro.textContent = "A senha deve ter pelo menos 6 caracteres.";
     return;
   }
 
@@ -264,7 +263,6 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
   emailCadastro.value = "";
   senhaCadastro.value = "";
   confirmarSenhaCadastro.value = "";
-
 });
 
 botaoSair.addEventListener("click", async function () {
@@ -305,6 +303,42 @@ botaoMenuMobile.addEventListener("click", function () {
 });
 
 overlayMenu.addEventListener("click", fecharMenu);
+// =========================
+// NAVEGAÇÃO DO MENU
+// =========================
+
+const itensMenu = document.querySelectorAll(".item-menu");
+
+itensMenu.forEach(function (item) {
+  item.addEventListener("click", function (event) {
+    const destino = item.getAttribute("href");
+
+    if (!destino || destino === "#") {
+      return;
+    }
+
+    event.preventDefault();
+
+    const secao = document.querySelector(destino);
+
+    if (!secao) {
+      return;
+    }
+
+    secao.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    itensMenu.forEach(function (itemMenu) {
+      itemMenu.classList.remove("ativo");
+    });
+
+    item.classList.add("ativo");
+
+    fecharMenu();
+  });
+});
 
 // =========================
 // RESUMO FINANCEIRO
@@ -338,10 +372,9 @@ function atualizarResumo() {
   elementoTotalPagas.textContent = formatarMoeda(pagas);
   elementoTotalAtrasadas.textContent = formatarMoeda(atrasadas);
 
-  elementoQuantidadeAtrasadas.textContent =
-    `${quantidadeAtrasadas} ${
-      quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
-    }`;
+  elementoQuantidadeAtrasadas.textContent = `${quantidadeAtrasadas} ${
+    quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
+  }`;
 }
 
 function formatarMoeda(valor) {
@@ -349,6 +382,10 @@ function formatarMoeda(valor) {
     style: "currency",
     currency: "BRL",
   });
+}
+function formatarData(data) {
+  const [ano, mes, dia] = data.split("-");
+  return `${dia}/${mes}/${ano}`;
 }
 
 // =========================
@@ -450,8 +487,7 @@ function atualizarProximosVencimentos() {
     .sort((a, b) => a.vencimento.localeCompare(b.vencimento));
 
   if (dividasPendentes.length === 0) {
-    elementoProximosVencimentos.innerHTML =
-      "<p>Nenhum vencimento próximo.</p>";
+    elementoProximosVencimentos.innerHTML = "<p>Nenhum vencimento próximo.</p>";
     return;
   }
 
@@ -466,14 +502,12 @@ function atualizarProximosVencimentos() {
     item.innerHTML = `
       <div class="info-vencimento">
         <strong>${divida.nome}</strong>
-        <span>Vencimento: ${divida.vencimento}</span>
+        <span>Vencimento: ${formatarData(divida.vencimento)}</span>
       </div>
 
       <div class="valor-vencimento">
         <strong>${formatarMoeda(divida.valor)}</strong>
-        <span class="${
-          atrasada ? "vencimento-atrasado" : "vencimento-aberto"
-        }">
+        <span class="${atrasada ? "vencimento-atrasado" : "vencimento-aberto"}">
           ${atrasada ? "Atrasada" : "Em aberto"}
         </span>
       </div>
@@ -509,7 +543,7 @@ function criarDivida(divida) {
   elementoDivida.innerHTML = `
     <div>
       <h3>${divida.nome}</h3>
-      <p>Vencimento: ${divida.vencimento}</p>
+      <p>Vencimento: ${formatarData(divida.vencimento)}</p>
       <p class="status-divida">
         Status:
         <span class="${status.classe}">${status.texto}</span>
