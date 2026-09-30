@@ -60,6 +60,14 @@ const elementoProximosVencimentos = document.getElementById(
   "proximosVencimentos",
 );
 const nomeUsuario = document.getElementById("nomeUsuario");
+const elementoRendaMensal = document.getElementById("rendaMensal");
+const botaoEditarRenda = document.getElementById("btnEditarRenda");
+const formularioRenda = document.getElementById("formularioRenda");
+const valorRenda = document.getElementById("valorRenda");
+const botaoSalvarRenda = document.getElementById("btnSalvarRenda");
+const elementoSaldoMensal = document.getElementById("saldoMensal");
+const textoSituacao = document.getElementById("textoSituacao");
+const mensagemSituacao = document.getElementById("mensagemSituacao");
 
 // =========================
 // ESTADO
@@ -68,6 +76,8 @@ const nomeUsuario = document.getElementById("nomeUsuario");
 const dividas = [];
 let filtroAtual = "todas";
 let dividaEditando = null;
+let rendaMensal = 0;
+const tabelaRenda = "renda_mensal";
 
 // =========================
 // NAVEGAÇÃO
@@ -196,6 +206,8 @@ botaoEntrar.addEventListener("click", async function (event) {
 
   dividas.length = 0;
   await carregarDividasSupabase();
+  await carregarRenda();
+  atualizarResumo();
 
   telaLogin.style.display = "none";
   telaPainel.style.display = "block";
@@ -375,6 +387,20 @@ function atualizarResumo() {
   elementoQuantidadeAtrasadas.textContent = `${quantidadeAtrasadas} ${
     quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
   }`;
+  const saldo = rendaMensal - emAberto - atrasadas;
+  elementoSaldoMensal.textContent = `Saldo após dívidas: ${formatarMoeda(saldo)}`;
+
+  if (rendaMensal <= 0) {
+    textoSituacao.textContent = "Sua situação";
+    mensagemSituacao.textContent = "Cadastre sua renda mensal.";
+  } else if (saldo < 0) {
+    textoSituacao.textContent = "Atenção";
+    mensagemSituacao.textContent =
+      "As dívidas informadas ultrapassam sua renda.";
+  } else {
+    textoSituacao.textContent = "Saldo disponível";
+    mensagemSituacao.textContent = `Você tem ${formatarMoeda(saldo)} disponíveis após as dívidas.`;
+  }
 }
 
 function formatarMoeda(valor) {
@@ -419,6 +445,47 @@ async function carregarDividasSupabase() {
   atualizarListaDividas();
   atualizarResumo();
   atualizarProximosVencimentos();
+}
+async function carregarRenda() {
+  const { data, error } = await supabase
+    .from(tabelaRenda)
+    .select("valor")
+    .single();
+
+  if (error && error.code !== "PGRST116") {
+    console.error("Erro ao carregar renda:", error);
+    return;
+  }
+
+  rendaMensal = data ? Number(data.valor) : 0;
+  elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+}
+async function salvarRenda(valor) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return false;
+  }
+
+  const { error } = await supabase.from(tabelaRenda).upsert(
+    {
+      user_id: user.id,
+      valor,
+    },
+    {
+      onConflict: "user_id",
+    },
+  );
+
+  if (error) {
+    console.error("Erro ao salvar renda:", error);
+    return false;
+  }
+
+  rendaMensal = Number(valor);
+  return true;
 }
 
 // =========================
@@ -776,4 +843,28 @@ botoesFiltro.forEach(function (botao) {
     botao.classList.add("ativo");
     atualizarListaDividas();
   });
+});
+botaoEditarRenda.addEventListener("click", function () {
+  valorRenda.value = rendaMensal || "";
+  formularioRenda.style.display = "flex";
+  valorRenda.focus();
+});
+botaoSalvarRenda.addEventListener("click", async function () {
+  const valor = Number(valorRenda.value);
+
+  if (valor <= 0) {
+    alert("Digite uma renda maior que zero.");
+    return;
+  }
+
+  const sucesso = await salvarRenda(valor);
+
+  if (!sucesso) {
+    alert("Erro ao salvar a renda.");
+    return;
+  }
+
+  elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+  atualizarResumo();
+  formularioRenda.style.display = "none";
 });
