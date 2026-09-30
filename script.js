@@ -289,6 +289,7 @@ botaoSair.addEventListener("click", async function () {
   listaDividas.innerHTML = "";
   atualizarResumo();
   atualizarProximosVencimentos();
+  atualizarGraficoDividas();
 
   telaPainel.style.display = "none";
   telaLogin.style.display = "block";
@@ -315,6 +316,7 @@ botaoMenuMobile.addEventListener("click", function () {
 });
 
 overlayMenu.addEventListener("click", fecharMenu);
+
 // =========================
 // NAVEGAÇÃO DO MENU
 // =========================
@@ -387,7 +389,9 @@ function atualizarResumo() {
   elementoQuantidadeAtrasadas.textContent = `${quantidadeAtrasadas} ${
     quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
   }`;
+
   const saldo = rendaMensal - emAberto - atrasadas;
+
   elementoSaldoMensal.textContent = `Saldo após dívidas: ${formatarMoeda(saldo)}`;
 
   if (rendaMensal <= 0) {
@@ -409,9 +413,334 @@ function formatarMoeda(valor) {
     currency: "BRL",
   });
 }
+
 function formatarData(data) {
   const [ano, mes, dia] = data.split("-");
   return `${dia}/${mes}/${ano}`;
+}
+// =========================
+// GRÁFICO — COMPROMISSOS
+// =========================
+
+function atualizarGraficoDividas() {
+  const grafico = document.getElementById("graficoDividas");
+
+  if (!grafico) {
+    return;
+  }
+
+  grafico.innerHTML = "";
+
+  if (dividas.length === 0) {
+    grafico.innerHTML = `
+      <div class="grafico-vazio">
+        Cadastre dívidas para visualizar sua evolução.
+      </div>
+    `;
+
+    return;
+  }
+
+  const hoje = new Date();
+  const meses = [];
+
+  for (let i = 0; i < 6; i++) {
+    const data = new Date(
+      hoje.getFullYear(),
+      hoje.getMonth() + i,
+      1
+    );
+
+    meses.push({
+      ano: data.getFullYear(),
+      mes: data.getMonth(),
+      nome: data.toLocaleDateString("pt-BR", {
+        month: "short",
+      }).replace(".", ""),
+      valor: 0,
+    });
+  }
+
+  dividas.forEach(function (divida) {
+    const [ano, mes] = divida.vencimento.split("-").map(Number);
+
+    const mesEncontrado = meses.find(function (item) {
+      return item.ano === ano && item.mes === mes - 1;
+    });
+
+    if (mesEncontrado) {
+      mesEncontrado.valor += Number(divida.valor);
+    }
+  });
+
+  const valores = meses.map((mes) => mes.valor);
+  const maiorValor = Math.max(...valores, 1);
+
+  const largura = 640;
+  const altura = 220;
+  const margemTopo = 24;
+  const margemInferior = 12;
+
+  const alturaUtil = altura - margemTopo - margemInferior;
+
+  const pontos = meses.map(function (mes, indice) {
+    const x =
+      meses.length === 1
+        ? largura / 2
+        : (indice / (meses.length - 1)) * largura;
+
+    const y =
+      margemTopo +
+      (1 - mes.valor / maiorValor) * alturaUtil;
+
+    return {
+      ...mes,
+      x,
+      y,
+    };
+  });
+
+  function criarCaminho(pontos) {
+    if (pontos.length === 0) {
+      return "";
+    }
+
+    if (pontos.length === 1) {
+      return `M${pontos[0].x} ${pontos[0].y}`;
+    }
+
+    let caminho = `M${pontos[0].x} ${pontos[0].y}`;
+
+    for (let i = 1; i < pontos.length - 1; i++) {
+      const anterior = pontos[i - 1];
+      const atual = pontos[i];
+      const proximo = pontos[i + 1];
+
+      const entradaX = atual.x - anterior.x;
+      const entradaY = atual.y - anterior.y;
+
+      const saidaX = proximo.x - atual.x;
+      const saidaY = proximo.y - atual.y;
+
+      const entradaTamanho =
+        Math.hypot(entradaX, entradaY) || 1;
+
+      const saidaTamanho =
+        Math.hypot(saidaX, saidaY) || 1;
+
+      const raio = Math.min(
+        2.5,
+        entradaTamanho / 2,
+        saidaTamanho / 2
+      );
+
+      const bx =
+        atual.x -
+        (entradaX / entradaTamanho) * raio;
+
+      const by =
+        atual.y -
+        (entradaY / entradaTamanho) * raio;
+
+      const ax =
+        atual.x +
+        (saidaX / saidaTamanho) * raio;
+
+      const ay =
+        atual.y +
+        (saidaY / saidaTamanho) * raio;
+
+      caminho += `
+        L${bx.toFixed(2)} ${by.toFixed(2)}
+        Q${atual.x.toFixed(2)} ${atual.y.toFixed(2)}
+        ${ax.toFixed(2)} ${ay.toFixed(2)}
+      `;
+    }
+
+    const ultimo = pontos[pontos.length - 1];
+
+    caminho += ` L${ultimo.x} ${ultimo.y}`;
+
+    return caminho;
+  }
+
+  const caminho = criarCaminho(pontos);
+
+  const primeiro = pontos[0];
+  const ultimo = pontos[pontos.length - 1];
+  const baseY = altura - margemInferior;
+
+  const area = `
+    ${caminho}
+    L${ultimo.x} ${baseY}
+    L${primeiro.x} ${baseY}
+    Z
+  `;
+
+  grafico.innerHTML = `
+    <div class="grafico-spell">
+      <div class="grafico-area">
+        <svg
+          class="grafico-svg"
+          viewBox="0 0 ${largura} ${altura}"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <linearGradient
+              id="gradienteGrafico"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop
+                offset="0%"
+                class="grafico-gradiente-inicio"
+              />
+              <stop
+                offset="100%"
+                class="grafico-gradiente-fim"
+              />
+            </linearGradient>
+          </defs>
+
+          <path
+            d="${area}"
+            class="grafico-preenchimento"
+          ></path>
+
+          <path
+            d="${caminho}"
+            class="grafico-linha"
+          ></path>
+        </svg>
+
+        <div class="grafico-cursor"></div>
+        <div class="grafico-ponto"></div>
+        <div class="grafico-tooltip"></div>
+      </div>
+
+      <div class="grafico-labels">
+        ${meses
+          .map(
+            (mes, indice) => `
+              <span
+                data-indice="${indice}"
+              >
+                ${mes.nome}
+              </span>
+            `
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
+
+  const areaGrafico =
+    grafico.querySelector(".grafico-area");
+
+  const cursor =
+    grafico.querySelector(".grafico-cursor");
+
+  const ponto =
+    grafico.querySelector(".grafico-ponto");
+
+  const tooltip =
+    grafico.querySelector(".grafico-tooltip");
+
+  const labels =
+    grafico.querySelectorAll(
+      ".grafico-labels span"
+    );
+
+  let indiceAtivo = pontos.length - 1;
+
+  function atualizarPonto(indice) {
+    const pontoAtual = pontos[indice];
+
+    if (!pontoAtual) {
+      return;
+    }
+
+    indiceAtivo = indice;
+
+    const porcentagemX =
+      (pontoAtual.x / largura) * 100;
+
+    const porcentagemY =
+      (pontoAtual.y / altura) * 100;
+
+    cursor.style.left = `${porcentagemX}%`;
+    ponto.style.left = `${porcentagemX}%`;
+    ponto.style.top = `${porcentagemY}%`;
+
+    tooltip.classList.remove(
+      "tooltip-esquerda"
+    );
+
+    if (porcentagemX > 55) {
+      tooltip.classList.add(
+        "tooltip-esquerda"
+      );
+    }
+
+    tooltip.style.left = `${porcentagemX}%`;
+    tooltip.style.top = `${porcentagemY}%`;
+
+    tooltip.innerHTML = `
+      <strong>${pontoAtual.nome}</strong>
+
+      <div class="tooltip-conteudo">
+        <span class="tooltip-indicador"></span>
+
+        <span>Compromissos</span>
+
+        <b>${formatarMoeda(pontoAtual.valor)}</b>
+      </div>
+    `;
+
+    labels.forEach(function (label, labelIndex) {
+      label.classList.toggle(
+        "ativo",
+        labelIndex === indice
+      );
+    });
+  }
+
+  areaGrafico.addEventListener(
+    "mousemove",
+    function (evento) {
+      const rect =
+        areaGrafico.getBoundingClientRect();
+
+      const posicao =
+        (evento.clientX - rect.left) /
+        rect.width;
+
+      const indice = Math.round(
+        posicao * (pontos.length - 1)
+      );
+
+      atualizarPonto(
+        Math.max(
+          0,
+          Math.min(
+            pontos.length - 1,
+            indice
+          )
+        )
+      );
+    }
+  );
+
+  areaGrafico.addEventListener(
+    "mouseleave",
+    function () {
+      atualizarPonto(indiceAtivo);
+    }
+  );
+
+  atualizarPonto(indiceAtivo);
 }
 
 // =========================
@@ -445,7 +774,9 @@ async function carregarDividasSupabase() {
   atualizarListaDividas();
   atualizarResumo();
   atualizarProximosVencimentos();
+  atualizarGraficoDividas();
 }
+
 async function carregarRenda() {
   const { data, error } = await supabase
     .from(tabelaRenda)
@@ -460,6 +791,7 @@ async function carregarRenda() {
   rendaMensal = data ? Number(data.valor) : 0;
   elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
 }
+
 async function salvarRenda(valor) {
   const {
     data: { user },
@@ -555,6 +887,7 @@ function atualizarProximosVencimentos() {
 
   if (dividasPendentes.length === 0) {
     elementoProximosVencimentos.innerHTML = "<p>Nenhum vencimento próximo.</p>";
+
     return;
   }
 
@@ -709,6 +1042,7 @@ function criarDivida(divida) {
     atualizarListaDividas();
     atualizarResumo();
     atualizarProximosVencimentos();
+    atualizarGraficoDividas();
   });
 }
 
@@ -787,6 +1121,7 @@ async function editarDivida(nome, valor, vencimento) {
   atualizarListaDividas();
   atualizarResumo();
   atualizarProximosVencimentos();
+  atualizarGraficoDividas();
   fecharFormularioDivida();
 }
 
@@ -825,6 +1160,7 @@ async function cadastrarDivida(nome, valor, vencimento) {
   atualizarListaDividas();
   atualizarResumo();
   atualizarProximosVencimentos();
+  atualizarGraficoDividas();
   fecharFormularioDivida();
 }
 
@@ -844,11 +1180,17 @@ botoesFiltro.forEach(function (botao) {
     atualizarListaDividas();
   });
 });
+
+// =========================
+// RENDA MENSAL
+// =========================
+
 botaoEditarRenda.addEventListener("click", function () {
   valorRenda.value = rendaMensal || "";
   formularioRenda.style.display = "flex";
   valorRenda.focus();
 });
+
 botaoSalvarRenda.addEventListener("click", async function () {
   const valor = Number(valorRenda.value);
 

@@ -2,11 +2,9 @@
 
 <html lang="pt-br">
   <head>
-    <!-- Configurações básicas da página -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- SEO -->
     <title>Eremita - Controle Financeiro</title>
 
     <meta
@@ -21,31 +19,26 @@
       content="byZaaMbnoTYLMJ60Ris971b3h6PZ9YMrtFbJDg67s6E"
     />
 
-    <!-- CSS principal -->
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
     <main>
-      <!-- Fundo animado -->
       <canvas id="animated-gradient"></canvas>
 
       <!-- ==================================================
-           ÍCONE REUTILIZÁVEL DA MARCA
-      =================================================== -->
+       ÍCONE REUTILIZÁVEL DA MARCA
+  =================================================== -->
 
       <svg class="svg-defs" aria-hidden="true">
         <symbol id="logo-ninja" viewBox="0 0 64 64">
-          <!-- Cabeça -->
           <path
             d="M14 25C14 16.7 22.2 10 32 10s18 6.7 18 15v13c0 8.3-8.2 16-18 16s-18-7.7-18-16V25Z"
             fill="currentColor"
           />
 
-          <!-- Faixa -->
           <path d="M14 27h36v9H14z" fill="currentColor" />
 
-          <!-- Olho esquerdo -->
           <path
             d="M21 30c2.5-3 6-3 9 0"
             fill="none"
@@ -54,7 +47,6 @@
             stroke-linecap="round"
           />
 
-          <!-- Olho direito -->
           <path
             d="M34 30c3-3 6.5-3 9 0"
             fill="none"
@@ -63,38 +55,32 @@
             stroke-linecap="round"
           />
 
-          <!-- Pupilas -->
           <circle cx="27" cy="30" r="2" fill="white" />
           <circle cx="37" cy="30" r="2" fill="white" />
         </symbol>
       </svg>
 
       <!-- ==================================================
-           LANDING
-      =================================================== -->
+       LANDING
+  =================================================== -->
 
       <section class="landing" id="landing">
         <div class="landing-conteudo">
-          <!-- Logo -->
           <div class="landing-logo">
             <svg class="logo-ninja landing-ninja" aria-hidden="true">
               <use href="#logo-ninja"></use>
             </svg>
           </div>
 
-          <!-- Subtítulo -->
           <span class="landing-subtitulo"> CONTROLE FINANCEIRO </span>
 
-          <!-- Nome -->
           <h1>Eremita</h1>
 
-          <!-- Descrição -->
           <p>
             Organize suas dívidas, acompanhe seus vencimentos e tenha mais
             controle sobre sua vida financeira.
           </p>
 
-          <!-- Botões -->
           <div class="landing-botoes">
             <button type="button" id="btnComecar">Começar agora</button>
 
@@ -106,22 +92,17 @@
       </section>
 
       <!-- ==================================================
-           LOGIN / CADASTRO
-      =================================================== -->
+       LOGIN / CADASTRO
+  =================================================== -->
 
       <section class="login" aria-label="Autenticação">
         <div class="auth-livro">
-          <!-- =========================
-               LOGIN
-          ========================== -->
-
           <div class="pagina-auth pagina-login">
             <h1>Eremita</h1>
 
             <p>Boas-vindas!</p>
 
             <form id="formLogin">
-              <!-- Email -->
               <label for="email"> Email: </label>
 
               <input
@@ -131,7 +112,6 @@
                 autocomplete="email"
               />
 
-              <!-- Senha -->
               <label for="password"> Senha: </label>
 
               <div class="campo-senha">
@@ -151,20 +131,13 @@
                 </button>
               </div>
 
-              <!-- Mensagem de erro -->
               <p id="mensagemErro" class="mensagem-auth"></p>
 
-              <!-- Entrar -->
               <button type="submit" id="btnEntrar">Entrar</button>
 
-              <!-- Criar conta -->
               <button type="button" id="btnCriarConta">Criar uma conta</button>
             </form>
           </div>
-
-          <!-- =========================
-               CADASTRO
-          ========================== -->
 
           <div class="pagina-auth pagina-cadastro">
             <h1>Criar conta</h1>
@@ -172,7 +145,6 @@
             <p>Comece sua organização financeira.</p>
 
             <form id="formCadastro">
-              <!-- Nome -->
               <label for="nomeCadastro"> Nome: </label>
 
               <input
@@ -182,7 +154,6 @@
                 autocomplete="name"
               />
 
-              <!-- Email -->
               <label for="emailCadastro"> Email: </label>
 
               <input
@@ -192,7 +163,6 @@
                 autocomplete="email"
               />
 
-              <!-- Senha -->
               <label for="senhaCadastro"> Senha: </label>
 
               <input
@@ -202,7 +172,6 @@
                 autocomplete="new-password"
               />
 
-              <!-- Confirmar senha -->
               <label for="confirmarSenhaCadastro"> Confirmar senha: </label>
 
               <input
@@ -212,15 +181,12 @@
                 autocomplete="new-password"
               />
 
-              <!-- Mensagem de cadastro -->
               <p id="mensagemCadastro" class="mensagem-auth"></p>
 
-              <!-- Criar usuário -->
               <button type="submit" id="btnCadastrarUsuario">
                 Criar conta
               </button>
 
-              <!-- Voltar para login -->
               <button type="button" id="btnVoltarLogin">
                 Já tenho uma conta
               </button>
@@ -230,17 +196,16 @@
       </section>
 
       <!-- ==================================================
-           PAINEL PRINCIPAL
-      =================================================== -->
+       PAINEL PRINCIPAL
+  =================================================== -->
 
       <section class="painel" aria-label="Painel financeiro">
         <div class="estrutura-painel">
           <!-- ==================================================
-               MENU LATERAL
-          =================================================== -->
+           MENU LATERAL
+      =================================================== -->
 
           <aside class="menu-lateral">
-            <!-- Logo do menu -->
             <div class="menu-logo">
               <div class="menu-logo-icone">
                 <svg class="logo-ninja" aria-hidden="true">
@@ -255,28 +220,23 @@
               </div>
             </div>
 
-            <!-- Navegação principal -->
             <nav class="menu-navegacao" aria-label="Navegação principal">
-              <!-- Dashboard -->
               <a href="#dashboard" class="item-menu ativo">
                 <span aria-hidden="true">🏠</span>
                 <span>Dashboard</span>
               </a>
 
-              <!-- Dívidas -->
               <a href="#dividas" class="item-menu">
                 <span aria-hidden="true">💸</span>
                 <span>Dívidas</span>
               </a>
 
-              <!-- Gastos -->
               <a href="#" class="item-menu menu-breve">
                 <span aria-hidden="true">💰</span>
                 <span>Gastos</span>
                 <small>Em breve</small>
               </a>
 
-              <!-- Relatórios -->
               <a href="#" class="item-menu menu-breve">
                 <span aria-hidden="true">📊</span>
                 <span>Relatórios</span>
@@ -284,16 +244,13 @@
               </a>
             </nav>
 
-            <!-- Opções inferiores -->
             <div class="menu-inferior">
-              <!-- Configurações -->
               <a href="#" class="item-menu menu-breve">
                 <span aria-hidden="true">⚙️</span>
                 <span>Configurações</span>
                 <small>Em breve</small>
               </a>
 
-              <!-- Sair -->
               <button
                 type="button"
                 id="btnSair"
@@ -305,20 +262,18 @@
             </div>
           </aside>
 
-          <!-- Overlay do menu mobile -->
           <div class="overlay-menu" id="overlayMenu"></div>
 
           <!-- ==================================================
-               CONTEÚDO DO PAINEL
-          =================================================== -->
+           CONTEÚDO DO PAINEL
+      =================================================== -->
 
           <div class="conteudo-painel">
             <!-- ==================================================
-                 CABEÇALHO
-            =================================================== -->
+             CABEÇALHO
+        =================================================== -->
 
             <header class="cabeçalho">
-              <!-- Menu mobile -->
               <button
                 type="button"
                 id="btnMenuMobile"
@@ -329,7 +284,6 @@
                 ☰
               </button>
 
-              <!-- Marca e usuário -->
               <div class="marca">
                 <div class="logo-eremita">
                   <svg class="logo-ninja" aria-hidden="true">
@@ -344,7 +298,6 @@
                 </div>
               </div>
 
-              <!-- Botão de tema -->
               <button
                 type="button"
                 id="btnTema"
@@ -356,11 +309,10 @@
             </header>
 
             <!-- ==================================================
-                 RESUMO FINANCEIRO
-            =================================================== -->
+             RESUMO FINANCEIRO
+        =================================================== -->
 
             <section class="resumo" id="dashboard">
-              <!-- Total devido -->
               <div class="card-resumo card-total">
                 <div class="icone-resumo" aria-hidden="true">💰</div>
 
@@ -371,7 +323,6 @@
                 </div>
               </div>
 
-              <!-- Em aberto -->
               <div class="card-resumo card-aberto">
                 <div class="icone-resumo" aria-hidden="true">📋</div>
 
@@ -382,7 +333,6 @@
                 </div>
               </div>
 
-              <!-- Pagas -->
               <div class="card-resumo card-pago">
                 <div class="icone-resumo" aria-hidden="true">✓</div>
 
@@ -393,7 +343,6 @@
                 </div>
               </div>
 
-              <!-- Atrasadas -->
               <div class="card-resumo card-atrasado">
                 <div class="icone-resumo" aria-hidden="true">⚠</div>
 
@@ -408,14 +357,10 @@
             </section>
 
             <!-- ==================================================
-                 VISÃO FINANCEIRA
-            =================================================== -->
+             VISÃO FINANCEIRA
+        =================================================== -->
 
             <section class="visao-financeira">
-              <!-- =========================
-                   CARD — SITUAÇÃO FINANCEIRA
-              ========================== -->
-
               <div class="card-visao">
                 <div class="cabecalho-card">
                   <span class="titulo-card"> Situação financeira </span>
@@ -423,7 +368,6 @@
                   <h2>Visão geral</h2>
                 </div>
 
-                <!-- Renda mensal -->
                 <div class="indicador-financeiro">
                   <div class="indicador-circulo" aria-hidden="true">
                     <span>💰</span>
@@ -435,16 +379,15 @@
                     <p id="rendaMensal">R$ 0,00</p>
 
                     <span id="saldoMensal"> Saldo após dívidas: R$ 0,00 </span>
+
                     <strong id="textoSituacao"> Sua situação </strong>
 
                     <p id="mensagemSituacao">Cadastre sua renda mensal.</p>
                   </div>
 
-                  <!-- Editar renda -->
                   <button type="button" id="btnEditarRenda">Editar</button>
                 </div>
 
-                <!-- Formulário para alterar a renda -->
                 <div class="formulario-renda" id="formularioRenda">
                   <input
                     type="number"
@@ -458,10 +401,6 @@
                 </div>
               </div>
 
-              <!-- =========================
-                   CARD — PRÓXIMOS VENCIMENTOS
-              ========================== -->
-
               <div class="card-visao">
                 <div class="cabecalho-card">
                   <span class="titulo-card"> Próximos vencimentos </span>
@@ -469,7 +408,6 @@
                   <h2>Fique atento</h2>
                 </div>
 
-                <!-- Lista de próximos vencimentos -->
                 <div class="proximos-vencimentos" id="proximosVencimentos">
                   <p>Nenhum vencimento próximo.</p>
                 </div>
@@ -477,11 +415,34 @@
             </section>
 
             <!-- ==================================================
-                 DÍVIDAS
-            =================================================== -->
+             ANÁLISE FINANCEIRA
+        =================================================== -->
+
+            <section class="analise-financeira">
+              <div class="card-analise">
+                <div class="cabecalho-card">
+                  <span class="titulo-card"> Análise financeira </span>
+
+                  <h2>Compromissos por mês</h2>
+                </div>
+
+                <div
+                  class="grafico-container"
+                  id="graficoDividas"
+                  aria-label="Gráfico de compromissos financeiros por mês"
+                ></div>
+
+                <p class="legenda-grafico">
+                  Valores das dívidas agrupados pelo mês de vencimento.
+                </p>
+              </div>
+            </section>
+
+            <!-- ==================================================
+             DÍVIDAS
+        =================================================== -->
 
             <section class="dividas" id="dividas">
-              <!-- Título da seção -->
               <div class="titulo-dividas">
                 <div>
                   <span class="titulo-card"> Controle financeiro </span>
@@ -489,42 +450,36 @@
                   <h2>Minhas dívidas</h2>
                 </div>
 
-                <!-- Nova dívida -->
                 <button type="button" id="btnNovaDivida">+ Nova dívida</button>
               </div>
 
               <!-- ==================================================
-                   FILTROS
-              =================================================== -->
+               FILTROS
+          =================================================== -->
 
               <div class="filtros-dividas" aria-label="Filtros de dívidas">
-                <!-- Todas -->
                 <button type="button" class="filtro ativo" data-filtro="todas">
                   Todas
                 </button>
 
-                <!-- Em aberto -->
                 <button type="button" class="filtro" data-filtro="abertas">
                   Em aberto
                 </button>
 
-                <!-- Atrasadas -->
                 <button type="button" class="filtro" data-filtro="atrasadas">
                   Atrasadas
                 </button>
 
-                <!-- Pagas -->
                 <button type="button" class="filtro" data-filtro="pagas">
                   Pagas
                 </button>
               </div>
 
               <!-- ==================================================
-                   FORMULÁRIO DE DÍVIDA
-              =================================================== -->
+               FORMULÁRIO DE DÍVIDA
+          =================================================== -->
 
               <div class="formulario-divida" id="formularioDivida">
-                <!-- Cabeçalho do formulário -->
                 <div class="formulario-cabecalho">
                   <div>
                     <span class="titulo-card"> Cadastro </span>
@@ -533,7 +488,6 @@
                   </div>
                 </div>
 
-                <!-- Nome -->
                 <label for="nome-divida"> Nome da dívida </label>
 
                 <input
@@ -542,7 +496,6 @@
                   placeholder="Ex: Internet"
                 />
 
-                <!-- Valor -->
                 <label for="valor-divida"> Valor </label>
 
                 <input
@@ -553,12 +506,10 @@
                   step="0.01"
                 />
 
-                <!-- Vencimento -->
                 <label for="vencimento-divida"> Vencimento </label>
 
                 <input type="date" id="vencimento-divida" />
 
-                <!-- Botões -->
                 <div class="botoes-formulario">
                   <button type="button" id="btnCancelar">Cancelar</button>
 
@@ -566,7 +517,6 @@
                 </div>
               </div>
 
-              <!-- Lista de dívidas -->
               <div class="lista-dividas" id="listaDividas"></div>
             </section>
           </div>
@@ -574,7 +524,6 @@
       </section>
     </main>
 
-    <!-- JavaScript principal -->
     <script type="module" src="script.js"></script>
   </body>
 </html>

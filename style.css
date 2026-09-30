@@ -711,10 +711,10 @@ main {
   position: relative;
   overflow: hidden;
   min-height: 145px;
-  padding: 22px;
+  padding: 20px 18px;
   display: flex;
   align-items: center;
-  gap: 17px;
+  gap: 14px;
 
   background: var(--cor-card);
   border: 1px solid var(--cor-borda);
@@ -766,13 +766,13 @@ main {
 .card-resumo:hover,
 .card-visao:hover,
 .divida:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.1);
   border-color: #cbd5e1;
-  box-shadow: 0 16px 32px rgba(15, 23, 42, 0.12);
 }
 
 .card-resumo h2 {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: var(--cor-texto-secundario);
   font-size: 11px;
   font-weight: 700;
@@ -782,7 +782,7 @@ main {
 
 .card-resumo p {
   color: var(--cor-texto);
-  font-size: clamp(18px, 2.2vw, 24px);
+  font-size: clamp(19px, 2.2vw, 24px);
   overflow-wrap: anywhere;
   font-weight: 800;
   line-height: 1.05;
@@ -951,8 +951,8 @@ main {
 .indicador-financeiro {
   display: flex;
   align-items: center;
-  gap: 17px;
-  padding: 18px;
+  gap: 18px;
+  padding: 20px;
 
   background: linear-gradient(135deg, #f8fafc, #f0fdf4);
 
@@ -976,8 +976,8 @@ main {
 }
 
 .indicador-circulo {
-  width: 58px;
-  height: 58px;
+  width: 56px;
+  height: 56px;
   flex-shrink: 0;
 
   display: flex;
@@ -1000,7 +1000,7 @@ main {
   display: block;
   margin-bottom: 5px;
   color: var(--cor-texto);
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .indicador-financeiro p {
@@ -1011,7 +1011,7 @@ main {
 
 #saldoMensal {
   display: block;
-  margin-top: 4px;
+  margin-top: 5px;
   color: var(--cor-principal);
   font-size: 14px;
   font-weight: 700;
@@ -1019,7 +1019,7 @@ main {
 
 #textoSituacao {
   display: block;
-  margin-top: 12px;
+  margin-top: 10px;
   margin-bottom: 3px;
   color: var(--cor-texto);
   font-size: 13px;
@@ -1035,7 +1035,7 @@ main {
 .proximos-vencimentos {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .proximos-vencimentos > p {
@@ -1049,7 +1049,7 @@ main {
   align-items: center;
   gap: 10px;
 
-  padding: 13px 12px;
+  padding: 12px 12px;
 
   border: 1px solid transparent;
   border-bottom-color: var(--cor-borda);
@@ -1058,12 +1058,13 @@ main {
   transition:
     background-color 0.2s ease,
     transform 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .item-vencimento:hover {
   background: #f8fafc;
   border-color: var(--cor-borda);
-  transform: translateX(2px);
+  transform: translateX(3px);
   box-shadow: 0 5px 14px rgba(15, 23, 42, 0.05);
 }
 
@@ -1128,8 +1129,8 @@ main {
 .titulo-dividas {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 10px;
+  align-items: flex-end;
+  gap: 16px;
   margin-bottom: 15px;
 }
 
@@ -1146,7 +1147,8 @@ main {
 
 .titulo-dividas button:hover {
   background: var(--cor-principal-hover);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(22, 163, 74, 0.18);
 }
 
 .filtros-dividas {
@@ -1195,7 +1197,7 @@ main {
 .lista-dividas {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .divida {
@@ -1204,8 +1206,8 @@ main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 20px;
-  padding: 22px 24px;
+  gap: 24px;
+  padding: 20px 24px;
   background: var(--cor-card);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-card);
@@ -1214,6 +1216,7 @@ main {
     transform 0.25s ease,
     box-shadow 0.25s ease,
     border-color 0.25s ease;
+  cursor: default;
 }
 
 .divida::before {
@@ -1236,7 +1239,7 @@ main {
 }
 
 .divida > div:last-child {
-  min-width: 190px;
+  min-width: 180px;
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -1246,9 +1249,9 @@ main {
   display: block;
   margin-bottom: 8px;
   color: var(--cor-texto);
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 800;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
 }
 
 .acoes-dividas {
@@ -1435,13 +1438,6 @@ main {
   transform: translateY(-1px);
 }
 
-.formulario-divida input:focus {
-  outline: none;
-  background: white;
-  border-color: var(--cor-principal);
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-}
-
 .botoes-formulario {
   display: flex;
   justify-content: flex-end;
@@ -1469,10 +1465,6 @@ main {
 
 .botoes-formulario button:active {
   transform: translateY(0);
-}
-
-.botoes-formulario button:hover {
-  transform: translateY(-1px);
 }
 
 .botoes-formulario button:first-child {
@@ -1696,6 +1688,8 @@ body.dark-mode .indicador-financeiro {
 
 body.dark-mode .item-vencimento:hover {
   background: #1e293b;
+  border-color: #475569;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.18);
 }
 
 body.dark-mode .indicador-circulo {
@@ -1766,6 +1760,15 @@ body.dark-mode .status-aberta {
   color: #fdba74;
   background: #431407;
 }
+body.dark-mode .formulario-renda {
+  background: #0f172a;
+  border-color: #334155;
+}
+body.dark-mode .formulario-renda input {
+  background: #1e293b;
+  color: var(--cor-texto);
+  border-color: #334155;
+}
 
 /* =========================
    RESPONSIVIDADE
@@ -1778,7 +1781,11 @@ body.dark-mode .status-aberta {
   display: none;
   align-items: center;
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 16px;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
 }
 .formulario-renda input {
   flex: 1;
@@ -1794,24 +1801,282 @@ body.dark-mode .status-aberta {
 }
 .indicador-financeiro button {
   margin-left: auto;
+  padding: 9px 15px;
   background: var(--cor-principal);
   color: white;
-  transition: 0.2s ease;
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.15);
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 .indicador-financeiro button:hover {
-  transform: translateY(-1px);
-  opacity: 0.9;
+  background: var(--cor-principal-hover);
+  transform: translateY(-2px);
+  opacity: 1;
+  box-shadow: 0 7px 15px rgba(22, 163, 74, 0.2);
 }
 .formulario-renda input {
+  flex: 1;
+  min-width: 0;
   border: 1px solid var(--cor-borda);
-  border-radius: 10px;
+  border-radius: 9px;
   padding: 10px 12px;
+  background: var(--cor-card);
+  color: var(--cor-texto);
   font: inherit;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+.formulario-renda input:focus {
+  border-color: var(--cor-principal);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
 }
 
 .formulario-renda button {
   background: var(--cor-principal);
   color: white;
+}
+/* =========================
+   ANÁLISE FINANCEIRA
+========================= */
+
+.analise-financeira {
+  margin-top: 30px;
+}
+
+.card-analise {
+  position: relative;
+  overflow: hidden;
+  padding: 25px;
+  background: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-card);
+  box-shadow: var(--sombra-card);
+}
+
+.card-analise::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--cor-secundaria);
+}
+
+.grafico-container {
+  width: 100%;
+  margin-top: 18px;
+}
+
+.grafico-spell {
+  width: 100%;
+  user-select: none;
+}
+
+.grafico-area {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 640 / 220;
+  overflow: visible;
+  cursor: crosshair;
+}
+
+.grafico-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.grafico-linha {
+  fill: none;
+  stroke: var(--cor-secundaria);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.grafico-preenchimento {
+  fill: url(#gradienteGrafico);
+}
+
+.grafico-gradiente-inicio {
+  stop-color: var(--cor-secundaria);
+  stop-opacity: 0.14;
+}
+
+.grafico-gradiente-fim {
+  stop-color: var(--cor-secundaria);
+  stop-opacity: 0;
+}
+
+.grafico-cursor {
+  position: absolute;
+  top: 11%;
+  bottom: 5%;
+  left: 0;
+  width: 1px;
+  pointer-events: none;
+  background: var(--cor-borda);
+  transform: translateX(-50%);
+  transition:
+    left 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.grafico-ponto {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+  border-radius: 50%;
+  background: var(--cor-secundaria);
+  border: 2px solid var(--cor-card);
+  box-shadow:
+    0 0 0 1px var(--cor-secundaria),
+    0 3px 10px rgba(0, 0, 0, 0.12);
+  transform: translate(-50%, -50%);
+  transition:
+    left 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    top 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.grafico-tooltip {
+  position: absolute;
+  left: 0;
+  top: 0;
+  min-width: 140px;
+  padding: 9px 11px;
+  pointer-events: none;
+  background: var(--cor-card);
+  border: 1px solid var(--cor-borda);
+  border-radius: 9px;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 4px 16px rgba(0, 0, 0, 0.08);
+  transform:
+    translate(12px, -50%);
+  transition:
+    left 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    top 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 5;
+}
+
+.grafico-tooltip.tooltip-esquerda {
+  transform:
+    translate(calc(-100% - 12px), -50%);
+}
+
+.grafico-tooltip strong {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--cor-texto);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.tooltip-conteudo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--cor-texto-secundario);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.tooltip-conteudo b {
+  margin-left: auto;
+  color: var(--cor-texto);
+  font-family: monospace;
+  font-size: 11px;
+}
+
+.tooltip-indicador {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  background: var(--cor-secundaria);
+}
+
+.grafico-labels {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  height: 18px;
+  margin-top: 8px;
+  padding: 0;
+}
+
+.grafico-labels span {
+  color: var(--cor-texto-secundario);
+  font-size: 11px;
+  font-weight: 500;
+  transition: color 180ms ease;
+}
+
+.grafico-labels span.ativo {
+  color: var(--cor-texto);
+  font-weight: 700;
+}
+
+.grafico-vazio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+  color: var(--cor-texto-secundario);
+  font-size: 13px;
+}
+
+.legenda-grafico {
+  margin-top: 8px;
+  color: var(--cor-texto-secundario);
+  font-size: 12px;
+}
+
+body.dark-mode .grafico-linha {
+  stroke: #60a5fa;
+}
+
+body.dark-mode .grafico-gradiente-inicio {
+  stop-color: #60a5fa;
+  stop-opacity: 0.16;
+}
+
+body.dark-mode .grafico-ponto {
+  background: #60a5fa;
+  border-color: var(--cor-card);
+  box-shadow:
+    0 0 0 1px #60a5fa,
+    0 3px 10px rgba(0, 0, 0, 0.22);
+}
+
+body.dark-mode .tooltip-indicador {
+  background: #60a5fa;
+}
+
+@media (max-width: 600px) {
+  .analise-financeira {
+    margin-top: 20px;
+  }
+
+  .card-analise {
+    padding: 20px 16px;
+  }
+
+  .grafico-tooltip {
+    min-width: 125px;
+  }
+
+  .grafico-labels span {
+    font-size: 10px;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1824,7 +2089,7 @@ body.dark-mode .status-aberta {
   }
   .visao-financeira {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 14px;
     margin-top: 20px;
   }
 
