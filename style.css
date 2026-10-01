@@ -97,10 +97,8 @@ main {
   position: absolute;
   top: 50%;
   left: 50%;
-
   width: 700px;
   height: 700px;
-
   transform: translate(-50%, -50%);
 
   background: radial-gradient(
@@ -159,7 +157,6 @@ main {
   letter-spacing: 3.5px;
   text-transform: uppercase;
   text-shadow: 0 4px 18px rgba(34, 197, 94, 0.25);
-
   animation: landingEntrada 0.8s ease-out 0.1s both;
 }
 
@@ -170,9 +167,7 @@ main {
   font-weight: 800;
   line-height: 0.95;
   letter-spacing: -3px;
-
   text-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
-
   animation: landingEntrada 0.8s ease-out 0.15s both;
 }
 
@@ -183,7 +178,6 @@ main {
   font-size: 17px;
   line-height: 1.7;
   text-shadow: 0 4px 18px rgba(0, 0, 0, 0.2);
-
   animation: landingEntrada 0.8s ease-out 0.25s both;
 }
 
@@ -265,13 +259,16 @@ main {
   background: rgba(255, 255, 255, 0.88);
   border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 20px;
+
   box-shadow:
     0 25px 60px rgba(0, 0, 0, 0.25),
     inset 0 0 30px rgba(255, 255, 255, 0.15);
+
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+
   transition:
     transform 0.8s cubic-bezier(0.4, 0.2, 0.2, 1),
     opacity 0.4s ease;
@@ -320,15 +317,19 @@ main {
   width: 100%;
   margin: 5px 0 15px;
   padding: 11px 12px;
+
   border: 1px solid var(--cor-borda);
   border-radius: 8px;
   outline: none;
+
   background: rgba(255, 255, 255, 0.75);
   color: var(--cor-texto);
+
   font-size: 14px;
   appearance: none;
   -webkit-appearance: none;
   color-scheme: light;
+
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
@@ -360,6 +361,7 @@ main {
   background: var(--cor-secundaria);
   color: white;
   cursor: pointer;
+
   transition:
     background-color 0.2s ease,
     transform 0.2s ease;
@@ -411,6 +413,7 @@ main {
   width: 94%;
   max-width: 1350px;
   padding: 25px;
+
   background: rgba(248, 250, 252, 0.94);
   border-radius: 20px;
   box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
@@ -433,12 +436,15 @@ main {
   min-height: 650px;
   height: 100%;
   padding: 18px 12px;
+
   display: flex;
   flex-direction: column;
+
   background: var(--cor-card);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-card);
   box-shadow: var(--sombra-card);
+
   z-index: 20;
   transform: translateX(-105%);
   transition: transform 0.25s ease;
@@ -502,17 +508,21 @@ main {
   position: relative;
   width: 100%;
   padding: 11px 12px;
+
   display: flex;
   align-items: center;
   gap: 10px;
+
   border: none;
   border-radius: 9px;
   background: transparent;
   color: var(--cor-texto-secundario);
+
   text-decoration: none;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
+
   transition: 0.2s;
 }
 
@@ -555,9 +565,11 @@ main {
 .menu-inferior {
   margin-top: auto;
   padding-top: 20px;
+
   display: flex;
   flex-direction: column;
   gap: 5px;
+
   border-top: 1px solid var(--cor-borda);
 }
 
@@ -574,9 +586,11 @@ main {
   position: absolute;
   inset: 0;
   background: rgba(15, 23, 42, 0.45);
+
   opacity: 0;
   visibility: hidden;
   z-index: 15;
+
   transition:
     opacity 0.25s ease,
     visibility 0.25s ease;
@@ -599,9 +613,11 @@ main {
 .btn-tema {
   width: 42px;
   height: 42px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   border: 1px solid var(--cor-borda);
   border-radius: 10px;
   background: var(--cor-card);
@@ -625,6 +641,7 @@ main {
 .btn-tema {
   flex-shrink: 0;
   font-size: 18px;
+
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
@@ -645,13 +662,16 @@ main {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+
   margin-bottom: 25px;
   padding: 16px;
+
   background: linear-gradient(
     135deg,
     rgba(240, 253, 244, 0.98),
     rgba(255, 255, 255, 0.96)
   );
+
   border: 1px solid #bbf7d0;
   border-radius: var(--raio-card);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -712,15 +732,10 @@ main {
   overflow: hidden;
   min-height: 145px;
   padding: 20px 18px;
+
   display: flex;
   align-items: center;
   gap: 14px;
-
-  background: var(--cor-card);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-card);
-
-  box-shadow: var(--sombra-card);
 
   transition:
     transform 0.25s ease,
@@ -738,6 +753,7 @@ main {
   border-radius: 50%;
   opacity: 0.08;
   pointer-events: none;
+
   transition:
     transform 0.3s ease,
     opacity 0.3s ease;
@@ -820,6 +836,7 @@ main {
 
 .card-resumo:hover .icone-resumo {
   transform: scale(1.08) rotate(-2deg);
+
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.4),
     0 6px 16px rgba(15, 23, 42, 0.08);
@@ -828,15 +845,19 @@ main {
 .card-total::before {
   background: var(--cor-secundaria);
 }
+
 .card-aberto::before {
   background: var(--cor-alerta);
 }
+
 .card-pago::before {
   background: var(--cor-sucesso);
 }
+
 .card-atrasado::before {
   background: var(--cor-perigo);
 }
+
 .card-total::after {
   background: var(--cor-secundaria);
 }
@@ -873,8 +894,6 @@ main {
   color: var(--cor-perigo);
 }
 
-/* COR DOS VALORES */
-
 .card-total p {
   color: var(--cor-secundaria);
 }
@@ -908,12 +927,6 @@ main {
   min-height: 215px;
   padding: 25px;
 
-  background: var(--cor-card);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-card);
-
-  box-shadow: var(--sombra-card);
-
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
@@ -927,9 +940,12 @@ main {
 .cabecalho-card {
   margin-bottom: 16px;
 }
+
 .cabecalho-card h2 {
+  color: var(--cor-texto);
   font-size: 21px;
   font-weight: 700;
+  letter-spacing: -0.4px;
 }
 
 .titulo-card {
@@ -942,12 +958,6 @@ main {
   letter-spacing: 0.8px;
 }
 
-.cabecalho-card h2 {
-  color: var(--cor-texto);
-  font-size: 21px;
-  letter-spacing: -0.4px;
-}
-
 .indicador-financeiro {
   display: flex;
   align-items: center;
@@ -955,7 +965,6 @@ main {
   padding: 20px;
 
   background: linear-gradient(135deg, #f8fafc, #f0fdf4);
-
   border: 1px solid var(--cor-borda);
   border-radius: 14px;
 
@@ -970,6 +979,7 @@ main {
 
 .indicador-financeiro:hover {
   transform: translateY(-2px);
+
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.8),
     0 10px 22px rgba(15, 23, 42, 0.07);
@@ -1049,7 +1059,7 @@ main {
   align-items: center;
   gap: 10px;
 
-  padding: 12px 12px;
+  padding: 12px;
 
   border: 1px solid transparent;
   border-bottom-color: var(--cor-borda);
@@ -1061,6 +1071,7 @@ main {
     border-color 0.2s ease,
     box-shadow 0.2s ease;
 }
+
 .item-vencimento:hover {
   background: #f8fafc;
   border-color: var(--cor-borda);
@@ -1158,6 +1169,7 @@ main {
   width: fit-content;
   margin-bottom: 20px;
   padding: 6px;
+
   background: #f8fafc;
   border: 1px solid var(--cor-borda);
   border-radius: 12px;
@@ -1173,6 +1185,7 @@ main {
   cursor: pointer;
   font-size: 13px;
   font-weight: 600;
+
   transition:
     background-color 0.2s ease,
     color 0.2s ease,
@@ -1203,19 +1216,19 @@ main {
 .divida {
   position: relative;
   overflow: hidden;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 24px;
+
   padding: 20px 24px;
-  background: var(--cor-card);
-  border: 1px solid var(--cor-borda);
-  border-radius: var(--raio-card);
-  box-shadow: var(--sombra-card);
+
   transition:
     transform 0.25s ease,
     box-shadow 0.25s ease,
     border-color 0.25s ease;
+
   cursor: default;
 }
 
@@ -1240,6 +1253,7 @@ main {
 
 .divida > div:last-child {
   min-width: 180px;
+
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -1487,6 +1501,81 @@ main {
 }
 
 /* =========================
+   RENDA MENSAL
+========================= */
+
+.formulario-renda {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 12px;
+
+  background: #f8fafc;
+  border: 1px solid var(--cor-borda);
+  border-radius: 12px;
+}
+
+.formulario-renda input {
+  flex: 1;
+  min-width: 0;
+  padding: 10px 12px;
+
+  border: 1px solid var(--cor-borda);
+  border-radius: 9px;
+
+  background: var(--cor-card);
+  color: var(--cor-texto);
+
+  font: inherit;
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.formulario-renda input:focus {
+  border-color: var(--cor-principal);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+}
+
+.formulario-renda button,
+.indicador-financeiro button {
+  border: none;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.formulario-renda button {
+  background: var(--cor-principal);
+  color: white;
+}
+
+.indicador-financeiro button {
+  margin-left: auto;
+  padding: 9px 15px;
+  background: var(--cor-principal);
+  color: white;
+
+  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.15);
+
+  transition:
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.indicador-financeiro button:hover {
+  background: var(--cor-principal-hover);
+  transform: translateY(-2px);
+  opacity: 1;
+  box-shadow: 0 7px 15px rgba(22, 163, 74, 0.2);
+}
+
+/* =========================
    ANIMAÇÕES
 ========================= */
 
@@ -1686,6 +1775,10 @@ body.dark-mode .indicador-financeiro {
   background: linear-gradient(135deg, #0f172a, #14251b);
 }
 
+body.dark-mode .item-vencimento {
+  border-bottom-color: #334155;
+}
+
 body.dark-mode .item-vencimento:hover {
   background: #1e293b;
   border-color: #475569;
@@ -1695,10 +1788,6 @@ body.dark-mode .item-vencimento:hover {
 body.dark-mode .indicador-circulo {
   background: #14532d;
   border-color: #166534;
-}
-
-body.dark-mode .item-vencimento {
-  border-bottom-color: #334155;
 }
 
 body.dark-mode .vencimento-aberto {
@@ -1760,85 +1849,18 @@ body.dark-mode .status-aberta {
   color: #fdba74;
   background: #431407;
 }
+
 body.dark-mode .formulario-renda {
   background: #0f172a;
   border-color: #334155;
 }
+
 body.dark-mode .formulario-renda input {
   background: #1e293b;
   color: var(--cor-texto);
   border-color: #334155;
 }
 
-/* =========================
-   RESPONSIVIDADE
-========================= */
-
-.btn-menu-mobile {
-  display: flex;
-}
-.formulario-renda {
-  display: none;
-  align-items: center;
-  gap: 10px;
-  margin-top: 16px;
-  padding: 12px;
-  background: #f8fafc;
-  border: 1px solid var(--cor-borda);
-  border-radius: 12px;
-}
-.formulario-renda input {
-  flex: 1;
-  min-width: 0;
-}
-.formulario-renda button,
-.indicador-financeiro button {
-  border: none;
-  border-radius: 10px;
-  padding: 9px 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-.indicador-financeiro button {
-  margin-left: auto;
-  padding: 9px 15px;
-  background: var(--cor-principal);
-  color: white;
-  box-shadow: 0 4px 10px rgba(22, 163, 74, 0.15);
-  transition:
-    transform 0.2s ease,
-    background-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-.indicador-financeiro button:hover {
-  background: var(--cor-principal-hover);
-  transform: translateY(-2px);
-  opacity: 1;
-  box-shadow: 0 7px 15px rgba(22, 163, 74, 0.2);
-}
-.formulario-renda input {
-  flex: 1;
-  min-width: 0;
-  border: 1px solid var(--cor-borda);
-  border-radius: 9px;
-  padding: 10px 12px;
-  background: var(--cor-card);
-  color: var(--cor-texto);
-  font: inherit;
-  outline: none;
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
-}
-.formulario-renda input:focus {
-  border-color: var(--cor-principal);
-  box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
-}
-
-.formulario-renda button {
-  background: var(--cor-principal);
-  color: white;
-}
 /* =========================
    ANÁLISE FINANCEIRA
 ========================= */
@@ -1851,6 +1873,7 @@ body.dark-mode .formulario-renda input {
   position: relative;
   overflow: hidden;
   padding: 25px;
+
   background: var(--cor-card);
   border: 1px solid var(--cor-borda);
   border-radius: var(--raio-card);
@@ -1921,10 +1944,11 @@ body.dark-mode .formulario-renda input {
   left: 0;
   width: 1px;
   pointer-events: none;
+
   background: var(--cor-borda);
   transform: translateX(-50%);
-  transition:
-    left 180ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  transition: left 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .grafico-ponto {
@@ -1933,14 +1957,18 @@ body.dark-mode .formulario-renda input {
   height: 10px;
   left: 0;
   top: 0;
+
   pointer-events: none;
   border-radius: 50%;
   background: var(--cor-secundaria);
   border: 2px solid var(--cor-card);
+
   box-shadow:
     0 0 0 1px var(--cor-secundaria),
     0 3px 10px rgba(0, 0, 0, 0.12);
+
   transform: translate(-50%, -50%);
+
   transition:
     left 180ms cubic-bezier(0.16, 1, 0.3, 1),
     top 180ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -1952,24 +1980,28 @@ body.dark-mode .formulario-renda input {
   top: 0;
   min-width: 140px;
   padding: 9px 11px;
+
   pointer-events: none;
+
   background: var(--cor-card);
   border: 1px solid var(--cor-borda);
   border-radius: 9px;
+
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.03),
     0 4px 16px rgba(0, 0, 0, 0.08);
-  transform:
-    translate(12px, -50%);
+
+  transform: translate(12px, -50%);
+
   transition:
     left 180ms cubic-bezier(0.16, 1, 0.3, 1),
     top 180ms cubic-bezier(0.16, 1, 0.3, 1);
+
   z-index: 5;
 }
 
 .grafico-tooltip.tooltip-esquerda {
-  transform:
-    translate(calc(-100% - 12px), -50%);
+  transform: translate(calc(-100% - 12px), -50%);
 }
 
 .grafico-tooltip strong {
@@ -2052,6 +2084,7 @@ body.dark-mode .grafico-gradiente-inicio {
 body.dark-mode .grafico-ponto {
   background: #60a5fa;
   border-color: var(--cor-card);
+
   box-shadow:
     0 0 0 1px #60a5fa,
     0 3px 10px rgba(0, 0, 0, 0.22);
@@ -2061,7 +2094,30 @@ body.dark-mode .tooltip-indicador {
   background: #60a5fa;
 }
 
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+.btn-menu-mobile {
+  display: flex;
+}
+
 @media (max-width: 600px) {
+  main {
+    padding: 20px 16px;
+  }
+
+  .resumo {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .visao-financeira {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    margin-top: 20px;
+  }
+
   .analise-financeira {
     margin-top: 20px;
   }
@@ -2076,21 +2132,6 @@ body.dark-mode .tooltip-indicador {
 
   .grafico-labels span {
     font-size: 10px;
-  }
-}
-
-@media (max-width: 600px) {
-  main {
-    padding: 20px 16px;
-  }
-  .resumo {
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .visao-financeira {
-    grid-template-columns: 1fr;
-    gap: 14px;
-    margin-top: 20px;
   }
 
   .landing {
@@ -2145,12 +2186,14 @@ body.dark-mode .tooltip-indicador {
     max-width: 320px;
     padding: 14px 20px;
   }
+
   .divida {
     flex-direction: column;
     align-items: stretch;
     gap: 15px;
     padding: 18px;
   }
+
   .divida > div:last-child {
     min-width: 0;
     width: 100%;
@@ -2165,6 +2208,7 @@ body.dark-mode .tooltip-indicador {
   .acoes-dividas button {
     flex: 1;
   }
+
   .filtros-dividas {
     width: 100%;
   }
@@ -2175,12 +2219,15 @@ body.dark-mode .tooltip-indicador {
     text-align: center;
     padding: 9px 10px;
   }
+
   .botoes-formulario {
     flex-direction: column;
   }
+
   .botoes-formulario button {
     width: 100%;
   }
+
   .card-resumo {
     min-height: 125px;
     padding: 16px;
@@ -2192,6 +2239,7 @@ body.dark-mode .tooltip-indicador {
     height: 46px;
     font-size: 18px;
   }
+
   .item-vencimento {
     padding: 12px 8px;
   }
@@ -2200,9 +2248,11 @@ body.dark-mode .tooltip-indicador {
   .valor-vencimento strong {
     font-size: 13px;
   }
+
   .titulo-dividas h2 {
     font-size: 20px;
   }
+
   .painel {
     width: 100%;
     padding: 14px;

@@ -390,7 +390,11 @@ function atualizarResumo() {
     quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
   }`;
 
-  const saldo = rendaMensal - emAberto - atrasadas;
+  const totalCompromissos = dividas.reduce(function (acumulado, divida) {
+    return acumulado + Number(divida.valor);
+  }, 0);
+
+  const saldo = rendaMensal - totalCompromissos;
 
   elementoSaldoMensal.textContent = `Saldo após dívidas: ${formatarMoeda(saldo)}`;
 
@@ -418,6 +422,7 @@ function formatarData(data) {
   const [ano, mes, dia] = data.split("-");
   return `${dia}/${mes}/${ano}`;
 }
+
 // =========================
 // GRÁFICO — COMPROMISSOS
 // =========================
@@ -445,18 +450,16 @@ function atualizarGraficoDividas() {
   const meses = [];
 
   for (let i = 0; i < 6; i++) {
-    const data = new Date(
-      hoje.getFullYear(),
-      hoje.getMonth() + i,
-      1
-    );
+    const data = new Date(hoje.getFullYear(), hoje.getMonth() + i, 1);
 
     meses.push({
       ano: data.getFullYear(),
       mes: data.getMonth(),
-      nome: data.toLocaleDateString("pt-BR", {
-        month: "short",
-      }).replace(".", ""),
+      nome: data
+        .toLocaleDateString("pt-BR", {
+          month: "short",
+        })
+        .replace(".", ""),
       valor: 0,
     });
   }
@@ -489,9 +492,7 @@ function atualizarGraficoDividas() {
         ? largura / 2
         : (indice / (meses.length - 1)) * largura;
 
-    const y =
-      margemTopo +
-      (1 - mes.valor / maiorValor) * alturaUtil;
+    const y = margemTopo + (1 - mes.valor / maiorValor) * alturaUtil;
 
     return {
       ...mes,
@@ -522,33 +523,19 @@ function atualizarGraficoDividas() {
       const saidaX = proximo.x - atual.x;
       const saidaY = proximo.y - atual.y;
 
-      const entradaTamanho =
-        Math.hypot(entradaX, entradaY) || 1;
+      const entradaTamanho = Math.hypot(entradaX, entradaY) || 1;
 
-      const saidaTamanho =
-        Math.hypot(saidaX, saidaY) || 1;
+      const saidaTamanho = Math.hypot(saidaX, saidaY) || 1;
 
-      const raio = Math.min(
-        2.5,
-        entradaTamanho / 2,
-        saidaTamanho / 2
-      );
+      const raio = Math.min(2.5, entradaTamanho / 2, saidaTamanho / 2);
 
-      const bx =
-        atual.x -
-        (entradaX / entradaTamanho) * raio;
+      const bx = atual.x - (entradaX / entradaTamanho) * raio;
 
-      const by =
-        atual.y -
-        (entradaY / entradaTamanho) * raio;
+      const by = atual.y - (entradaY / entradaTamanho) * raio;
 
-      const ax =
-        atual.x +
-        (saidaX / saidaTamanho) * raio;
+      const ax = atual.x + (saidaX / saidaTamanho) * raio;
 
-      const ay =
-        atual.y +
-        (saidaY / saidaTamanho) * raio;
+      const ay = atual.y + (saidaY / saidaTamanho) * raio;
 
       caminho += `
         L${bx.toFixed(2)} ${by.toFixed(2)}
@@ -629,29 +616,19 @@ function atualizarGraficoDividas() {
               >
                 ${mes.nome}
               </span>
-            `
+            `,
           )
           .join("")}
       </div>
     </div>
   `;
 
-  const areaGrafico =
-    grafico.querySelector(".grafico-area");
+  const areaGrafico = grafico.querySelector(".grafico-area");
+  const cursor = grafico.querySelector(".grafico-cursor");
+  const ponto = grafico.querySelector(".grafico-ponto");
+  const tooltip = grafico.querySelector(".grafico-tooltip");
 
-  const cursor =
-    grafico.querySelector(".grafico-cursor");
-
-  const ponto =
-    grafico.querySelector(".grafico-ponto");
-
-  const tooltip =
-    grafico.querySelector(".grafico-tooltip");
-
-  const labels =
-    grafico.querySelectorAll(
-      ".grafico-labels span"
-    );
+  const labels = grafico.querySelectorAll(".grafico-labels span");
 
   let indiceAtivo = pontos.length - 1;
 
@@ -664,24 +641,18 @@ function atualizarGraficoDividas() {
 
     indiceAtivo = indice;
 
-    const porcentagemX =
-      (pontoAtual.x / largura) * 100;
+    const porcentagemX = (pontoAtual.x / largura) * 100;
 
-    const porcentagemY =
-      (pontoAtual.y / altura) * 100;
+    const porcentagemY = (pontoAtual.y / altura) * 100;
 
     cursor.style.left = `${porcentagemX}%`;
     ponto.style.left = `${porcentagemX}%`;
     ponto.style.top = `${porcentagemY}%`;
 
-    tooltip.classList.remove(
-      "tooltip-esquerda"
-    );
+    tooltip.classList.remove("tooltip-esquerda");
 
     if (porcentagemX > 55) {
-      tooltip.classList.add(
-        "tooltip-esquerda"
-      );
+      tooltip.classList.add("tooltip-esquerda");
     }
 
     tooltip.style.left = `${porcentagemX}%`;
@@ -700,45 +671,23 @@ function atualizarGraficoDividas() {
     `;
 
     labels.forEach(function (label, labelIndex) {
-      label.classList.toggle(
-        "ativo",
-        labelIndex === indice
-      );
+      label.classList.toggle("ativo", labelIndex === indice);
     });
   }
 
-  areaGrafico.addEventListener(
-    "mousemove",
-    function (evento) {
-      const rect =
-        areaGrafico.getBoundingClientRect();
+  areaGrafico.addEventListener("mousemove", function (evento) {
+    const rect = areaGrafico.getBoundingClientRect();
 
-      const posicao =
-        (evento.clientX - rect.left) /
-        rect.width;
+    const posicao = (evento.clientX - rect.left) / rect.width;
 
-      const indice = Math.round(
-        posicao * (pontos.length - 1)
-      );
+    const indice = Math.round(posicao * (pontos.length - 1));
 
-      atualizarPonto(
-        Math.max(
-          0,
-          Math.min(
-            pontos.length - 1,
-            indice
-          )
-        )
-      );
-    }
-  );
+    atualizarPonto(Math.max(0, Math.min(pontos.length - 1, indice)));
+  });
 
-  areaGrafico.addEventListener(
-    "mouseleave",
-    function () {
-      atualizarPonto(indiceAtivo);
-    }
-  );
+  areaGrafico.addEventListener("mouseleave", function () {
+    atualizarPonto(indiceAtivo);
+  });
 
   atualizarPonto(indiceAtivo);
 }
@@ -1011,6 +960,13 @@ function criarDivida(divida) {
     vencimentoDivida.value = divida.vencimento;
 
     formularioDivida.style.display = "block";
+
+    formularioDivida.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    nomeDivida.focus();
   });
 
   botaoExcluir.addEventListener("click", async function () {
@@ -1063,7 +1019,12 @@ function fecharFormularioDivida() {
 }
 
 botaoNovaDivida.addEventListener("click", function () {
+  limparFormularioDivida();
   formularioDivida.style.display = "block";
+  formularioDivida.scrollIntoView({
+    behavior: "smooth",
+    block: "start",
+  });
 });
 
 botaoCancelar.addEventListener("click", fecharFormularioDivida);
