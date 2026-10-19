@@ -130,12 +130,43 @@
                   👁
                 </button>
               </div>
+              <button type="button" id="btnEsqueciSenha">
+                Esqueci minha senha
+              </button>
 
               <p id="mensagemErro" class="mensagem-auth"></p>
 
               <button type="submit" id="btnEntrar">Entrar</button>
 
               <button type="button" id="btnCriarConta">Criar uma conta</button>
+            </form>
+            <form id="formRedefinirSenha" hidden>
+              <h2>Redefinir senha</h2>
+              <p>Digite sua nova senha.</p>
+
+              <label for="novaSenha">Nova senha:</label>
+              <input
+                type="password"
+                id="novaSenha"
+                autocomplete="new-password"
+                minlength="6"
+                required
+                placeholder="Mínimo de 6 caracteres"
+              />
+
+              <label for="confirmarNovaSenha">Confirmar nova senha:</label>
+              <input
+                type="password"
+                id="confirmarNovaSenha"
+                autocomplete="new-password"
+                minlength="6"
+                required
+                placeholder="Digite a senha novamente"
+              />
+
+              <p id="mensagemRedefinirSenha" class="mensagem-auth"></p>
+
+              <button type="submit">Salvar nova senha</button>
             </form>
           </div>
 

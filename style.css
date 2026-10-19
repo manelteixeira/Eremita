@@ -2320,3 +2320,85 @@ body.dark-mode .tooltip-indicador {
     width: calc(50% - 2px);
   }
 }
+
+/* =====================================================
+   CORREÇÃO DOS FORMULÁRIOS DE AUTENTICAÇÃO
+   ===================================================== */
+
+/* Impede que regras como display: flex mostrem elementos
+   que deveriam estar escondidos pelo atributo hidden. */
+[hidden] {
+  display: none !important;
+}
+
+/* Permite que o cartão cresça quando a redefinição de
+   senha precisar de mais espaço. */
+.login {
+  height: auto;
+  min-height: 560px;
+  max-height: none;
+}
+
+.auth-livro {
+  height: auto;
+  min-height: 560px;
+}
+
+/* A página de autenticação continua usando posicionamento
+   absoluto para preservar a animação entre login e cadastro. */
+.pagina-auth {
+  min-height: 560px;
+}
+
+/* Quando a redefinição estiver aberta, aumentamos a área
+   e alinhamos o conteúdo no início para evitar cortes. */
+.auth-livro.redefinicao-aberta {
+  min-height: 680px;
+}
+
+.auth-livro.redefinicao-aberta .pagina-login {
+  justify-content: flex-start;
+  padding: 28px;
+  overflow-y: auto;
+}
+
+/* Espaçamento e leitura do título da redefinição. */
+#formRedefinirSenha h2 {
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+#formRedefinirSenha p {
+  margin-bottom: 18px;
+  line-height: 1.4;
+}
+
+/* Evita que mensagens longas fiquem coladas aos campos. */
+#mensagemRedefinirSenha {
+  margin: 4px 0 12px;
+  overflow-wrap: anywhere;
+}
+
+/* Evita que o cartão ultrapasse a tela em celulares. */
+@media (max-width: 480px) {
+  .login {
+    width: 100%;
+    min-height: 0;
+  }
+
+  .auth-livro {
+    min-height: 560px;
+  }
+
+  .auth-livro.redefinicao-aberta {
+    min-height: 650px;
+  }
+
+  .pagina-auth {
+    padding: 24px;
+  }
+
+  .auth-livro.redefinicao-aberta .pagina-login {
+    padding: 24px 20px;
+  }
+}

@@ -69,6 +69,19 @@ const elementoSaldoMensal = document.getElementById("saldoMensal");
 const textoSituacao = document.getElementById("textoSituacao");
 const mensagemSituacao = document.getElementById("mensagemSituacao");
 
+const botaoEsqueciSenha = document.getElementById("btnEsqueciSenha");
+
+const formularioLogin = document.getElementById("formLogin");
+
+const formularioRedefinirSenha = document.getElementById("formRedefinirSenha");
+
+const novaSenha = document.getElementById("novaSenha");
+const confirmarNovaSenha = document.getElementById("confirmarNovaSenha");
+
+const mensagemRedefinirSenha = document.getElementById(
+  "mensagemRedefinirSenha",
+);
+
 // =========================
 // ESTADO
 // =========================
@@ -1170,4 +1183,159 @@ botaoSalvarRenda.addEventListener("click", async function () {
   elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
   atualizarResumo();
   formularioRenda.style.display = "none";
+});
+
+// =========================
+// RECUPERAÇÃO DE SENHA
+// =========================
+
+// Mostra a mensagem de recuperação e solicita o envio do link.
+botaoEsqueciSenha.addEventListener("click", async function () {
+  const email = campoEmail.value.trim();
+
+  // O email precisa ser informado antes de solicitar o link.
+  if (!email) {
+    mensagemErro.textContent =
+      "Digite seu email no campo acima para receber o link de recuperação.";
+
+    campoEmail.focus();
+    return;
+  }
+
+  mensagemErro.textContent = "";
+  botaoEsqueciSenha.disabled = true;
+
+  try {
+    // O link retornará para esta mesma página.
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + window.location.pathname,
+    });
+
+    if (error) {
+      console.error("Erro ao solicitar recuperação:", error);
+
+      mensagemErro.textContent =
+        "Não foi possível solicitar a recuperação. Tente novamente.";
+
+      return;
+    }
+
+    // Mensagem genérica para não revelar se o email está cadastrado.
+    mensagemErro.textContent =
+      "Se houver uma conta associada a esse email, você receberá um link para redefinir sua senha.";
+  } catch (error) {
+    // Trata erros inesperados de conexão ou execução.
+    console.error("Erro inesperado na recuperação:", error);
+
+    mensagemErro.textContent =
+      "Ocorreu um erro. Verifique sua conexão e tente novamente.";
+  } finally {
+    // Reativa o botão mesmo se ocorrer um erro.
+    botaoEsqueciSenha.disabled = false;
+  }
+});
+
+// Detecta quando o usuário retorna pelo link de recuperação.
+supabase.auth.onAuthStateChange(function (event) {
+  if (event !== "PASSWORD_RECOVERY") return;
+
+  // Abre a tela de autenticação e fecha a animação de cadastro.
+  mostrarLogin();
+
+  // Esconde o login e exibe apenas a redefinição de senha.
+  formularioLogin.hidden = true;
+  formularioRedefinirSenha.hidden = false;
+
+  // Ativa o estilo que amplia o cartão para os novos campos.
+  authLivro.classList.add("redefinicao-aberta");
+
+  // Limpa campos e mensagens anteriores.
+  mensagemErro.textContent = "";
+  mensagemRedefinirSenha.textContent = "";
+
+  novaSenha.value = "";
+  confirmarNovaSenha.value = "";
+
+  // Leva o foco ao primeiro campo.
+  novaSenha.focus();
+});
+
+// Valida e salva a nova senha.
+formularioRedefinirSenha.addEventListener("submit", async function (event) {
+  event.preventDefault();
+
+  const senha = novaSenha.value;
+  const confirmacao = confirmarNovaSenha.value;
+
+  mensagemRedefinirSenha.textContent = "";
+
+  // Confere o tamanho mínimo exigido pela interface.
+  if (senha.length < 6) {
+    mensagemRedefinirSenha.textContent =
+      "A senha deve ter pelo menos 6 caracteres.";
+    return;
+  }
+
+  // Evita salvar quando os dois campos forem diferentes.
+  if (senha !== confirmacao) {
+    mensagemRedefinirSenha.textContent = "As senhas não coincidem.";
+    confirmarNovaSenha.focus();
+    return;
+  }
+
+  const botaoSalvar = formularioRedefinirSenha.querySelector(
+    'button[type="submit"]',
+  );
+
+  // Evita envios repetidos enquanto a senha é atualizada.
+  botaoSalvar.disabled = true;
+
+  try {
+    const { error } = await supabase.auth.updateUser({
+      password: senha,
+    });
+
+    if (error) {
+      console.error("Erro ao redefinir senha:", error);
+
+      mensagemRedefinirSenha.textContent =
+        "Não foi possível alterar a senha. Solicite um novo link e tente novamente.";
+
+      return;
+    }
+
+    // Encerra a sessão de recuperação após alterar a senha.
+    const { error: erroSaida } = await supabase.auth.signOut();
+
+    if (erroSaida) {
+      console.error("Erro ao encerrar sessão:", erroSaida);
+    }
+
+    // Restaura a interface para o login normal.
+    formularioRedefinirSenha.hidden = true;
+    formularioLogin.hidden = false;
+
+    authLivro.classList.remove("redefinicao-aberta");
+
+    // Limpa os campos sensíveis.
+    novaSenha.value = "";
+    confirmarNovaSenha.value = "";
+    campoSenha.value = "";
+
+    mensagemErro.textContent =
+      "Senha alterada com sucesso! Entre com sua nova senha.";
+
+    mensagemRedefinirSenha.textContent = "";
+
+    navegarPara("login");
+    campoEmail.focus();
+  } catch (error) {
+    console.error("Erro inesperado ao alterar senha:", error);
+
+    mensagemRedefinirSenha.textContent =
+      "Ocorreu um erro. Verifique sua conexão e tente novamente.";
+  } finally {
+    // Reativa o botão independentemente do resultado.
+    botaoSalvar.disabled = false;
+  }
 });
