@@ -2,6 +2,7 @@ import { supabase } from "./supabase.js";
 import "./notificacoes.css";
 
 let userAtual = null;
+let falhaGeracao = null; // Diagnóstico temporário para o preview
 let container, botao, painel, contador, lista, marcarTodas;
 
 const hojeISO = () => {
@@ -70,10 +71,15 @@ function montar() {
 }
 
 async function gerarAlertas(userId) {
+  falhaGeracao = null;
   const { data: debts, error } = await supabase.from("dividas")
     .select("id,nome,vencimento,paga").eq("user_id",userId)
     .eq("paga",false).not("vencimento","is",null);
-  if (error) { console.error("Erro ao verificar vencimentos:",error); return; }
+  if (error) {
+    falhaGeracao = { etapa: "buscar dívidas", error };
+    console.error("Erro ao verificar vencimentos:", { code: error.code, message: error.message, details: error.details, hint: error.hint });
+    return;
+  }
 
   const hoje = hojeISO();
   const alertas = [];
@@ -99,7 +105,10 @@ async function gerarAlertas(userId) {
   if (!alertas.length) return;
   const { error: insertError } = await supabase.from("notificacoes")
     .upsert(alertas,{onConflict:"user_id,dedupe_key",ignoreDuplicates:true});
-  if (insertError) console.error("Erro ao salvar alertas:",insertError);
+  if (insertError) {
+    falhaGeracao = { etapa: "salvar alertas", error: insertError };
+    console.error("Erro ao salvar alertas:", { code: insertError.code, message: insertError.message, details: insertError.details, hint: insertError.hint });
+  }
 }
 
 async function carregar() {
@@ -112,6 +121,12 @@ async function carregar() {
     console.error("Erro ao carregar notificações:", { code: error.code, message: error.message, details: error.details, hint: error.hint });
     const detalhe = [error.code ? `Código: ${error.code}` : "", error.message || "Erro sem mensagem"].filter(Boolean).join(" — ");
     lista.replaceChildren(el("p","estado-notificacoes",`Falha ao carregar: ${detalhe}`));
+    return;
+  }
+  if (falhaGeracao) {
+    const e = falhaGeracao.error;
+    const detalhe = [e.code ? `Código: ${e.code}` : "", e.message || "Erro sem mensagem"].filter(Boolean).join(" — ");
+    lista.replaceChildren(el("p","estado-notificacoes",`Falha ao ${falhaGeracao.etapa}: ${detalhe}`));
     return;
   }
   const items = data ?? [];
