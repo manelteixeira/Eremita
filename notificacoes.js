@@ -109,8 +109,9 @@ async function carregar() {
     .select("id,titulo,mensagem,tipo,lida_em,created_at")
     .eq("user_id",userAtual.id).order("created_at",{ascending:false}).limit(20);
   if (error) {
-    console.error("Erro ao carregar notificações:",error);
-    lista.replaceChildren(el("p","estado-notificacoes","Não foi possível carregar as notificações."));
+    console.error("Erro ao carregar notificações:", { code: error.code, message: error.message, details: error.details, hint: error.hint });
+    const detalhe = [error.code ? `Código: ${error.code}` : "", error.message || "Erro sem mensagem"].filter(Boolean).join(" — ");
+    lista.replaceChildren(el("p","estado-notificacoes",`Falha ao carregar: ${detalhe}`));
     return;
   }
   const items = data ?? [];
