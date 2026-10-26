@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import "./notificacoes.js";
 import "./animacoes/animated-gradient.js";
 
 // =========================
