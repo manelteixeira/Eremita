@@ -146,6 +146,7 @@ async function carregar() {
     body.append(el("p","mensagem-notificacao",item.mensagem));
     body.append(el("time","data-notificacao",new Date(item.created_at).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"})));
     row.append(body);
+    const actions = el("div","acoes-notificacao");
     if (!item.lida_em) {
       const read = el("button","marcar-notificacao-lida","Marcar lida");
       read.type = "button";
@@ -156,8 +157,26 @@ async function carregar() {
         if (updateError) console.error("Erro ao marcar notificação:",updateError);
         await carregar();
       });
-      row.append(read);
+      actions.append(read);
     }
+    const remove = el("button","excluir-notificacao","Excluir");
+    remove.type = "button";
+    remove.setAttribute("aria-label",`Excluir notificação: ${item.titulo}`);
+    remove.addEventListener("click",async () => {
+      if (!userAtual || !window.confirm("Excluir esta notificação? A dívida não será alterada.")) return;
+      remove.disabled = true;
+      const {error: deleteError} = await supabase.from("notificacoes")
+        .delete().eq("id",item.id).eq("user_id",userAtual.id);
+      if (deleteError) {
+        console.error("Erro ao excluir notificação:",deleteError);
+        remove.disabled = false;
+        window.alert("Não foi possível excluir a notificação. Tente novamente.");
+        return;
+      }
+      await carregar();
+    });
+    actions.append(remove);
+    row.append(actions);
     lista.append(row);
   }
 }
