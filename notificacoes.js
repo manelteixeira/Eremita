@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import { iniciarPush, encerrarPush } from "./push.js";
 import "./notificacoes.css";
 
 let userAtual = null;
@@ -108,7 +109,14 @@ async function gerarAlertas(userId) {
   if (insertError) {
     falhaGeracao = { etapa: "salvar alertas", error: insertError };
     console.error("Erro ao salvar alertas:", { code: insertError.code, message: insertError.message, details: insertError.details, hint: insertError.hint });
+    return;
   }
+
+  // A função de backend só envia notificações ainda não enviadas e pertencentes ao usuário autenticado.
+  const { error: pushError } = await supabase.functions.invoke("enviar-push", {
+    body: { dedupeKeys: alertas.map((alerta) => alerta.dedupe_key) },
+  });
+  if (pushError) console.warn("Push indisponível ou ainda não configurado:", pushError.message);
 }
 
 async function carregar() {
@@ -192,10 +200,12 @@ async function iniciar(user) {
   userAtual = user;
   montar();
   if (!container) return;
+  await iniciarPush(user);
   await sincronizarNotificacoes();
 }
 function sair() {
   userAtual = null;
+  encerrarPush();
   if (painel) painel.hidden = true;
   if (botao) botao.setAttribute("aria-expanded","false");
   if (contador) { contador.hidden = true; contador.textContent = "0"; }
