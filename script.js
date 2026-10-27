@@ -2,6 +2,15 @@ import { supabase } from "./supabase.js";
 import { sincronizarNotificacoes } from "./notificacoes.js";
 import "./animacoes/animated-gradient.js";
 
+// Registra o service worker ao abrir o app, não apenas ao ativar o push.
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch((error) => {
+      console.warn("Não foi possível registrar o service worker:", error);
+    });
+  });
+}
+
 // =========================
 // ELEMENTOS DA INTERFACE
 // =========================
