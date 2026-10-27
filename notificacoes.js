@@ -1,4 +1,5 @@
 import { supabase } from "./supabase.js";
+import { iniciarPush, encerrarPush } from "./push.js";
 import "./notificacoes.css";
 
 let userAtual = null;
@@ -38,6 +39,8 @@ function montar() {
   painel = el("section","painel-notificacoes");
   painel.hidden = true;
   painel.setAttribute("aria-label","Notificações");
+  painel.setAttribute("role","dialog");
+  painel.setAttribute("aria-modal","false");
   const topo = el("div","cabecalho-notificacoes");
   topo.append(el("h2","","Notificações"));
   marcarTodas = el("button","marcar-todas-lidas","Marcar lidas");
@@ -52,7 +55,10 @@ function montar() {
     const abrir = painel.hidden;
     painel.hidden = !abrir;
     botao.setAttribute("aria-expanded",String(abrir));
-    if (abrir) await sincronizarNotificacoes();
+    if (abrir) {
+      painel.classList.remove("painel-fechando");
+      await sincronizarNotificacoes();
+    }
   });
   marcarTodas.addEventListener("click", async () => {
     if (!userAtual) return;
@@ -108,7 +114,14 @@ async function gerarAlertas(userId) {
   if (insertError) {
     falhaGeracao = { etapa: "salvar alertas", error: insertError };
     console.error("Erro ao salvar alertas:", { code: insertError.code, message: insertError.message, details: insertError.details, hint: insertError.hint });
+    return;
   }
+
+  // A função de backend só envia notificações ainda não enviadas e pertencentes ao usuário autenticado.
+  const { error: pushError } = await supabase.functions.invoke("enviar-push", {
+    body: { dedupeKeys: alertas.map((alerta) => alerta.dedupe_key) },
+  });
+  if (pushError) console.warn("Push indisponível ou ainda não configurado:", pushError.message);
 }
 
 async function carregar() {
@@ -192,10 +205,12 @@ async function iniciar(user) {
   userAtual = user;
   montar();
   if (!container) return;
+  await iniciarPush(user);
   await sincronizarNotificacoes();
 }
 function sair() {
   userAtual = null;
+  encerrarPush();
   if (painel) painel.hidden = true;
   if (botao) botao.setAttribute("aria-expanded","false");
   if (contador) { contador.hidden = true; contador.textContent = "0"; }
