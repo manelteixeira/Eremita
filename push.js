@@ -18,18 +18,16 @@ function mostrarMensagem(mensagem) {
 
 function montarBotao() {
   if (botaoPush?.isConnected) return botaoPush;
-  const header = document.querySelector(".cabeçalho");
-  const tema = document.getElementById("btnTema");
-  if (!header || !tema) return null;
+  const settings = document.getElementById("btnAtivarNotificacoes");
+  if (!settings) return null;
 
   botaoPush = document.createElement("button");
   botaoPush.type = "button";
-  botaoPush.className = "btn-push-notificacoes";
-  botaoPush.textContent = "Ativar push";
-  botaoPush.setAttribute("aria-label", "Ativar notificações push");
-  botaoPush.style.cssText = "border:1px solid currentColor;border-radius:10px;padding:8px 10px;background:transparent;color:inherit;cursor:pointer;font:inherit;font-size:.85rem";
+  botaoPush.id = "btnAtivarNotificacoes";
+  botaoPush.textContent = "Ativar notificações";
+  botaoPush.setAttribute("aria-label", "Ativar notificações");
   botaoPush.addEventListener("click", alternarPush);
-  header.insertBefore(botaoPush, tema);
+  settings.replaceWith(botaoPush);
   return botaoPush;
 }
 
@@ -45,9 +43,9 @@ async function atualizarEstadoBotao() {
   try {
     const registration = await navigator.serviceWorker.getRegistration();
     const subscription = await registration?.pushManager.getSubscription();
-    botaoPush.textContent = subscription ? "Push ativo" : "Ativar push";
-    botaoPush.setAttribute("aria-label", subscription ? "Desativar notificações push" : "Ativar notificações push");
-    botaoPush.title = subscription ? "Clique para desativar notificações push neste dispositivo." : "Receba alertas de vencimento neste dispositivo.";
+    botaoPush.textContent = subscription ? "Desativar notificações" : "Ativar notificações";
+    botaoPush.setAttribute("aria-label", subscription ? "Desativar notificações" : "Ativar notificações");
+    botaoPush.title = subscription ? "Clique para desativar as notificações neste dispositivo." : "Receba alertas de vencimento neste dispositivo.";
   } catch (error) {
     console.error("Não foi possível verificar o estado do push:", error);
   }
@@ -74,7 +72,7 @@ async function alternarPush() {
         .delete().eq("user_id", userPushAtual.id).eq("endpoint", existente.endpoint);
       if (error) throw error;
       await existente.unsubscribe();
-      botaoPush.textContent = "Ativar push";
+      botaoPush.textContent = "Ativar notificações";
       mostrarMensagem("Notificações push desativadas neste dispositivo.");
       return;
     }
@@ -104,7 +102,7 @@ async function alternarPush() {
       throw error;
     }
 
-    botaoPush.textContent = "Push ativo";
+    botaoPush.textContent = "Desativar notificações";
     mostrarMensagem("Pronto! Este dispositivo está inscrito para receber notificações push do Eremita.");
   } catch (error) {
     console.error("Erro ao configurar notificações push:", error);
