@@ -8,11 +8,7 @@
     <title>Eremita - Controle Financeiro</title>
 
     <meta name="theme-color" content="#0b3d2e" />
-    <meta name="mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-title" content="Eremita" />
     <link rel="icon" href="/eremita-icon.svg" type="image/svg+xml" />
-    <link rel="manifest" href="/manifest.webmanifest" />
 
     <meta
       name="description"
@@ -283,10 +279,9 @@
             </nav>
 
             <div class="menu-inferior">
-              <a href="#" class="item-menu menu-breve">
+              <a href="#configuracoes" class="item-menu" id="linkConfiguracoes">
                 <span aria-hidden="true">⚙️</span>
                 <span>Configurações</span>
-                <small>Em breve</small>
               </a>
 
               <button
@@ -556,6 +551,25 @@
               </div>
 
               <div class="lista-dividas" id="listaDividas"></div>
+            </section>
+
+            <section class="configuracoes" id="configuracoes" hidden aria-labelledby="tituloConfiguracoes">
+              <div class="titulo-dividas">
+                <div>
+                  <span class="titulo-card">Preferências</span>
+                  <h2 id="tituloConfiguracoes">Configurações</h2>
+                </div>
+                <button type="button" id="btnVoltarPainel">Voltar ao painel</button>
+              </div>
+              <article class="card-visao configuracao-notificacoes">
+                <div class="cabecalho-card">
+                  <span class="titulo-card">Alertas do Eremita</span>
+                  <h2>Notificações neste dispositivo</h2>
+                </div>
+                <p>Ative as notificações para receber avisos de vencimentos e acompanhar seus compromissos financeiros. O navegador pode pedir sua permissão.</p>
+                <button type="button" id="btnAtivarNotificacoes">Ativar notificações</button>
+                <p class="ajuda-notificacoes" id="estadoNotificacoesPush" aria-live="polite">As notificações ainda não foram verificadas.</p>
+              </article>
             </section>
           </div>
         </div>
