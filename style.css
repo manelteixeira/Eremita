@@ -2402,3 +2402,37 @@ body.dark-mode .tooltip-indicador {
     padding: 24px 20px;
   }
 }
+
+
+/* Ajustes mobile do cabeçalho e tela de configurações */
+.cabeçalho { min-width: 0; }
+.marca { display: flex; align-items: center; gap: 12px; min-width: 0; flex: 1; }
+.marca-texto { min-width: 0; }
+.marca-texto h1 { overflow-wrap: anywhere; }
+.configuracoes { display: grid; gap: 18px; }
+.configuracoes[hidden] { display: none !important; }
+.configuracao-notificacoes { padding: 22px; }
+.configuracao-notificacoes > p { line-height: 1.6; }
+#btnAtivarNotificacoes, #btnVoltarPainel { border: 1px solid var(--cor-borda); border-radius: 10px; padding: 11px 16px; background: var(--cor-principal); color: white; font: inherit; font-weight: 600; cursor: pointer; }
+#btnAtivarNotificacoes:disabled { opacity: .65; cursor: wait; }
+.ajuda-notificacoes { color: var(--cor-texto-secundario); font-size: .9rem; }
+@media (max-width: 600px) {
+  .cabeçalho { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 8px; padding: 12px; align-items: center; }
+  .marca { gap: 8px; }
+  .logo-eremita { width: 42px; height: 42px; flex: 0 0 42px; }
+  .logo-eremita .logo-ninja { width: 32px; height: 32px; }
+  .marca-texto h1 { font-size: clamp(18px, 5vw, 24px); line-height: 1.15; margin-bottom: 4px; }
+  .marca-texto p { font-size: 12px; line-height: 1.3; }
+  .eremita-notificacoes { grid-column: 3; grid-row: 1; }
+  .btn-tema { grid-column: 3; grid-row: 2; justify-self: end; }
+  .btn-menu-mobile { grid-column: 1; grid-row: 1; }
+}
+@media (max-width: 380px) {
+  .cabeçalho { grid-template-columns: 34px minmax(0, 1fr) 38px; padding: 10px; gap: 6px; }
+  .marca { gap: 6px; }
+  .logo-eremita { width: 36px; height: 36px; flex-basis: 36px; }
+  .logo-eremita .logo-ninja { width: 28px; height: 28px; }
+  .marca-texto h1 { font-size: 18px; }
+  .marca-texto p { font-size: 11px; }
+  .btn-tema { grid-column: 3; grid-row: 2; }
+}
