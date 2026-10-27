@@ -1,0 +1,21 @@
+{
+  "id": "/",
+  "name": "Eremita - Controle Financeiro",
+  "short_name": "Eremita",
+  "description": "Organize suas dívidas, acompanhe seus vencimentos e tenha mais controle sobre sua vida financeira.",
+  "lang": "pt-BR",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#071f2d",
+  "theme_color": "#0b3d2e",
+  "icons": [
+    {
+      "src": "/eremita-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
