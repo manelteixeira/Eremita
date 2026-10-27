@@ -1,5 +1,5 @@
 import { supabase } from "./supabase.js";
-import "./notificacoes.js";
+import { sincronizarNotificacoes } from "./notificacoes.js";
 import "./animacoes/animated-gradient.js";
 
 // =========================
@@ -964,6 +964,7 @@ function criarDivida(divida) {
 
     atualizarResumo();
     atualizarProximosVencimentos();
+    await sincronizarNotificacoes();
   });
 
   botaoEditar.addEventListener("click", function () {
@@ -1013,6 +1014,7 @@ function criarDivida(divida) {
     atualizarResumo();
     atualizarProximosVencimentos();
     atualizarGraficoDividas();
+    await sincronizarNotificacoes();
   });
 }
 
@@ -1098,6 +1100,7 @@ async function editarDivida(nome, valor, vencimento) {
   atualizarProximosVencimentos();
   atualizarGraficoDividas();
   fecharFormularioDivida();
+  await sincronizarNotificacoes();
 }
 
 async function cadastrarDivida(nome, valor, vencimento) {
@@ -1137,6 +1140,7 @@ async function cadastrarDivida(nome, valor, vencimento) {
   atualizarProximosVencimentos();
   atualizarGraficoDividas();
   fecharFormularioDivida();
+  await sincronizarNotificacoes();
 }
 
 // =========================
