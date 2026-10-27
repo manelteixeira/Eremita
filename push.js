@@ -34,7 +34,7 @@ function montarBotao() {
 async function atualizarEstadoBotao() {
   if (!botaoPush || !userPushAtual) return;
   if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
-    botaoPush.textContent = "Push indisponível";
+    botaoPush.textContent = "Notificações indisponíveis";
     botaoPush.disabled = true;
     botaoPush.title = "Este navegador não oferece suporte a notificações push.";
     return;
@@ -54,7 +54,7 @@ async function atualizarEstadoBotao() {
 async function alternarPush() {
   if (!userPushAtual || !botaoPush) return;
   if (!VAPID_PUBLIC_KEY) {
-    mostrarMensagem("As notificações push ainda precisam ser configuradas. Falta definir VITE_VAPID_PUBLIC_KEY no ambiente de produção.");
+    mostrarMensagem("As notificações ainda precisam ser configuradas no servidor. Tente novamente mais tarde.");
     return;
   }
   if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
@@ -103,7 +103,7 @@ async function alternarPush() {
     }
 
     botaoPush.textContent = "Desativar notificações";
-    mostrarMensagem("Pronto! Este dispositivo está inscrito para receber notificações push do Eremita.");
+    mostrarMensagem("Pronto! Este dispositivo está configurado para receber notificações do Eremita.");
   } catch (error) {
     console.error("Erro ao configurar notificações push:", error);
     mostrarMensagem("Não foi possível configurar o push. Confira a configuração do Supabase e tente novamente.");
@@ -121,6 +121,8 @@ export async function iniciarPush(user) {
 
 export function encerrarPush() {
   userPushAtual = null;
-  botaoPush?.remove();
-  botaoPush = null;
+  if (botaoPush) {
+    botaoPush.disabled = true;
+    botaoPush.textContent = "Entre na sua conta para ativar notificações";
+  }
 }
