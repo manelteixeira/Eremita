@@ -1353,3 +1353,26 @@ formularioRedefinirSenha.addEventListener("submit", async function (event) {
     botaoSalvar.disabled = false;
   }
 });
+
+
+// Navegação da tela de configurações.
+const linkConfiguracoes = document.getElementById("linkConfiguracoes");
+const secaoConfiguracoes = document.getElementById("configuracoes");
+const botaoVoltarPainel = document.getElementById("btnVoltarPainel");
+const conteudoPainel = document.querySelector(".conteudo-painel");
+const secoesPainel = conteudoPainel ? [...conteudoPainel.children].filter((item) => item !== secaoConfiguracoes) : [];
+function mostrarConfiguracoes(abrir) {
+  if (!secaoConfiguracoes) return;
+  secaoConfiguracoes.hidden = !abrir;
+  secoesPainel.forEach((secao) => { secao.hidden = abrir; });
+  if (abrir) {
+    secaoConfiguracoes.scrollIntoView({ behavior: "smooth", block: "start" });
+  } else {
+    document.getElementById("dashboard")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+}
+linkConfiguracoes?.addEventListener("click", (event) => {
+  event.preventDefault();
+  mostrarConfiguracoes(true);
+});
+botaoVoltarPainel?.addEventListener("click", () => mostrarConfiguracoes(false));
