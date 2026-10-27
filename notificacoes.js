@@ -39,6 +39,8 @@ function montar() {
   painel = el("section","painel-notificacoes");
   painel.hidden = true;
   painel.setAttribute("aria-label","Notificações");
+  painel.setAttribute("role","dialog");
+  painel.setAttribute("aria-modal","false");
   const topo = el("div","cabecalho-notificacoes");
   topo.append(el("h2","","Notificações"));
   marcarTodas = el("button","marcar-todas-lidas","Marcar lidas");
@@ -53,7 +55,10 @@ function montar() {
     const abrir = painel.hidden;
     painel.hidden = !abrir;
     botao.setAttribute("aria-expanded",String(abrir));
-    if (abrir) await sincronizarNotificacoes();
+    if (abrir) {
+      painel.classList.remove("painel-fechando");
+      await sincronizarNotificacoes();
+    }
   });
   marcarTodas.addEventListener("click", async () => {
     if (!userAtual) return;
