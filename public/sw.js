@@ -9,8 +9,8 @@ self.addEventListener("push", (event) => {
   const title = payload.title || "Eremita";
   const options = {
     body: payload.body || "Você tem uma nova notificação.",
-    icon: "/icon-192.png",
-    badge: "/icon-192.png",
+    icon: "/eremita-icon.svg",
+    badge: "/eremita-icon.svg",
     tag: payload.tag || "eremita-notificacao",
     data: { url: payload.url || "/" },
   };
