@@ -52,7 +52,7 @@ function montar() {
     const abrir = painel.hidden;
     painel.hidden = !abrir;
     botao.setAttribute("aria-expanded",String(abrir));
-    if (abrir) await carregar();
+    if (abrir) await sincronizarNotificacoes();
   });
   marcarTodas.addEventListener("click", async () => {
     if (!userAtual) return;
@@ -181,13 +181,18 @@ async function carregar() {
   }
 }
 
+export async function sincronizarNotificacoes() {
+  if (!userAtual || !lista) return;
+  await gerarAlertas(userAtual.id);
+  await carregar();
+}
+
 async function iniciar(user) {
   if (userAtual?.id === user.id) return;
   userAtual = user;
   montar();
   if (!container) return;
-  await gerarAlertas(user.id);
-  await carregar();
+  await sincronizarNotificacoes();
 }
 function sair() {
   userAtual = null;
