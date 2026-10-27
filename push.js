@@ -43,7 +43,7 @@ async function atualizarEstadoBotao() {
   }
 
   try {
-    const registration = await navigator.serviceWorker.getRegistration("/");
+    const registration = await navigator.serviceWorker.getRegistration();
     const subscription = await registration?.pushManager.getSubscription();
     botaoPush.textContent = subscription ? "Push ativo" : "Ativar push";
     botaoPush.setAttribute("aria-label", subscription ? "Desativar notificações push" : "Ativar notificações push");
