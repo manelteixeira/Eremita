@@ -97,7 +97,7 @@ const mensagemRedefinirSenha = document.getElementById(
 // =========================
 
 const dividas = [];
-let filtroAtual = "todas";
+let filtroAtual = "pendentes";
 let dividaEditando = null;
 let rendaMensal = 0;
 const tabelaRenda = "renda_mensal";
@@ -833,19 +833,7 @@ function obterStatus(divida) {
 }
 
 function deveMostrarDivida(divida) {
-  switch (filtroAtual) {
-    case "abertas":
-      return !divida.paga && !estaAtrasada(divida);
-
-    case "atrasadas":
-      return !divida.paga && estaAtrasada(divida);
-
-    case "pagas":
-      return divida.paga;
-
-    default:
-      return true;
-  }
+  return filtroAtual === "pagas" ? Boolean(divida.paga) : !divida.paga;
 }
 
 // =========================
