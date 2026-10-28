@@ -181,6 +181,10 @@ function atualizarControlesSelecao() {
   controlesExclusao.hidden = !modoSelecaoNotificacoes;
   botaoModoExcluir.hidden = modoSelecaoNotificacoes;
   marcarTodas.hidden = modoSelecaoNotificacoes;
+  const checkboxes = [...lista.querySelectorAll(".selecionar-notificacao")];
+  const selecionadasVisiveis = checkboxes.filter((checkbox) => notificacoesSelecionadas.has(checkbox.dataset.id)).length;
+  selecionarTodas.checked = checkboxes.length > 0 && selecionadasVisiveis === checkboxes.length;
+  selecionarTodas.indeterminate = selecionadasVisiveis > 0 && selecionadasVisiveis < checkboxes.length;
   excluirSelecionadas.disabled = notificacoesSelecionadas.size === 0;
   excluirSelecionadas.textContent = "Excluir selecionadas (" + notificacoesSelecionadas.size + ")";
 }
