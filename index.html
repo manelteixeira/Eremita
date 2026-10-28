@@ -573,6 +573,19 @@
       </section>
     </main>
 
+    <dialog id="dialogoCicloMensal" class="dialogo-ciclo-mensal" aria-labelledby="tituloCicloMensal">
+      <form id="formularioCicloMensal">
+        <p class="titulo-card">NOVO CICLO FINANCEIRO</p>
+        <h2 id="tituloCicloMensal">Vamos começar o mês?</h2>
+        <p>O Eremita detectou um novo mês: <strong id="mesNovoCiclo"></strong>.</p>
+        <p>Confirme sua renda para iniciar o orçamento deste mês. Seu histórico e suas dívidas pendentes serão mantidos.</p>
+        <label for="valorNovoCiclo">Renda deste mês (R$)</label>
+        <input id="valorNovoCiclo" type="number" min="0.01" step="0.01" required placeholder="Ex.: 2500,00" />
+        <p id="mensagemCicloMensal" aria-live="polite"></p>
+        <button id="btnConfirmarCiclo" type="submit">Confirmar início do mês</button>
+      </form>
+    </dialog>
+
     <script type="module" src="script.js"></script>
   </body>
 </html>
