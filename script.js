@@ -434,6 +434,7 @@ function atualizarResumo() {
   const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
   const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
   const totalCompromissos = dividas.reduce(function (acumulado, divida) {
+    if (!divida.vencimento) return acumulado;
     const [ano, mes, dia] = divida.vencimento.split("-").map(Number);
     const vencimento = new Date(ano, mes - 1, dia);
     const venceNesteMes = vencimento >= primeiroDiaMes && vencimento <= ultimoDiaMes;
