@@ -434,14 +434,15 @@ function atualizarResumo() {
   const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
   const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
   const totalCompromissos = dividas.reduce(function (acumulado, divida) {
-    if (!divida.vencimento) return acumulado;
+    // O saldo do ciclo considera apenas dívidas não pagas com vencimento neste mês.
+    // Dívidas antigas continuam no histórico/lista, mas não consomem novamente o salário do novo ciclo.
+    if (divida.paga || !divida.vencimento) return acumulado;
+
     const [ano, mes, dia] = divida.vencimento.split("-").map(Number);
     const vencimento = new Date(ano, mes - 1, dia);
     const venceNesteMes = vencimento >= primeiroDiaMes && vencimento <= ultimoDiaMes;
-    const vencidaAnteriorPendente = vencimento < primeiroDiaMes && !divida.paga;
-    return venceNesteMes || vencidaAnteriorPendente
-      ? acumulado + Number(divida.valor)
-      : acumulado;
+
+    return venceNesteMes ? acumulado + Number(divida.valor) : acumulado;
   }, 0);
 
   const saldo = rendaMensal - totalCompromissos;
