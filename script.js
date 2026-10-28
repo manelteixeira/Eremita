@@ -94,6 +94,7 @@ const mensagemSituacao = document.getElementById("mensagemSituacao");
 const botaoEsqueciSenha = document.getElementById("btnEsqueciSenha");
 
 const formularioLogin = document.getElementById("formLogin");
+const formularioCadastro = document.getElementById("formCadastro");
 
 const formularioRedefinirSenha = document.getElementById("formRedefinirSenha");
 
@@ -236,7 +237,10 @@ botaoEntrar.addEventListener("click", async function (event) {
 
   if (error) {
     console.error("Erro ao entrar:", error);
-    mensagemErro.textContent = "Email ou senha incorretos.";
+    mensagemErro.textContent =
+      error.code === "email_not_confirmed" || /email not confirmed/i.test(error.message)
+        ? "Você precisa confirmar seu email pelo link recebido antes de entrar."
+        : "Email ou senha incorretos.";
     return;
   }
 
@@ -263,7 +267,8 @@ botaoVoltarLogin.addEventListener("click", function () {
   mensagemCadastro.textContent = "";
 });
 
-botaoCadastrarUsuario.addEventListener("click", async function () {
+formularioCadastro.addEventListener("submit", async function (event) {
+  event.preventDefault();
   const nome = nomeCadastro.value.trim();
   const email = emailCadastro.value.trim();
   const senha = senhaCadastro.value;
@@ -309,7 +314,7 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
   }
 
   mensagemCadastro.textContent =
-    "Conta criada com sucesso! Você já pode entrar.";
+    "Cadastro recebido! Abra o link enviado ao seu email para confirmar a conta. Depois, volte aqui para entrar.";
 
   nomeCadastro.value = "";
   emailCadastro.value = "";
