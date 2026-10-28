@@ -26,3 +26,5 @@ with check ((select auth.uid()) = user_id);
 create policy "Users can delete own monthly income cycles"
 on public.ciclos_renda_mensal for delete to authenticated
 using ((select auth.uid()) = user_id);
+
+grant select, insert, update, delete on table public.ciclos_renda_mensal to authenticated;
