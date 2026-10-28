@@ -2436,3 +2436,17 @@ body.dark-mode .tooltip-indicador {
   .marca-texto p { font-size: 11px; }
   .btn-tema { grid-column: 3; grid-row: 2; }
 }
+
+
+/* Seleção múltipla de dívidas */
+.acoes-lista-dividas { margin: 14px 0; }
+.controles-exclusao { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--cor-borda); border-radius: 12px; }
+.controles-exclusao[hidden] { display: none !important; }
+.selecionar-todas { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; }
+.checkbox-divida { display: flex; align-items: center; margin-right: 12px; }
+.checkbox-divida input, .selecionar-todas input { width: 18px; height: 18px; accent-color: var(--cor-principal); cursor: pointer; }
+.divida:has(.checkbox-divida) { display: flex; align-items: center; }
+.btn-modo-exclusao, .btn-excluir-selecionadas, .btn-cancelar-selecao { border: 1px solid var(--cor-borda); border-radius: 9px; padding: 9px 12px; font: inherit; cursor: pointer; }
+.btn-modo-exclusao, .btn-excluir-selecionadas { background: var(--cor-perigo); color: #fff; border-color: var(--cor-perigo); }
+.btn-cancelar-selecao { background: var(--cor-card); color: var(--cor-texto); }
+.btn-excluir-selecionadas:disabled { opacity: .5; cursor: not-allowed; }
