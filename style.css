@@ -2450,3 +2450,31 @@ body.dark-mode .tooltip-indicador {
 .btn-modo-exclusao, .btn-excluir-selecionadas { background: var(--cor-perigo); color: #fff; border-color: var(--cor-perigo); }
 .btn-cancelar-selecao { background: var(--cor-card); color: var(--cor-texto); }
 .btn-excluir-selecionadas:disabled { opacity: .5; cursor: not-allowed; }
+
+
+/* Alinha a checkbox de seleção com o nome da dívida no celular */
+@media (max-width: 600px) {
+  .divida:has(.checkbox-divida) {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding-left: 52px;
+  }
+
+  .divida:has(.checkbox-divida) .checkbox-divida {
+    position: absolute;
+    top: 20px;
+    left: 18px;
+    margin: 0;
+  }
+
+  .divida:has(.checkbox-divida) > div:first-of-type {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .divida:has(.checkbox-divida) > div:last-child {
+    width: 100%;
+  }
+}
