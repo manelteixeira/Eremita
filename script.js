@@ -58,6 +58,12 @@ const vencimentoDivida = document.getElementById("vencimento-divida");
 
 const listaDividas = document.getElementById("listaDividas");
 const botoesFiltro = document.querySelectorAll(".filtro");
+const botaoModoExcluirDividas = document.getElementById("btnModoExcluirDividas");
+const controlesExclusaoDividas = document.getElementById("controlesExclusaoDividas");
+const selecionarTodasDividas = document.getElementById("selecionarTodasDividas");
+const contadorDividasSelecionadas = document.getElementById("contadorDividasSelecionadas");
+const botaoExcluirDividasSelecionadas = document.getElementById("btnExcluirDividasSelecionadas");
+const botaoCancelarExclusaoDividas = document.getElementById("btnCancelarExclusaoDividas");
 
 const elementoTotalDividas = document.getElementById("totalDividas");
 const elementoTotalEmAberto = document.getElementById("totalEmAberto");
@@ -99,6 +105,8 @@ const mensagemRedefinirSenha = document.getElementById(
 const dividas = [];
 let filtroAtual = "pendentes";
 let dividaEditando = null;
+let modoExclusaoDividas = false;
+const dividasSelecionadas = new Set();
 let rendaMensal = 0;
 const tabelaRenda = "renda_mensal";
 
@@ -883,11 +891,29 @@ function atualizarProximosVencimentos() {
 
 function atualizarListaDividas() {
   listaDividas.innerHTML = "";
-
-  [...dividas]
+  const visiveis = [...dividas]
     .sort((a, b) => a.vencimento.localeCompare(b.vencimento))
-    .filter(deveMostrarDivida)
-    .forEach(criarDivida);
+    .filter(deveMostrarDivida);
+  visiveis.forEach(criarDivida);
+  atualizarControlesExclusaoDividas(visiveis);
+}
+
+function atualizarControlesExclusaoDividas(visiveis = dividas.filter(deveMostrarDivida)) {
+  if (!controlesExclusaoDividas) return;
+  controlesExclusaoDividas.hidden = !modoExclusaoDividas;
+  botaoModoExcluirDividas.hidden = modoExclusaoDividas;
+  const ids = visiveis.map((d) => String(d.id));
+  const selecionadasVisiveis = ids.filter((id) => dividasSelecionadas.has(id)).length;
+  selecionarTodasDividas.checked = ids.length > 0 && selecionadasVisiveis === ids.length;
+  selecionarTodasDividas.indeterminate = selecionadasVisiveis > 0 && selecionadasVisiveis < ids.length;
+  contadorDividasSelecionadas.textContent = dividasSelecionadas.size + " selecionada(s)";
+  botaoExcluirDividasSelecionadas.disabled = dividasSelecionadas.size === 0;
+}
+
+function sairModoExclusaoDividas() {
+  modoExclusaoDividas = false;
+  dividasSelecionadas.clear();
+  atualizarListaDividas();
 }
 
 function criarDivida(divida) {
@@ -901,6 +927,7 @@ function criarDivida(divida) {
   }
 
   elementoDivida.innerHTML = `
+    ${modoExclusaoDividas ? `<label class="checkbox-divida"><input type="checkbox" class="selecionar-divida" aria-label="Selecionar dívida" ${dividasSelecionadas.has(String(divida.id)) ? "checked" : ""}></label>` : ""}
     <div>
       <h3>${divida.nome}</h3>
       <p>Vencimento: ${formatarData(divida.vencimento)}</p>
@@ -922,8 +949,8 @@ function criarDivida(divida) {
           ${divida.paga ? "✓ Paga" : "Pagar"}
         </button>
 
-        <button type="button" class="btnEditar">Editar</button>
-        <button type="button" class="btnExcluir">Excluir</button>
+        <button type="button" class="btnEditar" ${modoExclusaoDividas ? "hidden" : ""}>Editar</button>
+        <button type="button" class="btnExcluir" ${modoExclusaoDividas ? "hidden" : ""}>Excluir</button>
       </div>
     </div>
   `;
@@ -934,6 +961,13 @@ function criarDivida(divida) {
   const botaoEditar = elementoDivida.querySelector(".btnEditar");
   const botaoExcluir = elementoDivida.querySelector(".btnExcluir");
   const elementoStatus = elementoDivida.querySelector(".status-divida span");
+  const checkboxDivida = elementoDivida.querySelector(".selecionar-divida");
+  if (checkboxDivida) checkboxDivida.addEventListener("change", () => {
+    const id = String(divida.id);
+    if (checkboxDivida.checked) dividasSelecionadas.add(id);
+    else dividasSelecionadas.delete(id);
+    atualizarControlesExclusaoDividas();
+  });
 
   botaoPagar.addEventListener("click", async function () {
     const { data, error } = await supabase
@@ -1147,6 +1181,7 @@ async function cadastrarDivida(nome, valor, vencimento) {
 botoesFiltro.forEach(function (botao) {
   botao.addEventListener("click", function () {
     filtroAtual = botao.dataset.filtro;
+    dividasSelecionadas.clear();
 
     botoesFiltro.forEach(function (botaoFiltro) {
       botaoFiltro.classList.remove("ativo");
@@ -1155,6 +1190,41 @@ botoesFiltro.forEach(function (botao) {
     botao.classList.add("ativo");
     atualizarListaDividas();
   });
+});
+
+botaoModoExcluirDividas.addEventListener("click", function () {
+  modoExclusaoDividas = true;
+  dividasSelecionadas.clear();
+  atualizarListaDividas();
+});
+botaoCancelarExclusaoDividas.addEventListener("click", sairModoExclusaoDividas);
+selecionarTodasDividas.addEventListener("change", function () {
+  const ids = dividas.filter(deveMostrarDivida).map((d) => String(d.id));
+  ids.forEach((id) => selecionarTodasDividas.checked ? dividasSelecionadas.add(id) : dividasSelecionadas.delete(id));
+  atualizarListaDividas();
+});
+botaoExcluirDividasSelecionadas.addEventListener("click", async function () {
+  const ids = [...dividasSelecionadas];
+  if (!ids.length) return;
+  if (!confirm("Tem certeza que deseja excluir " + ids.length + " dívida(s) selecionada(s)? Essa ação não pode ser desfeita.")) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) { alert("Sua sessão expirou. Entre novamente."); return; }
+  botaoExcluirDividasSelecionadas.disabled = true;
+  const { error } = await supabase.from("dividas").delete().eq("user_id", user.id).in("id", ids.map(Number));
+  if (error) {
+    console.error("Erro ao excluir dívidas selecionadas:", error);
+    alert("Não foi possível excluir as dívidas selecionadas. Tente novamente.");
+    atualizarControlesExclusaoDividas();
+    return;
+  }
+  for (let i = dividas.length - 1; i >= 0; i--) {
+    if (dividasSelecionadas.has(String(dividas[i].id))) dividas.splice(i, 1);
+  }
+  sairModoExclusaoDividas();
+  atualizarResumo();
+  atualizarProximosVencimentos();
+  atualizarGraficoDividas();
+  await sincronizarNotificacoes();
 });
 
 // =========================
