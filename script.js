@@ -81,6 +81,12 @@ const botaoEditarRenda = document.getElementById("btnEditarRenda");
 const formularioRenda = document.getElementById("formularioRenda");
 const valorRenda = document.getElementById("valorRenda");
 const botaoSalvarRenda = document.getElementById("btnSalvarRenda");
+const dialogoCicloMensal = document.getElementById("dialogoCicloMensal");
+const formularioCicloMensal = document.getElementById("formularioCicloMensal");
+const valorNovoCiclo = document.getElementById("valorNovoCiclo");
+const mesNovoCiclo = document.getElementById("mesNovoCiclo");
+const mensagemCicloMensal = document.getElementById("mensagemCicloMensal");
+const botaoConfirmarCiclo = document.getElementById("btnConfirmarCiclo");
 const elementoSaldoMensal = document.getElementById("saldoMensal");
 const textoSituacao = document.getElementById("textoSituacao");
 const mensagemSituacao = document.getElementById("mensagemSituacao");
@@ -108,7 +114,9 @@ let dividaEditando = null;
 let modoExclusaoDividas = false;
 const dividasSelecionadas = new Set();
 let rendaMensal = 0;
+let mesCicloAtual = "";
 const tabelaRenda = "renda_mensal";
+const tabelaCiclosRenda = "ciclos_renda_mensal";
 
 // =========================
 // NAVEGAÇÃO
@@ -238,6 +246,7 @@ botaoEntrar.addEventListener("click", async function (event) {
   dividas.length = 0;
   await carregarDividasSupabase();
   await carregarRenda();
+  await verificarCicloMensal();
   atualizarResumo();
 
   telaLogin.style.display = "none";
@@ -421,8 +430,17 @@ function atualizarResumo() {
     quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
   }`;
 
+  const hoje = new Date();
+  const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
   const totalCompromissos = dividas.reduce(function (acumulado, divida) {
-    return acumulado + Number(divida.valor);
+    const [ano, mes, dia] = divida.vencimento.split("-").map(Number);
+    const vencimento = new Date(ano, mes - 1, dia);
+    const venceNesteMes = vencimento >= primeiroDiaMes && vencimento <= ultimoDiaMes;
+    const vencidaAnteriorPendente = vencimento < primeiroDiaMes && !divida.paga;
+    return venceNesteMes || vencidaAnteriorPendente
+      ? acumulado + Number(divida.valor)
+      : acumulado;
   }, 0);
 
   const saldo = rendaMensal - totalCompromissos;
@@ -757,19 +775,75 @@ async function carregarDividasSupabase() {
   atualizarGraficoDividas();
 }
 
-async function carregarRenda() {
-  const { data, error } = await supabase
-    .from(tabelaRenda)
-    .select("valor")
-    .single();
+function obterMesAtual() {
+  const agora = new Date();
+  return `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, "0")}-01`;
+}
 
+function formatarMesCiclo(mes) {
+  const [ano, numeroMes] = mes.split("-").map(Number);
+  return new Date(ano, numeroMes - 1, 1).toLocaleDateString("pt-BR", {
+    month: "long", year: "numeric",
+  });
+}
+
+async function carregarRenda() {
+  const { data, error } = await supabase.from(tabelaRenda).select("valor").single();
   if (error && error.code !== "PGRST116") {
     console.error("Erro ao carregar renda:", error);
     return;
   }
-
   rendaMensal = data ? Number(data.valor) : 0;
   elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+}
+
+async function verificarCicloMensal() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+  mesCicloAtual = obterMesAtual();
+
+  const { data, error } = await supabase.from(tabelaCiclosRenda)
+    .select("valor, mes_inicio")
+    .eq("user_id", user.id)
+    .eq("mes_inicio", mesCicloAtual)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Erro ao verificar ciclo mensal:", error);
+    alert("Não foi possível verificar o ciclo financeiro deste mês. Tente novamente.");
+    return;
+  }
+  if (data) {
+    rendaMensal = Number(data.valor);
+    elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+    return;
+  }
+
+  mesNovoCiclo.textContent = formatarMesCiclo(mesCicloAtual);
+  valorNovoCiclo.value = rendaMensal > 0 ? rendaMensal.toFixed(2) : "";
+  mensagemCicloMensal.textContent = rendaMensal > 0
+    ? "Confirme sua renda ou ajuste o valor para este novo mês."
+    : "Informe sua renda para começar a organizar o orçamento deste mês.";
+  dialogoCicloMensal.showModal();
+  valorNovoCiclo.focus();
+}
+
+async function confirmarCicloMensal(valor) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return false;
+
+  const { error } = await supabase.from(tabelaCiclosRenda).upsert({
+    user_id: user.id,
+    mes_inicio: mesCicloAtual || obterMesAtual(),
+    valor,
+    confirmado_em: new Date().toISOString(),
+  }, { onConflict: "user_id,mes_inicio" });
+  if (error) {
+    console.error("Erro ao iniciar ciclo mensal:", error);
+    return false;
+  }
+
+  return await salvarRenda(valor);
 }
 
 async function salvarRenda(valor) {
@@ -1239,22 +1313,49 @@ botaoEditarRenda.addEventListener("click", function () {
 
 botaoSalvarRenda.addEventListener("click", async function () {
   const valor = Number(valorRenda.value);
-
   if (valor <= 0) {
     alert("Digite uma renda maior que zero.");
     return;
   }
-
   const sucesso = await salvarRenda(valor);
-
   if (!sucesso) {
     alert("Erro ao salvar a renda.");
     return;
   }
-
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { error } = await supabase.from(tabelaCiclosRenda).upsert({
+      user_id: user.id, mes_inicio: obterMesAtual(), valor,
+      confirmado_em: new Date().toISOString(),
+    }, { onConflict: "user_id,mes_inicio" });
+    if (error) console.error("Erro ao atualizar renda do ciclo atual:", error);
+  }
   elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
   atualizarResumo();
   formularioRenda.style.display = "none";
+});
+
+formularioCicloMensal.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const valor = Number(valorNovoCiclo.value);
+  if (!Number.isFinite(valor) || valor <= 0) {
+    mensagemCicloMensal.textContent = "Informe uma renda maior que zero.";
+    valorNovoCiclo.focus();
+    return;
+  }
+  botaoConfirmarCiclo.disabled = true;
+  botaoConfirmarCiclo.textContent = "Salvando...";
+  const sucesso = await confirmarCicloMensal(valor);
+  botaoConfirmarCiclo.disabled = false;
+  botaoConfirmarCiclo.textContent = "Confirmar início do mês";
+  if (!sucesso) {
+    mensagemCicloMensal.textContent = "Não foi possível salvar o ciclo. Tente novamente.";
+    return;
+  }
+  rendaMensal = valor;
+  elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+  atualizarResumo();
+  dialogoCicloMensal.close();
 });
 
 // =========================
