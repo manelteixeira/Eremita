@@ -39,3 +39,14 @@
   .titulo-notificacao { font-size:13px; }
   .mensagem-notificacao { font-size:11px; }
 }
+
+
+/* Seleção múltipla de notificações */
+.modo-excluir-notificacoes, .confirmar-exclusao-notificacoes, .cancelar-selecao-notificacoes { border: 1px solid var(--cor-borda); border-radius: 8px; padding: 7px 9px; font: inherit; font-size: 12px; cursor: pointer; }
+.modo-excluir-notificacoes, .confirmar-exclusao-notificacoes { background: var(--cor-perigo); border-color: var(--cor-perigo); color: #fff; }
+.cancelar-selecao-notificacoes { background: var(--cor-card); color: var(--cor-texto); }
+.controles-exclusao-notificacoes { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 14px; border-bottom: 1px solid var(--cor-borda); }
+.controles-exclusao-notificacoes[hidden] { display: none !important; }
+.selecionar-todas-notificacoes { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; }
+.selecionar-notificacao, .selecionar-todas-notificacoes input { width: 17px; height: 17px; flex: 0 0 auto; accent-color: var(--cor-principal); margin: 0 8px 0 0; }
+.item-notificacao:has(.selecionar-notificacao) { display: flex; align-items: flex-start; gap: 8px; }

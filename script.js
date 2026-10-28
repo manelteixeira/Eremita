@@ -58,6 +58,12 @@ const vencimentoDivida = document.getElementById("vencimento-divida");
 
 const listaDividas = document.getElementById("listaDividas");
 const botoesFiltro = document.querySelectorAll(".filtro");
+const botaoModoExcluirDividas = document.getElementById("btnModoExcluirDividas");
+const controlesExclusaoDividas = document.getElementById("controlesExclusaoDividas");
+const selecionarTodasDividas = document.getElementById("selecionarTodasDividas");
+const contadorDividasSelecionadas = document.getElementById("contadorDividasSelecionadas");
+const botaoExcluirDividasSelecionadas = document.getElementById("btnExcluirDividasSelecionadas");
+const botaoCancelarExclusaoDividas = document.getElementById("btnCancelarExclusaoDividas");
 
 const elementoTotalDividas = document.getElementById("totalDividas");
 const elementoTotalEmAberto = document.getElementById("totalEmAberto");
@@ -75,6 +81,12 @@ const botaoEditarRenda = document.getElementById("btnEditarRenda");
 const formularioRenda = document.getElementById("formularioRenda");
 const valorRenda = document.getElementById("valorRenda");
 const botaoSalvarRenda = document.getElementById("btnSalvarRenda");
+const dialogoCicloMensal = document.getElementById("dialogoCicloMensal");
+const formularioCicloMensal = document.getElementById("formularioCicloMensal");
+const valorNovoCiclo = document.getElementById("valorNovoCiclo");
+const mesNovoCiclo = document.getElementById("mesNovoCiclo");
+const mensagemCicloMensal = document.getElementById("mensagemCicloMensal");
+const botaoConfirmarCiclo = document.getElementById("btnConfirmarCiclo");
 const elementoSaldoMensal = document.getElementById("saldoMensal");
 const textoSituacao = document.getElementById("textoSituacao");
 const mensagemSituacao = document.getElementById("mensagemSituacao");
@@ -82,6 +94,7 @@ const mensagemSituacao = document.getElementById("mensagemSituacao");
 const botaoEsqueciSenha = document.getElementById("btnEsqueciSenha");
 
 const formularioLogin = document.getElementById("formLogin");
+const formularioCadastro = document.getElementById("formCadastro");
 
 const formularioRedefinirSenha = document.getElementById("formRedefinirSenha");
 
@@ -97,10 +110,14 @@ const mensagemRedefinirSenha = document.getElementById(
 // =========================
 
 const dividas = [];
-let filtroAtual = "todas";
+let filtroAtual = "pendentes";
 let dividaEditando = null;
+let modoExclusaoDividas = false;
+const dividasSelecionadas = new Set();
 let rendaMensal = 0;
+let mesCicloAtual = "";
 const tabelaRenda = "renda_mensal";
+const tabelaCiclosRenda = "ciclos_renda_mensal";
 
 // =========================
 // NAVEGAÇÃO
@@ -220,7 +237,10 @@ botaoEntrar.addEventListener("click", async function (event) {
 
   if (error) {
     console.error("Erro ao entrar:", error);
-    mensagemErro.textContent = "Email ou senha incorretos.";
+    mensagemErro.textContent =
+      error.code === "email_not_confirmed" || /email not confirmed/i.test(error.message)
+        ? "Você precisa confirmar seu email pelo link recebido antes de entrar."
+        : "Email ou senha incorretos.";
     return;
   }
 
@@ -230,6 +250,7 @@ botaoEntrar.addEventListener("click", async function (event) {
   dividas.length = 0;
   await carregarDividasSupabase();
   await carregarRenda();
+  await verificarCicloMensal();
   atualizarResumo();
 
   telaLogin.style.display = "none";
@@ -246,7 +267,8 @@ botaoVoltarLogin.addEventListener("click", function () {
   mensagemCadastro.textContent = "";
 });
 
-botaoCadastrarUsuario.addEventListener("click", async function () {
+formularioCadastro.addEventListener("submit", async function (event) {
+  event.preventDefault();
   const nome = nomeCadastro.value.trim();
   const email = emailCadastro.value.trim();
   const senha = senhaCadastro.value;
@@ -292,7 +314,7 @@ botaoCadastrarUsuario.addEventListener("click", async function () {
   }
 
   mensagemCadastro.textContent =
-    "Conta criada com sucesso! Você já pode entrar.";
+    "Cadastro recebido! Abra o link enviado ao seu email para confirmar a conta. Depois, volte aqui para entrar.";
 
   nomeCadastro.value = "";
   emailCadastro.value = "";
@@ -413,8 +435,19 @@ function atualizarResumo() {
     quantidadeAtrasadas === 1 ? "dívida" : "dívidas"
   }`;
 
+  const hoje = new Date();
+  const primeiroDiaMes = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+  const ultimoDiaMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
   const totalCompromissos = dividas.reduce(function (acumulado, divida) {
-    return acumulado + Number(divida.valor);
+    // O saldo do ciclo considera apenas dívidas não pagas com vencimento neste mês.
+    // Dívidas antigas continuam no histórico/lista, mas não consomem novamente o salário do novo ciclo.
+    if (divida.paga || !divida.vencimento) return acumulado;
+
+    const [ano, mes, dia] = divida.vencimento.split("-").map(Number);
+    const vencimento = new Date(ano, mes - 1, dia);
+    const venceNesteMes = vencimento >= primeiroDiaMes && vencimento <= ultimoDiaMes;
+
+    return venceNesteMes ? acumulado + Number(divida.valor) : acumulado;
   }, 0);
 
   const saldo = rendaMensal - totalCompromissos;
@@ -749,19 +782,75 @@ async function carregarDividasSupabase() {
   atualizarGraficoDividas();
 }
 
-async function carregarRenda() {
-  const { data, error } = await supabase
-    .from(tabelaRenda)
-    .select("valor")
-    .single();
+function obterMesAtual() {
+  const agora = new Date();
+  return `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, "0")}-01`;
+}
 
+function formatarMesCiclo(mes) {
+  const [ano, numeroMes] = mes.split("-").map(Number);
+  return new Date(ano, numeroMes - 1, 1).toLocaleDateString("pt-BR", {
+    month: "long", year: "numeric",
+  });
+}
+
+async function carregarRenda() {
+  const { data, error } = await supabase.from(tabelaRenda).select("valor").single();
   if (error && error.code !== "PGRST116") {
     console.error("Erro ao carregar renda:", error);
     return;
   }
-
   rendaMensal = data ? Number(data.valor) : 0;
   elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+}
+
+async function verificarCicloMensal() {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return;
+  mesCicloAtual = obterMesAtual();
+
+  const { data, error } = await supabase.from(tabelaCiclosRenda)
+    .select("valor, mes_inicio")
+    .eq("user_id", user.id)
+    .eq("mes_inicio", mesCicloAtual)
+    .maybeSingle();
+
+  if (error) {
+    console.error("Erro ao verificar ciclo mensal:", error);
+    alert("Não foi possível verificar o ciclo financeiro deste mês. Tente novamente.");
+    return;
+  }
+  if (data) {
+    rendaMensal = Number(data.valor);
+    elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+    return;
+  }
+
+  mesNovoCiclo.textContent = formatarMesCiclo(mesCicloAtual);
+  valorNovoCiclo.value = rendaMensal > 0 ? rendaMensal.toFixed(2) : "";
+  mensagemCicloMensal.textContent = rendaMensal > 0
+    ? "Confirme sua renda ou ajuste o valor para este novo mês."
+    : "Informe sua renda para começar a organizar o orçamento deste mês.";
+  dialogoCicloMensal.showModal();
+  valorNovoCiclo.focus();
+}
+
+async function confirmarCicloMensal(valor) {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return false;
+
+  const { error } = await supabase.from(tabelaCiclosRenda).upsert({
+    user_id: user.id,
+    mes_inicio: mesCicloAtual || obterMesAtual(),
+    valor,
+    confirmado_em: new Date().toISOString(),
+  }, { onConflict: "user_id,mes_inicio" });
+  if (error) {
+    console.error("Erro ao iniciar ciclo mensal:", error);
+    return false;
+  }
+
+  return await salvarRenda(valor);
 }
 
 async function salvarRenda(valor) {
@@ -833,19 +922,7 @@ function obterStatus(divida) {
 }
 
 function deveMostrarDivida(divida) {
-  switch (filtroAtual) {
-    case "abertas":
-      return !divida.paga && !estaAtrasada(divida);
-
-    case "atrasadas":
-      return !divida.paga && estaAtrasada(divida);
-
-    case "pagas":
-      return divida.paga;
-
-    default:
-      return true;
-  }
+  return filtroAtual === "pagas" ? Boolean(divida.paga) : !divida.paga;
 }
 
 // =========================
@@ -895,11 +972,29 @@ function atualizarProximosVencimentos() {
 
 function atualizarListaDividas() {
   listaDividas.innerHTML = "";
-
-  [...dividas]
+  const visiveis = [...dividas]
     .sort((a, b) => a.vencimento.localeCompare(b.vencimento))
-    .filter(deveMostrarDivida)
-    .forEach(criarDivida);
+    .filter(deveMostrarDivida);
+  visiveis.forEach(criarDivida);
+  atualizarControlesExclusaoDividas(visiveis);
+}
+
+function atualizarControlesExclusaoDividas(visiveis = dividas.filter(deveMostrarDivida)) {
+  if (!controlesExclusaoDividas) return;
+  controlesExclusaoDividas.hidden = !modoExclusaoDividas;
+  botaoModoExcluirDividas.hidden = modoExclusaoDividas;
+  const ids = visiveis.map((d) => String(d.id));
+  const selecionadasVisiveis = ids.filter((id) => dividasSelecionadas.has(id)).length;
+  selecionarTodasDividas.checked = ids.length > 0 && selecionadasVisiveis === ids.length;
+  selecionarTodasDividas.indeterminate = selecionadasVisiveis > 0 && selecionadasVisiveis < ids.length;
+  contadorDividasSelecionadas.textContent = dividasSelecionadas.size + " selecionada(s)";
+  botaoExcluirDividasSelecionadas.disabled = dividasSelecionadas.size === 0;
+}
+
+function sairModoExclusaoDividas() {
+  modoExclusaoDividas = false;
+  dividasSelecionadas.clear();
+  atualizarListaDividas();
 }
 
 function criarDivida(divida) {
@@ -913,6 +1008,7 @@ function criarDivida(divida) {
   }
 
   elementoDivida.innerHTML = `
+    ${modoExclusaoDividas ? `<label class="checkbox-divida"><input type="checkbox" class="selecionar-divida" aria-label="Selecionar dívida" ${dividasSelecionadas.has(String(divida.id)) ? "checked" : ""}></label>` : ""}
     <div>
       <h3>${divida.nome}</h3>
       <p>Vencimento: ${formatarData(divida.vencimento)}</p>
@@ -934,8 +1030,8 @@ function criarDivida(divida) {
           ${divida.paga ? "✓ Paga" : "Pagar"}
         </button>
 
-        <button type="button" class="btnEditar">Editar</button>
-        <button type="button" class="btnExcluir">Excluir</button>
+        <button type="button" class="btnEditar" ${modoExclusaoDividas ? "hidden" : ""}>Editar</button>
+        <button type="button" class="btnExcluir" ${modoExclusaoDividas ? "hidden" : ""}>Excluir</button>
       </div>
     </div>
   `;
@@ -946,6 +1042,13 @@ function criarDivida(divida) {
   const botaoEditar = elementoDivida.querySelector(".btnEditar");
   const botaoExcluir = elementoDivida.querySelector(".btnExcluir");
   const elementoStatus = elementoDivida.querySelector(".status-divida span");
+  const checkboxDivida = elementoDivida.querySelector(".selecionar-divida");
+  if (checkboxDivida) checkboxDivida.addEventListener("change", () => {
+    const id = String(divida.id);
+    if (checkboxDivida.checked) dividasSelecionadas.add(id);
+    else dividasSelecionadas.delete(id);
+    atualizarControlesExclusaoDividas();
+  });
 
   botaoPagar.addEventListener("click", async function () {
     const { data, error } = await supabase
@@ -1159,6 +1262,7 @@ async function cadastrarDivida(nome, valor, vencimento) {
 botoesFiltro.forEach(function (botao) {
   botao.addEventListener("click", function () {
     filtroAtual = botao.dataset.filtro;
+    dividasSelecionadas.clear();
 
     botoesFiltro.forEach(function (botaoFiltro) {
       botaoFiltro.classList.remove("ativo");
@@ -1167,6 +1271,41 @@ botoesFiltro.forEach(function (botao) {
     botao.classList.add("ativo");
     atualizarListaDividas();
   });
+});
+
+botaoModoExcluirDividas.addEventListener("click", function () {
+  modoExclusaoDividas = true;
+  dividasSelecionadas.clear();
+  atualizarListaDividas();
+});
+botaoCancelarExclusaoDividas.addEventListener("click", sairModoExclusaoDividas);
+selecionarTodasDividas.addEventListener("change", function () {
+  const ids = dividas.filter(deveMostrarDivida).map((d) => String(d.id));
+  ids.forEach((id) => selecionarTodasDividas.checked ? dividasSelecionadas.add(id) : dividasSelecionadas.delete(id));
+  atualizarListaDividas();
+});
+botaoExcluirDividasSelecionadas.addEventListener("click", async function () {
+  const ids = [...dividasSelecionadas];
+  if (!ids.length) return;
+  if (!confirm("Tem certeza que deseja excluir " + ids.length + " dívida(s) selecionada(s)? Essa ação não pode ser desfeita.")) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) { alert("Sua sessão expirou. Entre novamente."); return; }
+  botaoExcluirDividasSelecionadas.disabled = true;
+  const { error } = await supabase.from("dividas").delete().eq("user_id", user.id).in("id", ids.map(Number));
+  if (error) {
+    console.error("Erro ao excluir dívidas selecionadas:", error);
+    alert("Não foi possível excluir as dívidas selecionadas. Tente novamente.");
+    atualizarControlesExclusaoDividas();
+    return;
+  }
+  for (let i = dividas.length - 1; i >= 0; i--) {
+    if (dividasSelecionadas.has(String(dividas[i].id))) dividas.splice(i, 1);
+  }
+  sairModoExclusaoDividas();
+  atualizarResumo();
+  atualizarProximosVencimentos();
+  atualizarGraficoDividas();
+  await sincronizarNotificacoes();
 });
 
 // =========================
@@ -1181,22 +1320,49 @@ botaoEditarRenda.addEventListener("click", function () {
 
 botaoSalvarRenda.addEventListener("click", async function () {
   const valor = Number(valorRenda.value);
-
   if (valor <= 0) {
     alert("Digite uma renda maior que zero.");
     return;
   }
-
   const sucesso = await salvarRenda(valor);
-
   if (!sucesso) {
     alert("Erro ao salvar a renda.");
     return;
   }
-
+  const { data: { user } } = await supabase.auth.getUser();
+  if (user) {
+    const { error } = await supabase.from(tabelaCiclosRenda).upsert({
+      user_id: user.id, mes_inicio: obterMesAtual(), valor,
+      confirmado_em: new Date().toISOString(),
+    }, { onConflict: "user_id,mes_inicio" });
+    if (error) console.error("Erro ao atualizar renda do ciclo atual:", error);
+  }
   elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
   atualizarResumo();
   formularioRenda.style.display = "none";
+});
+
+formularioCicloMensal.addEventListener("submit", async function (event) {
+  event.preventDefault();
+  const valor = Number(valorNovoCiclo.value);
+  if (!Number.isFinite(valor) || valor <= 0) {
+    mensagemCicloMensal.textContent = "Informe uma renda maior que zero.";
+    valorNovoCiclo.focus();
+    return;
+  }
+  botaoConfirmarCiclo.disabled = true;
+  botaoConfirmarCiclo.textContent = "Salvando...";
+  const sucesso = await confirmarCicloMensal(valor);
+  botaoConfirmarCiclo.disabled = false;
+  botaoConfirmarCiclo.textContent = "Confirmar início do mês";
+  if (!sucesso) {
+    mensagemCicloMensal.textContent = "Não foi possível salvar o ciclo. Tente novamente.";
+    return;
+  }
+  rendaMensal = valor;
+  elementoRendaMensal.textContent = formatarMoeda(rendaMensal);
+  atualizarResumo();
+  dialogoCicloMensal.close();
 });
 
 // =========================

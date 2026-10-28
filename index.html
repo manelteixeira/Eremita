@@ -490,22 +490,19 @@
                FILTROS
           =================================================== -->
 
-              <div class="filtros-dividas" aria-label="Filtros de dívidas">
-                <button type="button" class="filtro ativo" data-filtro="todas">
-                  Todas
-                </button>
+              <div class="filtros-dividas" aria-label="Visualização de dívidas">
+                <button type="button" class="filtro ativo" data-filtro="pendentes">Pendentes</button>
+                <button type="button" class="filtro" data-filtro="pagas">Pagas</button>
+              </div>
 
-                <button type="button" class="filtro" data-filtro="abertas">
-                  Em aberto
-                </button>
-
-                <button type="button" class="filtro" data-filtro="atrasadas">
-                  Atrasadas
-                </button>
-
-                <button type="button" class="filtro" data-filtro="pagas">
-                  Pagas
-                </button>
+              <div class="acoes-lista-dividas">
+                <button type="button" id="btnModoExcluirDividas" class="btn-modo-exclusao">Excluir dívidas</button>
+                <div id="controlesExclusaoDividas" class="controles-exclusao" hidden>
+                  <label class="selecionar-todas"><input type="checkbox" id="selecionarTodasDividas" /> Selecionar todas</label>
+                  <span id="contadorDividasSelecionadas">0 selecionadas</span>
+                  <button type="button" id="btnExcluirDividasSelecionadas" class="btn-excluir-selecionadas" disabled>Excluir selecionadas</button>
+                  <button type="button" id="btnCancelarExclusaoDividas" class="btn-cancelar-selecao">Cancelar</button>
+                </div>
               </div>
 
               <!-- ==================================================
@@ -575,6 +572,19 @@
         </div>
       </section>
     </main>
+
+    <dialog id="dialogoCicloMensal" class="dialogo-ciclo-mensal" aria-labelledby="tituloCicloMensal">
+      <form id="formularioCicloMensal">
+        <p class="titulo-card">NOVO CICLO FINANCEIRO</p>
+        <h2 id="tituloCicloMensal">Vamos começar o mês?</h2>
+        <p>O Eremita detectou um novo mês: <strong id="mesNovoCiclo"></strong>.</p>
+        <p>Confirme sua renda para iniciar o orçamento deste mês. Seu histórico e suas dívidas pendentes serão mantidos.</p>
+        <label for="valorNovoCiclo">Renda deste mês (R$)</label>
+        <input id="valorNovoCiclo" type="number" min="0.01" step="0.01" required placeholder="Ex.: 2500,00" />
+        <p id="mensagemCicloMensal" aria-live="polite"></p>
+        <button id="btnConfirmarCiclo" type="submit">Confirmar início do mês</button>
+      </form>
+    </dialog>
 
     <script type="module" src="script.js"></script>
   </body>
