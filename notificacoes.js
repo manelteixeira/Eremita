@@ -3,8 +3,10 @@ import { iniciarPush, encerrarPush } from "./push.js";
 import "./notificacoes.css";
 
 let userAtual = null;
-let falhaGeracao = null; // Diagnóstico temporário para o preview
-let container, botao, painel, contador, lista, marcarTodas;
+let falhaGeracao = null;
+let modoSelecaoNotificacoes = false;
+const notificacoesSelecionadas = new Set();
+let container, botao, painel, contador, lista, marcarTodas, botaoModoExcluir, controlesExclusao, selecionarTodas, excluirSelecionadas, cancelarSelecao;
 
 const hojeISO = () => {
   const d = new Date();
@@ -45,9 +47,23 @@ function montar() {
   topo.append(el("h2","","Notificações"));
   marcarTodas = el("button","marcar-todas-lidas","Marcar lidas");
   marcarTodas.type = "button";
-  topo.append(marcarTodas);
+  botaoModoExcluir = el("button","modo-excluir-notificacoes","Excluir notificações");
+  botaoModoExcluir.type = "button";
+  controlesExclusao = el("div","controles-exclusao-notificacoes");
+  controlesExclusao.hidden = true;
+  selecionarTodas = el("input");
+  selecionarTodas.type = "checkbox";
+  const labelTodas = el("label","selecionar-todas-notificacoes","Selecionar todas");
+  labelTodas.prepend(selecionarTodas);
+  excluirSelecionadas = el("button","confirmar-exclusao-notificacoes","Excluir selecionadas");
+  excluirSelecionadas.type = "button";
+  excluirSelecionadas.disabled = true;
+  cancelarSelecao = el("button","cancelar-selecao-notificacoes","Cancelar");
+  cancelarSelecao.type = "button";
+  controlesExclusao.append(labelTodas,excluirSelecionadas,cancelarSelecao);
+  topo.append(marcarTodas,botaoModoExcluir);
   lista = el("div","lista-notificacoes");
-  painel.append(topo,lista);
+  painel.append(topo,controlesExclusao,lista);
   container.append(botao,painel);
   header.insertBefore(container,tema);
 
@@ -59,6 +75,42 @@ function montar() {
       painel.classList.remove("painel-fechando");
       await sincronizarNotificacoes();
     }
+  });
+  botaoModoExcluir.addEventListener("click", () => {
+    modoSelecaoNotificacoes = true;
+    notificacoesSelecionadas.clear();
+    atualizarControlesSelecao();
+    void carregar();
+  });
+  cancelarSelecao.addEventListener("click", () => {
+    modoSelecaoNotificacoes = false;
+    notificacoesSelecionadas.clear();
+    atualizarControlesSelecao();
+    void carregar();
+  });
+  selecionarTodas.addEventListener("change", () => {
+    lista.querySelectorAll(".selecionar-notificacao").forEach((checkbox) => {
+      if (selecionarTodas.checked) notificacoesSelecionadas.add(checkbox.dataset.id);
+      else notificacoesSelecionadas.delete(checkbox.dataset.id);
+      checkbox.checked = selecionarTodas.checked;
+    });
+    atualizarControlesSelecao();
+  });
+  excluirSelecionadas.addEventListener("click", async () => {
+    const ids = [...notificacoesSelecionadas];
+    if (!userAtual || !ids.length) return;
+    if (!window.confirm("Excluir " + ids.length + " notificação(ões) selecionada(s)? As dívidas não serão alteradas.")) return;
+    excluirSelecionadas.disabled = true;
+    const { error } = await supabase.from("notificacoes").delete().eq("user_id",userAtual.id).in("id",ids);
+    if (error) {
+      console.error("Erro ao excluir notificações selecionadas:",error);
+      window.alert("Não foi possível excluir as notificações. Tente novamente.");
+      atualizarControlesSelecao();
+      return;
+    }
+    notificacoesSelecionadas.clear();
+    modoSelecaoNotificacoes = false;
+    await carregar();
   });
   marcarTodas.addEventListener("click", async () => {
     if (!userAtual) return;
@@ -124,6 +176,15 @@ async function gerarAlertas(userId) {
   if (pushError) console.warn("Push indisponível ou ainda não configurado:", pushError.message);
 }
 
+function atualizarControlesSelecao() {
+  if (!controlesExclusao) return;
+  controlesExclusao.hidden = !modoSelecaoNotificacoes;
+  botaoModoExcluir.hidden = modoSelecaoNotificacoes;
+  marcarTodas.hidden = modoSelecaoNotificacoes;
+  excluirSelecionadas.disabled = notificacoesSelecionadas.size === 0;
+  excluirSelecionadas.textContent = "Excluir selecionadas (" + notificacoesSelecionadas.size + ")";
+}
+
 async function carregar() {
   if (!userAtual || !lista) return;
   lista.replaceChildren(el("p","estado-notificacoes","Carregando…"));
@@ -148,19 +209,33 @@ async function carregar() {
   contador.hidden = unread === 0;
   marcarTodas.disabled = unread === 0;
   lista.replaceChildren();
+  atualizarControlesSelecao();
   if (!items.length) {
     lista.append(el("p","estado-notificacoes","Você está em dia. Nenhuma notificação por aqui."));
     return;
   }
   for (const item of items) {
     const row = el("article",`item-notificacao${item.lida_em ? " notificacao-lida" : ""}`);
+    if (modoSelecaoNotificacoes) {
+      const checkbox = el("input","selecionar-notificacao");
+      checkbox.type = "checkbox";
+      checkbox.dataset.id = item.id;
+      checkbox.checked = notificacoesSelecionadas.has(item.id);
+      checkbox.setAttribute("aria-label","Selecionar notificação: " + item.titulo);
+      checkbox.addEventListener("change", () => {
+        if (checkbox.checked) notificacoesSelecionadas.add(item.id);
+        else notificacoesSelecionadas.delete(item.id);
+        atualizarControlesSelecao();
+      });
+      row.append(checkbox);
+    }
     const body = el("div","texto-notificacao");
     body.append(el("strong","titulo-notificacao",item.titulo));
     body.append(el("p","mensagem-notificacao",item.mensagem));
     body.append(el("time","data-notificacao",new Date(item.created_at).toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"})));
     row.append(body);
     const actions = el("div","acoes-notificacao");
-    if (!item.lida_em) {
+    if (!modoSelecaoNotificacoes && !item.lida_em) {
       const read = el("button","marcar-notificacao-lida","Marcar lida");
       read.type = "button";
       read.addEventListener("click",async () => {
@@ -174,6 +249,7 @@ async function carregar() {
     }
     const remove = el("button","excluir-notificacao","Excluir");
     remove.type = "button";
+    remove.hidden = modoSelecaoNotificacoes;
     remove.setAttribute("aria-label",`Excluir notificação: ${item.titulo}`);
     remove.addEventListener("click",async () => {
       if (!userAtual || !window.confirm("Excluir esta notificação? A dívida não será alterada.")) return;
